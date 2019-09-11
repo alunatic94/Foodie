@@ -1,4 +1,4 @@
-# Foodie-Front-End
+# Foodie
 COMP490/L 
 
 "The Hotspots" 
