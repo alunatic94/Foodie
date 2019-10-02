@@ -93,8 +93,10 @@ class RegisterScreen extends React.Component{
         <Button
          title = 'Register Account'
          onPress = {() => {
-			 
-		   fetch('http://192.168.1.205:3000/api/users', {  
+                      
+      //  Connecting to the server will need to be updated
+      // this code should call a function on server side
+		   fetch('http://localhost:3000/api/users', {  
 			  method: 'POST',
 			  headers: {
 				'Accept': 'application/json',
@@ -106,7 +108,7 @@ class RegisterScreen extends React.Component{
 				age: this.state.age,
 				email: this.state.email
 			  })
-			});
+			}).catch((error) => console.log("Interesting"));
 
            this.props.navigation.dispatch(StackActions.reset({
              index:0,
