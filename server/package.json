@@ -4,7 +4,7 @@
   "description": "Foodie Server with Node.js + Express + Firebase",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --exec babel-node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,8 +20,5 @@
     "@babel/node": "^7.6.1",
     "@babel/preset-env": "^7.6.0",
     "nodemon": "^1.19.2"
-  },
-  "scripts": {
-    "start": "nodemon --exec babel-node index.js"
   }
 }
