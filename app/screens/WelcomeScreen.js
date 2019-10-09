@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements';
 import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import styles from './styles.js';
+import firebase from '../handlers/DBHandler.js';
 
 class WelcomeScreen extends React.Component{
     render(){
@@ -34,6 +35,7 @@ class WelcomeScreen extends React.Component{
           <Button
            title = 'Logout'
            onPress = {() => {
+            firebase.auth().signOut();
             this.props.navigation.dispatch(StackActions.reset({
               index:0,
               actions:[

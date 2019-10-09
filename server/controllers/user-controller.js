@@ -19,10 +19,16 @@ function get(req, res) {
 }
 
 function add(req, res, next) {
-	users.add(req.body)
+	users.doc(req.userId).set({
+		firstName: req.params.firstName,
+		lastName: req.params.lastName,
+		age: req.params.lastName,
+		email: req.params.email
+	})
 	.then((doc) => {
 		console.log("New user added: id = " + doc.id);
 		res.sendStatus(200);
+		return res.json({"userId": doc.id});
 	})
 	.catch((err) => {
 		console.log("Could not create user given: \n" + req.body);

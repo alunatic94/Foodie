@@ -4,8 +4,43 @@ import { Button } from 'react-native-elements';
 import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import styles from './styles.js';
+import firebase from '../handlers/DBHandler.js';
 
 class LoginScreen extends React.Component{
+  constructor(props) {
+    super(props)
+
+    this.state = {
+        email: '',
+        password: ''
+    }
+}
+
+componentWillMount() {
+  this.loginListener = firebase.auth().onAuthStateChanged(user => { 
+    if (user) { // logged in
+      this.navigateToWelcome();
+    } else { // not logged in (e.g. logged out)
+      
+    }
+  })
+}
+loginWithEmail = (email, password) => {
+    firebase.auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(res => {
+          console.log("Logged in user: " + res.user.email);
+    });
+  };
+
+  navigateToWelcome = () => {
+    this.props.navigation.dispatch(StackActions.reset({
+      index:0,
+      actions:[
+        NavigationActions.navigate({ routeName: 'Welcome'})
+      ]
+    }))
+  }
     render(){
      return (
       <View style={styles.left}>
@@ -16,20 +51,19 @@ class LoginScreen extends React.Component{
         <Text>  Enter Username/Email:</Text>
         <TextInput
           style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+          returnKeyLabel = {"next"}
+          onChangeText={(text) => this.setState({email:text})}
         />
         <Text>  Enter Password:</Text> 
         <TextInput
           style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+          returnKeyLabel = {"next"}
+          onChangeText={(text) => this.setState({password:text})}
         />
         <Button
            title = 'Login'
            onPress = {() => {
-            this.props.navigation.dispatch(StackActions.reset({
-              index:0,
-              actions:[
-                NavigationActions.navigate({ routeName: 'Welcome'})
-              ]
-            }))
+            this.loginWithEmail(this.state.email, this.state.password);
           }} />
         <Button
            title = 'First Time? Create an Account!'
