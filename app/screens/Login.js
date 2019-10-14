@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import styles from './styles.js';
 import firebase from '../handlers/DBHandler.js';
 
-class LoginScreen extends React.Component{
+class Login extends React.Component{
   constructor(props) {
     super(props)
 
@@ -19,7 +19,7 @@ class LoginScreen extends React.Component{
 componentWillMount() {
   this.loginListener = firebase.auth().onAuthStateChanged(user => { 
     if (user) { // logged in
-      this.navigateToWelcome();
+      this.navigateToFeed();
     } else { // not logged in (e.g. logged out)
       
     }
@@ -33,14 +33,15 @@ loginWithEmail = (email, password) => {
     });
   };
 
-  navigateToWelcome = () => {
+  navigateToFeed = () => {
     this.props.navigation.dispatch(StackActions.reset({
       index:0,
       actions:[
-        NavigationActions.navigate({ routeName: 'Welcome'})
+        NavigationActions.navigate({ routeName: 'Feed'})
       ]
     }))
-  }
+  }  
+
     render(){
      return (
       <View style={styles.left}>
@@ -79,4 +80,4 @@ loginWithEmail = (email, password) => {
     );
     }
   }
-  export default LoginScreen;
+  export default Login;

@@ -4,25 +4,18 @@ import { Button } from 'react-native-elements';
 import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import styles from './styles.js';
+import Nav from '../navigation/Nav.js';
+
 
 //Temporary testing button for returning to welcome screen
-class ProfileScreen extends React.Component{
+class Profile extends React.Component{
     render(){
       return(
         <View style = {styles.centered}>
-          <Text> EMPTY PROFILE SCREEN </Text>
-          <Button
-           title = 'Back to Welcome'
-           onPress = {() => {
-            this.props.navigation.dispatch(StackActions.reset({
-              index:0,
-              actions:[
-                NavigationActions.navigate({ routeName: 'Welcome'})
-              ]
-            }))
-          }} />
+          <Text> EMPTY PROFILE SCREEN </Text>          
+          <Nav/>
         </View>
       )
     }
   }
-  export default ProfileScreen;
+  export default Profile;

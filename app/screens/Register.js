@@ -7,7 +7,7 @@ import styles from './styles.js';
 import serverHandler from '../handlers/ServerHandler.js';
 import firebase from '../handlers/DBHandler.js';
 
-class RegisterScreen extends React.Component{
+class Register extends React.Component{
     constructor(props) {
          super(props)
  
@@ -121,4 +121,4 @@ class RegisterScreen extends React.Component{
      )
    }
  }
- export default RegisterScreen;
+ export default Register;

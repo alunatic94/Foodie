@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import styles from './styles.js';
 
 //Temporary testing button for returning to welcome screen
-class MapScreen extends React.Component{
+class Map extends React.Component{
     render(){
       return(
         <View style = {styles.centered}>
@@ -25,4 +25,4 @@ class MapScreen extends React.Component{
       )
     }
   }
-  export default MapScreen; 
+  export default Map; 
