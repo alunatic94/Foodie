@@ -8,7 +8,7 @@ class Feed extends React.Component{
       render() {
         return (
             <Container>
-              <Nav/>
+              <Nav navigation={this.props.navigation}/>
           </Container>
         );
     }

@@ -8,21 +8,17 @@ class Nav extends React.Component{
         super(props)
         this.state = {
           active: false,          
-        };
-    //     this.handlePress = this.handlePress.bind(this);
+        };    
       }
 
-      // TODO: implement navigation
-    //   handlePress(arg){
-    //     this.setState(state => ({          
-    //       screen:this.props.navigation.dispatch(StackActions.reset({
-    //         index:0,
-    //         actions:[
-    //           NavigationActions.navigate({ routeName: arg})
-    //         ]
-    //       }))
-    //     }))
-    //   }
+      navigateScreen = (ScreenName) => {
+        this.props.navigation.dispatch(StackActions.reset({
+          index:0,
+          actions:[
+            NavigationActions.navigate({ routeName: ScreenName})
+          ]
+        }))
+      }    
 
       render() {          
         return (
@@ -31,14 +27,19 @@ class Nav extends React.Component{
             <Footer>
               <FooterTab>
                 <Button
-                        // onPress={this.handlePress(screen)}
+                onPress = { () => {
+                  this.navigateScreen("Map")}}
                       >
                   <Text>Map</Text>
                 </Button>                
-                <Button>
+                <Button
+                onPress = { () => {
+                  this.navigateScreen("Feed")}}>
                   <Text>Feed</Text>
                 </Button>
-                <Button>
+                <Button
+                onPress = { () => {
+                  this.navigateScreen("Profile")}}>
                   <Text>Profile</Text>
                 </Button>
               </FooterTab>

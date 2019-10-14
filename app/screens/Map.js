@@ -1,16 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
+import { StyleSheet, View, Image, TextInput } from 'react-native';
 import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Container, Header, Content, Footer, FooterTab, Button, Text} from 'native-base';
 import styles from './styles.js';
+import Nav from '../navigation/Nav.js';
 
 //Temporary testing button for returning to welcome screen
 class Map extends React.Component{
     render(){
-      return(
-        <View style = {styles.centered}>
-          <Text> EMPTY MAPS SCREEN </Text>
+      return(        
+          <Container>
+            <Container style={styles.centered}>
+            <Text> EMPTY MAPS SCREEN </Text>
           <Button
            title = 'Back to Welcome'
            onPress = {() => {
@@ -21,7 +23,9 @@ class Map extends React.Component{
               ]
             }))
           }} />
-        </View>
+            </Container>        
+              <Nav navigation={this.props.navigation}/>              
+          </Container>        
       )
     }
   }
