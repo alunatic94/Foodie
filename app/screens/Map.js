@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, TextInput } from 'react-native';
+import MapView from "react-native-maps";
+import { StyleSheet, View, Image, TextInput, Dimensions } from 'react-native';
 import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Container, Header, Content, Footer, FooterTab, Button, Text} from 'native-base';
@@ -11,20 +12,16 @@ class Map extends React.Component{
     render(){
       return(        
           <Container>
-            <Container style={styles.centered}>
-            <Text> EMPTY MAPS SCREEN </Text>
-          <Button
-           title = 'Back to Welcome'
-           onPress = {() => {
-            this.props.navigation.dispatch(StackActions.reset({
-              index:0,
-              actions:[
-                NavigationActions.navigate({ routeName: 'Welcome'})
-              ]
-            }))
-          }} />
-            </Container>        
-              <Nav navigation={this.props.navigation}/>              
+          <MapView
+          style={{flex: 1}}
+          initialRegion={{
+            // 37.78825, -122.4324
+            latitude: 34.241089,
+            longitude: -118.527509,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}
+        />              
           </Container>        
       )
     }
