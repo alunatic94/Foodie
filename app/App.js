@@ -7,6 +7,13 @@ import WelcomeScreen from './screens/WelcomeScreen.js';
 import Map from './screens/Map.js';
 import Profile from './screens/Profile.js';
 import Feed from './screens/Feed.js';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
+
+Font.loadAsync({
+  'Roboto': require('native-base/Fonts/Roboto.ttf'),
+  'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+  });
 
 //Screen navigator 
 const AppNavigator = createStackNavigator({
