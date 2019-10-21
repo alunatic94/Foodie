@@ -3,12 +3,10 @@ import { createAppContainer, StackActions, NavigationActions} from 'react-naviga
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from './screens/Login.js';
 import Register from './screens/Register.js';
-import WelcomeScreen from './screens/WelcomeScreen.js';
 import Map from './screens/Map.js';
 import Profile from './screens/Profile.js';
 import Feed from './screens/Feed.js';
 import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
 
 Font.loadAsync({
   'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -22,9 +20,6 @@ const AppNavigator = createStackNavigator({
   },
   Register: {
     screen: Register
-  },
-  Welcome: {
-    screen: WelcomeScreen
   },
   Map: {
     screen: Map
