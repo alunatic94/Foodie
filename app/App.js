@@ -1,35 +1,19 @@
-import React from 'react';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import Login from './screens/Login.js';
-import Register from './screens/Register.js';
-import Map from './screens/Map.js';
-import Profile from './screens/Profile.js';
-import Feed from './screens/Feed.js';
-import * as Font from 'expo-font';
+import React, { Component } from 'react';
+import styles from './screens/styles.js';
+import { Container, Header, Content, Footer, FooterTab, Button, Text } from 'native-base';
+import { createAppContainer } from 'react-navigation';
+import AppNavigator from './navigation/router.js'
 
-Font.loadAsync({
-  'Roboto': require('native-base/Fonts/Roboto.ttf'),
-  'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-  });
+const AppIndex = createAppContainer(AppNavigator);
 
-//Screen navigator 
-const AppNavigator = createStackNavigator({
-  Login: {
-    screen: Login
-  },
-  Register: {
-    screen: Register
-  },
-  Map: {
-    screen: Map
-  },
-  Profile: {
-    screen: Profile
-  },
-  Feed: {
-    screen: Feed
-  }
-})
-
-export default createAppContainer(AppNavigator); 
+export default class App extends Component {
+    render() {
+        return (
+            <Container style={{flex: 1}}>
+                <Text>  </Text>
+                <Text>  </Text>
+                <AppIndex />
+            </Container>
+        )
+    }
+}
