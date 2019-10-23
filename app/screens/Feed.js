@@ -1,16 +1,14 @@
-import React from 'react';
-import { Container, Header, Content, Footer, FooterTab, Button, Text } from 'native-base';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import Nav from '../navigation/Nav.js';
+import React, { Component } from 'react';
+import { Container } from 'native-base';
+import styles from './styles.js';
+import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 
-class Feed extends React.Component{
-
-      render() {
+export default class Feed extends Component {
+    render() {
         return (
-            <Container>
-              <Nav navigation={this.props.navigation}/>
-          </Container>
-        );
+            <Container style={styles.centered}>
+                <Text> EMPTY FEED SCREEN</Text>
+            </Container>
+        )
     }
 }
-export default Feed;

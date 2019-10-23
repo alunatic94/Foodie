@@ -5,7 +5,6 @@ import { createAppContainer, StackActions, NavigationActions} from 'react-naviga
 import { createStackNavigator } from 'react-navigation-stack';
 import { Container, Header, Content, Footer, FooterTab, Button, Text} from 'native-base';
 import styles from './styles.js';
-import Nav from '../navigation/Nav.js';
 
 class Map extends React.Component{
     render(){
@@ -20,8 +19,7 @@ class Map extends React.Component{
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
-        />
-         <Nav navigation={this.props.navigation}/>              
+        />       
           </Container>        
       )
     }
