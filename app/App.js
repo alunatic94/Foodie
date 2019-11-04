@@ -14,9 +14,7 @@ const AppIndex = createAppContainer(AppNavigator2);
 export default class App extends Component {
     render() {
         return (
-            <Container style={{flex: 1}}>
-                <Text>  </Text>
-                <Text>  </Text>
+            <Container style={{flex: 5}}>
                 <AppIndex />
             </Container>
         )

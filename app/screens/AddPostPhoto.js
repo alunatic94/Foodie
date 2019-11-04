@@ -4,7 +4,6 @@ export default class AddPostPhoto extends Component {
   render() {
     return (
       <Container>
-        <Header />
         <Content>
             <Text>ADD POST PHOTO SCREEN</Text>
             <Button 

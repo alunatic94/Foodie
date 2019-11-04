@@ -1,13 +1,14 @@
 import React from 'react';
 import MapView from "react-native-maps";
-import { Container, Left, Right,  Button, Header} from 'native-base';
+import { Container, Left, Right,  Button, Header, Item, Icon, Input, Text} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Map extends React.Component{
     render(){
       return(        
           <Container>
-            <Header>
+
+            <Header searchBar rounded>
                   <Left>
                     <Button 
                         transparent
@@ -16,12 +17,24 @@ class Map extends React.Component{
                      </Button>
                   </Left>
 
+                  <Item>
+                    <Icon name="ios-search" />
+                    <Input placeholder="Search" />
+                  </Item>
+
+                  <Button transparent>
+                     <Text>Search</Text>
+                  </Button>
+
                   <Right>
                      <Button transparent>
                          <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
                      </Button>
                   </Right>
             </Header>
+
+
+
             <MapView
               style={{flex: 5}}
               initialRegion={{
