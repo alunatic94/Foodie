@@ -1,10 +1,14 @@
-import React from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
+import Login from '../screens/Login.js';
+import Register from '../screens/Register.js'; 
 import Map from '../screens/Map.js';
 import Feed from '../screens/Feed.js';
 import Profile from '../screens/Profile.js';
+import AddPostPhoto from '../screens/AddPostPhoto.js'; 
+import AddPostComment from '../screens/AddPostComment.js'; 
 
-const AppNavigator = createMaterialTopTabNavigator({
+const AppNavigatorTabs = createMaterialTopTabNavigator({
     Map: {
         screen: Map
     },
@@ -15,6 +19,7 @@ const AppNavigator = createMaterialTopTabNavigator({
         screen: Profile
     }
 },{
+    initialRouteName: 'Feed',
     tabBarPosition: 'bottom',
     tabBarOptions:{
         activeTintColor: 'orange',
@@ -28,4 +33,25 @@ const AppNavigator = createMaterialTopTabNavigator({
     }
 });
 
-export default AppNavigator;
+const AppNavigator = createStackNavigator({
+    
+    Login:{
+        screen: Login
+    },
+    Register:{
+        screen: Register
+    },
+    AddPostPhoto: {
+        screen: AddPostPhoto
+    },
+    AddPostComment: {
+        screen: AddPostComment
+    },
+    Main: AppNavigatorTabs,
+},
+{
+    headerMode: 'none'
+})
+
+export default AppNavigator; 
+

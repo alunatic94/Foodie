@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { Text, View, Image, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 import firebase from '../handlers/DBHandler.js';
 
@@ -33,11 +32,12 @@ loginWithEmail = (email, password) => {
     });
   };
 
+
   navigateToFeed = () => {
     this.props.navigation.dispatch(StackActions.reset({
       index:0,
       actions:[
-        NavigationActions.navigate({ routeName: 'Feed'})
+        NavigationActions.navigate({ routeName: 'Main'})
       ]
     }))
   }  
@@ -80,4 +80,14 @@ loginWithEmail = (email, password) => {
     );
     }
   }
-  export default Login;
+ export const logout = (navigation) => {
+    firebase.auth()
+      .signOut()
+      .then(function() {
+        navigation.navigate('Login');
+      })
+      .catch(function(error) {
+        console.log("Could not log out user");
+      });
+  }
+export default Login;

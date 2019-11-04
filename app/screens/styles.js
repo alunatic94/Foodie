@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   centered: {
     backgroundColor: '#fff',

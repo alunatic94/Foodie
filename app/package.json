@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "expo": "^34.0.1",
-    "expo-cli": "^3.2.3",
+    "expo-cli": "^3.5.0",
     "firebase": "^7.1.0",
     "native-base": "^2.13.8",
     "react": "16.8.3",

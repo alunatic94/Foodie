@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { Text, View, Image, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 import serverHandler from '../handlers/ServerHandler.js';
 import firebase from '../handlers/DBHandler.js';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Register extends React.Component{
     constructor(props) {
