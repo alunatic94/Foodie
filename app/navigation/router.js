@@ -8,7 +8,7 @@ import Profile from '../screens/Profile.js';
 import AddPostPhoto from '../screens/AddPostPhoto.js'; 
 import AddPostComment from '../screens/AddPostComment.js'; 
 
-const AppNavigator = createMaterialTopTabNavigator({
+const AppNavigatorTabs = createMaterialTopTabNavigator({
     Map: {
         screen: Map
     },
@@ -33,7 +33,7 @@ const AppNavigator = createMaterialTopTabNavigator({
     }
 });
 
-const AppNavigator2 = createStackNavigator({
+const AppNavigator = createStackNavigator({
     
     Login:{
         screen: Login
@@ -47,8 +47,8 @@ const AppNavigator2 = createStackNavigator({
     AddPostComment: {
         screen: AddPostComment
     },
-    Main: AppNavigator,
+    Main: AppNavigatorTabs,
 })
 
-export default AppNavigator2; 
+export default AppNavigator; 
 

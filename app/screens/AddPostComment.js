@@ -12,17 +12,17 @@ export default class AddPostComment extends Component {
             <View style={{flexDirection: "row"}}>
               <Button 
                 transparent> 
-                  <AntDesign name='smile-circle' style={{fontSize: 30, color: 'Yellow'}} />
+                  <AntDesign name='smile-circle' style={{fontSize: 30}} />
              </Button>
 
               <Button 
                transparent> 
-                  <AntDesign name='smile-circle' style={{fontSize: 30, color: 'Yellow'}} />
+                  <AntDesign name='smile-circle' style={{fontSize: 30}} />
              </Button>
 
              <Button 
                transparent> 
-                  <AntDesign name='frowno' style={{fontSize: 30, color: 'Yellow'}} />
+                  <AntDesign name='frowno' style={{fontSize: 30}} />
               </Button>
             </View>
 

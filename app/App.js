@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Text } from 'native-base';
 import { createAppContainer } from 'react-navigation';
-import AppNavigator2 from './navigation/router.js';
+import AppNavigator from './navigation/router.js';
 import * as Font from 'expo-font';
 
 Font.loadAsync({
@@ -9,7 +9,7 @@ Font.loadAsync({
   'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
   });
 
-const AppIndex = createAppContainer(AppNavigator2);
+const AppIndex = createAppContainer(AppNavigator);
 
 export default class App extends Component {
     render() {

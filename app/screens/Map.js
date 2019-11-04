@@ -27,7 +27,9 @@ class Map extends React.Component{
                   </Button>
 
                   <Right>
-                     <Button transparent>
+                    <Button 
+                      transparent
+                      onPress={() => this.props.navigation.navigate('Login')}>
                          <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
                      </Button>
                   </Right>
