@@ -5,6 +5,7 @@ import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 import serverHandler from '../handlers/ServerHandler.js';
 import firebase from '../handlers/DBHandler.js';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Register extends React.Component{
     constructor(props) {

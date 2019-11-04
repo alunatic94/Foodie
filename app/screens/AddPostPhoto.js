@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Left, Right, Body, Content, Button, Text } from 'native-base';
+import AntDesign from 'react-native-vector-icons/AntDesign'; 
 export default class AddPostPhoto extends Component {
   render() {
     return (

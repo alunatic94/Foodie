@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {logout} from '../screens/Login.js';
+import {logout} from '../screens/Login.js'; 
 export default class AddPostComment extends Component {
   render() {
     return (
