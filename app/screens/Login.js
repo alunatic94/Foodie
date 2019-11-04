@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { Text, View, Image, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 import firebase from '../handlers/DBHandler.js';
 

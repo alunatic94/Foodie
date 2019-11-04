@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import styles from './screens/styles.js';
-import { Container, Header, Content, Footer, FooterTab, Button, Text } from 'native-base';
+import { Container, Text } from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import AppNavigator2 from './navigation/router.js';
 import * as Font from 'expo-font';

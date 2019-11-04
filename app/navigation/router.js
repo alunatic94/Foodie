@@ -1,4 +1,3 @@
-import React from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../screens/Login.js';

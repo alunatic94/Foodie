@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Text, Left, Right, Icon, Button, Header } from 'native-base';
+import { Container, Text, Left, Right, Button, Header } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default class Profile extends Component {

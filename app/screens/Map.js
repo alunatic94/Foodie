@@ -1,6 +1,6 @@
 import React from 'react';
 import MapView from "react-native-maps";
-import { Container, Left, Right, Icon, Button, Header} from 'native-base';
+import { Container, Left, Right,  Button, Header} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Map extends React.Component{
