@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button } from 'native-base';
 import styles from './styles.js';
 import { StyleSheet, View, TextInput, Image, FlatList } from 'react-native';
-
+import MainHeader from './Header.js';
 
 export default class Feed extends Component {
     render() {
         return (
 	<Container>
+    
+    <MainHeader>
+    </MainHeader>
+    
         <Content>
           <Card>
             <CardItem>
