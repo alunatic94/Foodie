@@ -32,6 +32,7 @@ loginWithEmail = (email, password) => {
     });
   };
 
+
   navigateToFeed = () => {
     this.props.navigation.dispatch(StackActions.reset({
       index:0,
@@ -79,4 +80,14 @@ loginWithEmail = (email, password) => {
     );
     }
   }
-  export default Login;
+ export const logout = (navigation) => {
+    firebase.auth()
+      .signOut()
+      .then(function() {
+        navigation.navigate('Login');
+      })
+      .catch(function(error) {
+        console.log("Could not log out user");
+      });
+  }
+export default Login;

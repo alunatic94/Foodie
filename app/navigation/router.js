@@ -48,6 +48,9 @@ const AppNavigator = createStackNavigator({
         screen: AddPostComment
     },
     Main: AppNavigatorTabs,
+},
+{
+    headerMode: 'none'
 })
 
 export default AppNavigator; 

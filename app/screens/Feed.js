@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Image } from 'react-native';
+import {logout} from '../screens/Login.js';
 
 export default class Feed extends Component {
     render() {
@@ -13,15 +14,19 @@ export default class Feed extends Component {
                 <Button 
                      transparent
                      onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                     <AntDesign name='pluscircle' style={{fontSize: 30, color: 'white'}} />
+                     <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
                 </Button>
             </Left>
+
+            <Body>
+              <Text>Your Feed</Text>
+            </Body>
 
             <Right>
               <Button 
                 transparent
-                onPress={() => this.props.navigation.navigate('Login')}>
-                <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
+                onPress={() => logout(this.props.navigation)}>
+                <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
               </Button>
             </Right>
         </Header>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Text, Left, Right, Button, Header } from 'native-base';
+import { Container, Text, Left, Body, Right, Button, Header } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {logout} from '../screens/Login.js';
 
 export default class Profile extends Component {
     render() {
@@ -11,15 +12,19 @@ export default class Profile extends Component {
                     <Button 
                         transparent
                          onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'white'}} />
+                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
                      </Button>
                   </Left>
+                  
+                  <Body>
+              <Text>Your Profile</Text>
+            </Body>
 
                   <Right>
                     <Button 
                         transparent
-                        onPress={() => this.props.navigation.navigate('Login')}>
-                         <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
+                        onPress={() => logout(this.props.navigation)}>
+                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
                      </Button>
                   </Right>
                 </Header>
