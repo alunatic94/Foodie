@@ -6,9 +6,12 @@ export default class AddPostPhoto extends Component {
       <Container>
         <Header />
         <Content>
-         
-            <Text>ADD POST SCREEN</Text>
-        
+            <Text>ADD POST PHOTO SCREEN</Text>
+            <Button 
+            block success 
+            onPress={() => this.props.navigation.navigate('AddPostComment')}>
+                <Text>Submit Photo</Text>
+            </Button>
         </Content>
       </Container>
     );

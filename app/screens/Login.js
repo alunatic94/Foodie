@@ -37,7 +37,7 @@ loginWithEmail = (email, password) => {
     this.props.navigation.dispatch(StackActions.reset({
       index:0,
       actions:[
-        NavigationActions.navigate({ routeName: 'Feed'})
+        NavigationActions.navigate({ routeName: 'Main'})
       ]
     }))
   }  

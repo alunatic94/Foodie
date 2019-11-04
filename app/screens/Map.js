@@ -1,18 +1,27 @@
 import React from 'react';
 import MapView from "react-native-maps";
-import { StyleSheet, View, Image, TextInput, Dimensions } from 'react-native';
-import { createAppContainer, StackActions, NavigationActions} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { Container, Header, Content, Footer, FooterTab, Button, Text} from 'native-base';
-import styles from './styles.js';
-import MainHeader from './Header.js';
+import { Container, Left, Right, Icon, Button, Header} from 'native-base';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Map extends React.Component{
     render(){
       return(        
           <Container>
-            <MainHeader>
-            </MainHeader>
+            <Header>
+                  <Left>
+                    <Button 
+                        transparent
+                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'white'}} />
+                     </Button>
+                  </Left>
+
+                  <Right>
+                     <Button transparent>
+                         <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
+                     </Button>
+                  </Right>
+            </Header>
             <MapView
               style={{flex: 5}}
               initialRegion={{

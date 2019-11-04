@@ -7,8 +7,12 @@ export default class AddPostComment extends Component {
         <Header />
         <Content>
          
-            <Text>ADD POST SCREEN</Text>
-        
+            <Text>ADD POST COMMENT/RATING SCREEN</Text>
+            <Button 
+            block success 
+            onPress={() => this.props.navigation.navigate('Main')}>
+                <Text>Post your plate</Text>
+            </Button>
         </Content>
       </Container>
     );

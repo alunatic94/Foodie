@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button } from 'native-base';
-import styles from './styles.js';
-import { StyleSheet, View, TextInput, Image, FlatList } from 'react-native';
-import MainHeader from './Header.js';
+import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { Image } from 'react-native';
 
 export default class Feed extends Component {
     render() {
         return (
 	<Container>
     
-    <MainHeader>
-    </MainHeader>
-    
+        <Header>
+            <Left>
+                <Button 
+                     transparent
+                     onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+                     <AntDesign name='pluscircle' style={{fontSize: 30, color: 'white'}} />
+                </Button>
+            </Left>
+
+            <Right>
+              <Button transparent>
+                <AntDesign name='logout' style={{fontSize: 30, color: 'white'}} />
+              </Button>
+            </Right>
+        </Header>
+
         <Content>
           <Card>
             <CardItem>
