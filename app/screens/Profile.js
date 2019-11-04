@@ -3,6 +3,7 @@ import { Container } from 'native-base';
 import styles from './styles.js';
 import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 
+
 export default class Profile extends Component {
     render() {
         return (
