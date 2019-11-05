@@ -7,16 +7,37 @@ import Feed from '../screens/Feed.js';
 import Profile from '../screens/Profile.js';
 import AddPostPhoto from '../screens/AddPostPhoto.js'; 
 import AddPostComment from '../screens/AddPostComment.js'; 
+import { FontAwesome } from '@expo/vector-icons';
+
 
 const AppNavigatorTabs = createMaterialTopTabNavigator({
     Map: {
-        screen: Map
+        screen: Map,
+        navigationOptions:{
+            tabBarLabel: 'Map',
+            tabBarIcon: ({ tintColor }) => (
+                <FontAwesome name ="map-marker" size={24} color="grey" />
+            )
+        }   
     },
     Feed: {
-        screen: Feed
+        screen: Feed,
+        navigationOptions:{
+            tabBarLabel: 'Feed',
+            tabBarIcon: ({ tintColor }) => (
+                <FontAwesome name ="home" size={24} color="grey" />
+            )
+        }
     },
+
     Profile: {
-        screen: Profile
+        screen: Profile,
+        navigationOptions:{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ tintColor }) => (
+                <FontAwesome name ="user" size={24} color="grey" />
+            )
+        }
     }
 },{
     initialRouteName: 'Feed',
@@ -24,6 +45,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
     tabBarOptions:{
         activeTintColor: 'orange',
         inactiveTintColor: 'grey',
+        showIcon: true, 
         style: {
             backgroundColor: '#f2f2f2',
             borderTopWidth: 1,

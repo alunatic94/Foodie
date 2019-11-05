@@ -3,6 +3,7 @@ import { Container, Text, Left, Body, Right, Button, Header } from 'native-base'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 
+
 export default class Profile extends Component {
     render() {
         return (
