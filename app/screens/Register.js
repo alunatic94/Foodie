@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
@@ -40,36 +40,33 @@ class Register extends React.Component{
    }
    render(){
      return(
+     <KeyboardAvoidingView style={{flex:1}} behavior="padding">
        <View style = {styles.left}>
          <View style = {styles.centered}>
            <Image source = {require('./assets/logo.png')} />
          </View>
          <View>
-             <Text>Full Name:</Text>
              <View style={{flexDirection:"row" }}>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder="First" style={{ height: 50, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({firstName:text})}/>
+                     <TextInput placeholder=" First" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({firstName:text})}/>
                  </View>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder="Last" style={{ height: 50, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({lastName:text})} />
+                     <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({lastName:text})} />
                  </View>
              </View>
          </View>
-         <Text>  Age:</Text>
-         <TextInput
-         style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder=" Age"
+         style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({age:text})}
         />
-         <Text>  Email:</Text>
-         <TextInput
-         style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder=" Email"
+         style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({email:text})}
         />
-         <Text>  Password:</Text>
-         <TextInput
-         style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder=" Password"
+         style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
          onChangeText={(text) => this.setState({password:text})}
          />
@@ -118,6 +115,8 @@ class Register extends React.Component{
             ****/
               } />
        </View>
+       </KeyboardAvoidingView>
+       
      )
    }
  }

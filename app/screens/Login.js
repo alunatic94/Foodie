@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
@@ -44,25 +44,25 @@ loginWithEmail = (email, password) => {
 
     render(){
      return (
+      <KeyboardAvoidingView style={{flex:1}} behavior="padding">
       <View style={styles.left}>
         <View style = {styles.centered}>
           <Image source = {require('./assets/logo.png')} />
         </View>
   
-        <Text>  Enter Username/Email:</Text>
-        <TextInput
-          style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+        <TextInput placeholder=" Username/Email"
+          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
           returnKeyLabel = {"next"}
           onChangeText={(text) => this.setState({email:text})}
         />
-        <Text>  Enter Password:</Text> 
-        <TextInput
-          style = {{ height: 50, borderColor: 'black', borderWidth: 2}}
+        <TextInput placeholder=" Password"
+          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
           returnKeyLabel = {"next"}
+          secureTextEntry
           onChangeText={(text) => this.setState({password:text})}
         />
         <Button
-           title = 'Login'
+           title = 'Log In'
            onPress = {() => {
             this.loginWithEmail(this.state.email, this.state.password);
           }} />
@@ -77,6 +77,7 @@ loginWithEmail = (email, password) => {
              }))
            }} />
       </View>
+    </KeyboardAvoidingView>
     );
     }
   }
