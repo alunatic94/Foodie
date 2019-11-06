@@ -31,29 +31,32 @@ export default class AddPostComment extends Component {
 
         <Content>
          
-            <Text style = {{fontSize:30, fontWeight:"bold"}}>Rate your Plate!</Text>
-
+            <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 18, paddingBottom: 25}}>Rate your plate:</Text>
+    
+         <View style={{ borderWidth: 1, height: 100, alignItems: 'center', justifyContent: 'center', justifyContent:'space-between', paddingTop: 15, paddingBottom: 20 }}>
             <View style={{flexDirection: "row"}}>
               <Button 
                 transparent> 
-                  <AntDesign name='smile-circle' style={{fontSize: 30}} />
+                  <AntDesign name='like2' size={30} style={{padding: 30}}/>
              </Button>
 
               <Button 
                transparent> 
-                  <AntDesign name='smile-circle' style={{fontSize: 30}} />
+                  <AntDesign name='meh' size={30} style={{padding: 30}}/>
              </Button>
 
              <Button 
                transparent> 
-                  <AntDesign name='frowno' style={{fontSize: 30}} />
+                  <AntDesign name='dislike2' size={30} style={{padding: 30}}/>
               </Button>
             </View>
+          </View>
 
-            <Text style = {{fontSize:30, fontWeight:"bold"}}>Add a Comment</Text>
-
-            <Input placeholder="Comment" />
-
+            <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 30, paddingBottom: 15}}>Add a caption:</Text>
+          <View style={{borderWidth: 1}}>
+            <Input placeholder="Caption" />
+            </View>
+            
             <Button 
             block success 
             onPress={() => this.props.navigation.navigate('Main')}>
