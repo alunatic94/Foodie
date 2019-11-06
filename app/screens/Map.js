@@ -1,14 +1,24 @@
-import React from 'react';
-import MapView from "react-native-maps";
+
+import MapView, {Marker} from "react-native-maps";
 import { Container, Left, Body, Right,  Button, Header, Item, Icon, Input, Text} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
+
+import React, { Component } from 'react';
+import { Platform, View, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
 
 class Map extends React.Component{ 
   constructor(props) {
     super(props);
     this.state = {
-      showSearch: false
+      showSearch: false,
+	  latitude: 0,
+	  longitude: 0,
+	  error: null
     };
 }
 
@@ -18,6 +28,26 @@ searchOn = () => {
 searchOff = () => {
   this.setState({ showSearch: false});
 };
+
+ componentDidMount() {
+	 navigator.geolocation.getCurrentPosition(
+		position => {
+			this.setState({
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude,
+				error:null
+			});
+		},
+		error => this.setState({error: error.message }),
+			{enableHighAccuracy:true, timeout: 200000, maximumAge: 2000}
+	)
+ };
+
+
+
+	   
+
+
     render(){
       return(        
           <Container>
@@ -67,14 +97,17 @@ searchOff = () => {
 
             <MapView
               style={{flex: 5}}
-              initialRegion={{
+              region={{
                 // 37.78825, -122.4324
-                latitude: 34.241089,
-                longitude: -118.527509,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
               }}
-        />       
+			>
+			<Marker coordinate={this.state} />
+			</MapView>
+              
           </Container>        
       )
     }
