@@ -3,7 +3,7 @@ import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail,
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Image } from "react-native"
+import { Image, ScrollView } from "react-native"
 
 const thumbnail = "https://p7.hiclipart.com/preview/358/473/173/computer-icons-user-profile-person-thumbnail.jpg";
 const platesURL = [
@@ -68,6 +68,7 @@ export default class Profile extends Component {
                         <CardItem>
                             <Body>
                                 <H2>Badges</H2>
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 <View style={{flexDirection: "row"}}>
                                     <Icon name="bonfire" style={styles.padding} />
                                     <Icon name="bowtie" style={styles.padding} />
@@ -78,6 +79,7 @@ export default class Profile extends Component {
                                     <Icon name="pizza" style={styles.padding} />
                                     <Icon name="trophy" style={styles.padding} />
                                 </View>
+                                </ScrollView>
                             </Body>
                         </CardItem>
                         <CardItem>
