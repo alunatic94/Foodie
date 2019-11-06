@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, DeckSwiper, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Image, ScrollView, View } from 'react-native';
-import {logout} from '../screens/Login.js';
-import {YelpRequest} from '../handlers/YelpRequestHandler.js';
 import { Rating} from 'react-native-ratings';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
@@ -62,7 +59,7 @@ function ImagesItem(images) {
         </Left>
         </CardItem>
         <CardItem cardBody>
-            
+
         <ImageSlider
             style={styles.imageFeed}
             images={images}

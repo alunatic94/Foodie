@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Image } from 'react-native';
 import {logout} from '../screens/Login.js';
 import FeedCard from '../components/FeedCard.js';
 
