@@ -4,6 +4,7 @@ import { Image, ScrollView, View } from 'react-native';
 import { Rating} from 'react-native-ratings';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
+import CardItems from '../components/CardItems.js';
 
 
 const mainInfo = {
@@ -39,55 +40,13 @@ const cards = [
 function FeedCardItem(props) {
     const {card} = props;
     if (card.part == 'main') {
-        return ImagesItem(card.cardImages);
+        return <CardItems/>;
     }
-    else {
+    else {        
         return RestaurantInfo();
     }
 }
 
-function ImagesItem(images) {
-    return (
-    <Card>
-        <CardItem>
-        <Left>
-        <Thumbnail source={mainInfo.profileImage} style={styles.circleSmall} />
-            <Body>
-            <Text style={styles.heading}>{mainInfo.name}</Text>
-            <Text style={styles.subheading}>{mainInfo.location}</Text>
-            </Body>
-        </Left>
-        </CardItem>
-        <CardItem cardBody>
-
-        <ImageSlider
-            style={styles.imageFeed}
-            images={images}
-        />
-        </CardItem>
-        <CardItem>
-        <Left>
-        
-                <Icon active name="thumbs-up" />
-            <Text style={styles.boldText}>{mainInfo.likes}</Text>
-            <Text style={styles.lightText}>Likes</Text>
-            
-            
-        </Left>
-        <Body>
-            
-            <Icon active name="chatbubbles" />
-            <Text style={styles.boldText}>{mainInfo.comments}</Text>
-            <Text style={styles.lightText}>Comments</Text>
-            
-        </Body>
-        <Right>
-            <Text style={styles.lightTextSmall}>{mainInfo.hours}h ago</Text>
-        </Right>
-        </CardItem>
-    </Card>
-    );
-}
 function RestaurantInfo() {
     return (
         <Card>
