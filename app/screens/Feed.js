@@ -31,9 +31,10 @@ export default class Feed extends Component {
               </Button>
             </Right>
         </Header>
-
         <Content>
-         <FeedCard />             
+         <FeedCard />
+         <FeedCard />
+         <FeedCard />
         </Content>
       </Container>
         )
