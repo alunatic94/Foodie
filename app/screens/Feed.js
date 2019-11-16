@@ -19,7 +19,7 @@ export default class Feed extends Component {
             </Left>
 
             <Body>
-              <Text>Your Feed</Text>
+              <Text style={styles.heading}>Your Feed</Text>
             </Body>
 
             <Right>

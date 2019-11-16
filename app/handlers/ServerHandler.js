@@ -1,4 +1,52 @@
-class ServerHandler {
+import {db} from 'DBHandler';
+
+export class UserHandler {
+  users = db.collection('users');
+  getUser(userId) {
+    var userData = {};
+    users.doc(userId).get().then((doc) => {
+      userData[doc.id] = doc.data();
+      return userData;
+    })
+    .catch((err) => {
+      console.log("Could not find user from Id '" + userId);
+    });
+  }
+
+  addUser(userId, first, last, age, email) {
+    let userData = {
+      firstName: first,
+      lastName: last,
+      age: age,
+      email: email
+    };
+    users.doc(userId).set(userData)
+    .then((doc) => {
+      return doc.id;
+    })
+    .catch((err) => {
+      console.log("Could not create user given: \n" + userData);
+    });
+  }
+
+  getAllUsers() {
+    var allUsers = {};
+    users.get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+      allUsers[doc.id] = doc.data();
+      });
+    console.log(allUsers);
+    return allUsers;
+    })
+    .catch((err) => {
+      console.log('Error getting users', err);
+    });
+  }
+}
+
+
+/*class ServerHandler {
 
     // POST user registration info to Firebase 'users' collection
     addNewUserData(userId, first, last, age, email) {
@@ -24,4 +72,4 @@ class ServerHandler {
     }
   }
   const serverHandler = new ServerHandler();
-  export default serverHandler;
+  export default serverHandler;*/

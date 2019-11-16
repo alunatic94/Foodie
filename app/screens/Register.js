@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import serverHandler from '../handlers/ServerHandler.js';
+import UserHandler from '../handlers/ServerHandler.js';
 import firebase from '../handlers/DBHandler.js';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -77,7 +77,7 @@ class Register extends React.Component{
               this.registerWithEmail(this.state.email.trim(), this.state.password);
 
               // Then add user data (with ID) to database
-              serverHandler.addNewUserData(this.state.userId, this.state.firstName.trim(), this.state.lastName.trim(),
+              UserHandler.addNewUser(this.state.userId, this.state.firstName.trim(), this.state.lastName.trim(),
                 this.state.age.trim(), this.state.email.trim());
 
               this.navigateToLogin();

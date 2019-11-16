@@ -15,3 +15,4 @@ var firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
 
   export default firebase;
+  export var db = firebase.firestore();

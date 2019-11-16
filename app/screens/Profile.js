@@ -33,7 +33,7 @@ export default class Profile extends Component {
                   </Left>
                   
                   <Body>
-              <Text>Your Profile</Text>
+              <Text style={styles.heading}>Your Profile</Text>
             </Body>
 
                   <Right>

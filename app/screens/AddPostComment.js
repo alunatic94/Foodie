@@ -17,7 +17,7 @@ export default class AddPostComment extends Component {
             </Left>
 
             <Body>
-              <Text>Post a Plate</Text>
+              <Text style={styles.heading}>Post a Plate</Text>
             </Body>
 
             <Right>

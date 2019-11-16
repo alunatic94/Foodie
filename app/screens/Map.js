@@ -71,7 +71,7 @@ searchOff = () => {
                   </Button>
                     </Item>
                   :
-                    <Text>Find a Restaurant</Text>
+                    <Text style={styles.heading}>Find a Restaurant</Text>
                   }
                   </Body>
 
