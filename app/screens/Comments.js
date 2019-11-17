@@ -5,6 +5,22 @@ import Comment from '../components/Comment.js';
 import { KeyboardAvoidingView, Text } from 'react-native';
 
 class Comments extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            comment: ''
+        }
+
+        this.handleCommentChange = this.handleCommentChange.bind(this);
+    }
+
+    handleCommentChange(comment) {
+        this.setState({comment});
+    }
+    // TODO:
+    handleSubmit(comment){
+    }
+
     render(){
         return(
             <Container>
@@ -16,6 +32,7 @@ class Comments extends Component{
                     </Left>
                 </Header>
                 <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+                    {/* Must up slack comments dynamically  */}
                 <ScrollView>
                 <Comment/>
                 <Comment/>
@@ -32,11 +49,15 @@ class Comments extends Component{
                     <Container>
                         <Content>
                             <Item rounded>
-                                <Input placeholder='Comment'/>
+                                <Input
+                                placeholder='Comment'
+                                onChangeText={(comment) => this.handleCommentChange(comment)}
+                                />
                             </Item>
                         </Content>
                     </Container>
-                    <Button transparent>
+                    <Button transparent
+                    onPress={(comment) => this.handleSubmit(comment)}>
                         <Text>Post</Text>
                     </Button>
                 </Footer>
