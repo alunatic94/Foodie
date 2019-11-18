@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import UserHandler from '../handlers/ServerHandler.js';
-import firebase from '../handlers/DBHandler.js';
+import User from '../database/User.js';
+import firebase from '../database/Database.js';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Register extends React.Component{
@@ -12,8 +12,9 @@ class Register extends React.Component{
          super(props)
  
          this.state = {
-             firstName: '',
-             lastName: '',
+             username: '',
+             first: '',
+             last: '',
              age: 0,
              email: '',
              password: '',
@@ -45,13 +46,18 @@ class Register extends React.Component{
          <View style = {styles.centered}>
            <Image source = {require('./assets/logo.png')} />
          </View>
+         <TextInput placeholder="Username"
+         style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
+         returnKeyLabel = {"next"}
+           onChangeText={(text) => this.setState({username:text})}
+        />
          <View>
              <View style={{flexDirection:"row" }}>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder=" First" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({firstName:text})}/>
+                     <TextInput placeholder=" First" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
                  </View>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({lastName:text})} />
+                     <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({last:text})} />
                  </View>
              </View>
          </View>
@@ -77,8 +83,8 @@ class Register extends React.Component{
               this.registerWithEmail(this.state.email.trim(), this.state.password);
 
               // Then add user data (with ID) to database
-              UserHandler.addNewUser(this.state.userId, this.state.firstName.trim(), this.state.lastName.trim(),
-                this.state.age.trim(), this.state.email.trim());
+              let user = new User(this.state.userId, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
+                this.state.age.trim(), this.state.email.trim()).add();
 
               this.navigateToLogin();
           }

@@ -1,22 +1,32 @@
-import {db} from 'DBHandler';
+import {firebase, db} from 'Database';
+import {User} from 'User';
 
-export class UserHandler {
-  users = db.collection('users');
-  getUser(userId) {
-    var userData = {};
-    users.doc(userId).get().then((doc) => {
-      userData[doc.id] = doc.data();
-      return userData;
+export class Profile {
+  profiles = db.collection('profiles');
+  currentUser = new User(User.getCurrentUID());
+
+  getProfile(uid) {
+    var profileData = {};
+    profiles.doc(uid).get().then((doc) => {
+      profileData[doc.id] = doc.data();
+      return profileData;
     })
     .catch((err) => {
-      console.log("Could not find user from Id '" + userId);
+      console.log("Could not find profile from Id '" + userId);
     });
   }
 
-  addUser(userId, first, last, age, email) {
+  getProfilePicture(uid) {
+      var profileData = getProfile(uid);
+      return profileData.picture;
+  }
+
+  addUser(username, uid, first, last, age, email) {
     let userData = {
-      firstName: first,
-      lastName: last,
+      uid: uid,
+      username: username,
+      first: first,
+      last: last,
       age: age,
       email: email
     };
