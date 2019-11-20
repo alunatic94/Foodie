@@ -88,8 +88,10 @@ export default class AddPostPhoto extends React.Component {
   _takeImage = async () => {
     await Permissions.askAsync(Permissions.CAMERA);
     const { cancelled, uri } = await ImagePicker.launchCameraAsync({
-      allowsEditing: false,
+      allowsEditing: true,
     });
-    this.setState({ image: uri });
+    if (!cancelled) {
+      this.setState({ image: uri });
+    }
   };
 }
