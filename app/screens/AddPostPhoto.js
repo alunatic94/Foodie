@@ -43,6 +43,9 @@ export default class AddPostPhoto extends React.Component {
          <Button block success onPress={this._pickImage}>
            <Text>Pick Photo</Text>
         </Button>
+        <Button block success onPress={this._takeImage}>
+           <Text>Take Photo</Text>
+        </Button>
 
         {image &&
           <Image source={{ uri: image }} style={{ width: 400, height: 400 }} />}
@@ -81,6 +84,15 @@ export default class AddPostPhoto extends React.Component {
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
+    }
+  };
+  _takeImage = async () => {
+    await Permissions.askAsync(Permissions.CAMERA);
+    const { cancelled, uri } = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+    });
+    if (!cancelled) {
+      this.setState({ image: uri });
     }
   };
 }
