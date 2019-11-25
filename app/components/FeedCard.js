@@ -4,7 +4,7 @@ import { Image, ScrollView, View } from 'react-native';
 import { Rating} from 'react-native-ratings';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
-
+import LikeButton from '../components/LikeButton.js';
 
 const mainInfo = {
     profileImage: require('../screens/assets/dog.png'),
@@ -68,10 +68,7 @@ function ImagesItem(images) {
         <CardItem>
         <Left>
         
-                <Icon active name="thumbs-up" />
-            <Text style={styles.boldText}>{mainInfo.likes}</Text>
-            <Text style={styles.lightText}>Likes</Text>
-            
+           <LikeButton/> 
             
         </Left>
         <Body>
