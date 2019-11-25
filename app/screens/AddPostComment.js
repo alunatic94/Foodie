@@ -3,7 +3,23 @@ import { Container, Header, Left, Right, Body, Content, Button, Text, Input, Vie
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 export default class AddPostComment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        disable: false,
+        like: false,
+        meh: false,
+        dislike: false
+    };
+  }
+
+  componentWillMount() {
+    const { like, meh, dislike } = this.props;
+    this.setState({ like, meh, dislike });
+}
+
   render() {
+    const { like, meh, dislike } = this.state;
     return (
       <Container>
 
@@ -37,17 +53,17 @@ export default class AddPostComment extends Component {
             <View style={{flexDirection: "row"}}>
               <Button 
                 transparent> 
-                  <AntDesign name='like2' size={30} style={{padding: 30}}/>
+                  <AntDesign name={like ? 'like1' : 'like2'} color={like ? 'green' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ like : !like })} disabled= {this.state.dislike} disabled= {this.state.meh} />
              </Button>
 
               <Button 
                transparent> 
-                  <AntDesign name='meh' size={30} style={{padding: 30}}/>
+                  <AntDesign name={meh ? 'meho' : 'meh'} color={meh ? 'grey' : 'rgb(50, 50, 50)'}  size={30} style={{padding: 30}} onPress={() => this.setState({ meh : !meh })}/>
              </Button>
 
              <Button 
                transparent> 
-                  <AntDesign name='dislike2' size={30} style={{padding: 30}}/>
+                  <AntDesign name={dislike ? 'dislike1' : 'dislike2'} color={dislike ? 'red' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ dislike : !dislike })}/>
               </Button>
             </View>
           </View>
@@ -57,7 +73,7 @@ export default class AddPostComment extends Component {
             <Input placeholder="Caption" />
             </View>
             
-            <Button 
+            <Button
             block success 
             onPress={() => this.props.navigation.navigate('Main')}>
                 <Text>Post your plate</Text>
