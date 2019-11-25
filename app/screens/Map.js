@@ -3,12 +3,13 @@ import MapView, {Marker} from "react-native-maps";
 import { Container, Left, Body, Right,  Button, Header, Item, Icon, Input, Text} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
-
+import styles from './styles.js';
 import React, { Component } from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+
 
 
 class Map extends React.Component{ 

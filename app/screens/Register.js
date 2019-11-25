@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import User from '../database/User.js';
-import firebase from '../database/Database.js';
+import {UserDB} from '../database/UserDB.js';
+import {firebase} from '../database/Database.js';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Register extends React.Component{
@@ -22,13 +22,20 @@ class Register extends React.Component{
          }
    }
 
-   registerWithEmail = (email, password) => {
-     firebase.auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.state.userId = user.uid;
-        console.log("User registered, new ID = " + user.uid);
-      })
+   registerUser = () => {
+      // Firebase Auth User creation
+      firebase.auth()
+      .createUserWithEmailAndPassword(this.state.email.trim(), this.state.password)
+      .then((userCreds) => { // firebase returns UserCredentials object
+        console.log("Created in Firebase: " + userCreds.user.uid);
+        this.setState({userID: userCreds.user.uid});
+
+        // Then add user data (with ID) to database
+        let userData = new UserDB(userCreds.user.uid, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
+        this.state.age.trim(), this.state.email.trim());
+
+        this.navigateToLogin();
+      });
    }
 
    navigateToLogin = () => {
@@ -74,20 +81,15 @@ class Register extends React.Component{
          <TextInput placeholder=" Password"
          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
+         secureTextEntry
          onChangeText={(text) => this.setState({password:text})}
          />
          <Button
           title = 'Register Account'
           onPress = { () => {
-              // Firebase Auth User creation
-              this.registerWithEmail(this.state.email.trim(), this.state.password);
-
-              // Then add user data (with ID) to database
-              let user = new User(this.state.userId, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
-                this.state.age.trim(), this.state.email.trim()).add();
-
-              this.navigateToLogin();
-          }
+             this.registerUser();
+            }
+             
             
             /****
              * OLD REGISTER -> SERVER CODE

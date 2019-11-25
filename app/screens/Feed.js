@@ -3,6 +3,7 @@ import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thum
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import FeedCard from '../components/FeedCard.js';
+import styles from './styles.js';
 
 export default class Feed extends Component {
     render() {

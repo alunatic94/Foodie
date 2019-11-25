@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   centered: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   left: {
     flex: 1,
@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     color: "#000",
     fontFamily: "Raleway Bold"
+  },
+  headerBody: {
+    flex: 3,
+    flexDirection:'row',
+    justifyContent:'center'
   },
   heading: {
     color: "#000",
@@ -84,6 +89,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     margin: 10
-  }
+  },
+  padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
+  columnStyle: { height: 200, padding: 10 }
 });
 export default styles; 

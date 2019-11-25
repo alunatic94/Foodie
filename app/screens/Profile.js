@@ -3,9 +3,13 @@ import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail,
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Image, ScrollView } from "react-native"
+import { Image, ScrollView, ActivityIndicator } from "react-native"
+import {ProfileDB} from "../database/ProfileDB.js"
+import {UserDB} from "../database/UserDB.js"
+import styles from './styles.js';
+import {firebase, db} from '../database/Database';
 
-const thumbnail = "https://p7.hiclipart.com/preview/358/473/173/computer-icons-user-profile-person-thumbnail.jpg";
+const thumbnail = "";
 const platesURL = [
     "https://www.williams-sonoma.com/wsimgs/rk/images/dp/wcm/201938/0181/williams-sonoma-pantry-dinner-plates-set-of-6-c.jpg",
     "https://www.restaurantware.com/media/catalog/product/cache/9acef7d1ef9b6ecea35dddea8ea8fdff/R/W/RWP0063B-3-LR.jpg",
@@ -14,14 +18,52 @@ const platesURL = [
     "https://www.lomonosov-russia.com/sites/default/files/dinner.jpg",
     "https://travel.home.sndimg.com/content/dam/images/travel/fullset/2015/10/26/50-states-50-plates/alabama-white-bbq-sauce.jpg.rend.hgtvcom.966.644.suffix/1491581554822.jpeg"
 ];
-const styles = {
-    padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
-    columnStyle: { height: 200, padding: 10 }
-}
-
 export default class Profile extends Component {
+    constructor(props) {
+        super(props);
+        // Defaults
+        this.state = {
+            userID: this.props.navigation.getParam('userID', UserDB.getCurrentUserID()),
+            currentProfile: null,
+            isProfileLoaded: false
+        }
+    }
+    componentDidMount() {
+        // Fetch profile data after component instance created
+        (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
+            this.setState({currentProfile: profile, isProfileLoaded: true});
+        });
+    }
     render() {
-        return (
+        // Render empty profile screen until data is finished being fetched
+        if (!this.state.isProfileLoaded) {
+            return (<Container>
+                <Header>
+                  <Left>
+                    <Button 
+                        transparent
+                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
+                     </Button>
+                  </Left>
+                      <Body>
+                        <Text style={styles.heading}>Profile</Text>
+                    </Body>
+
+                  <Right>
+                    <Button 
+                        transparent
+                        onPress={() => logout(this.props.navigation)}>
+                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
+                     </Button>
+                  </Right>
+                </Header>
+                <Content styles={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#ddd" />
+                </Content>
+            </Container>)
+        }
+        else return (
             <Container>
                 <Header>
                   <Left>
@@ -31,9 +73,8 @@ export default class Profile extends Component {
                         <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
                      </Button>
                   </Left>
-                  
-                  <Body>
-              <Text style={styles.heading}>Your Profile</Text>
+                      <Body style={styles.headerBody}>
+              <Text style={styles.heading}>{this.state.userID == UserDB.getCurrentUserID() ? "Profile" : this.state.currentProfile.username}</Text>
             </Body>
 
                   <Right>
@@ -48,26 +89,24 @@ export default class Profile extends Component {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail large source={{uri: thumbnail}} />
-                                <Body>
-                                    <H1>Valentino Rossi</H1>
-                                    <Text note>Twin Ring Motegi - ツインリンクもてぎ</Text>
+                                <Thumbnail large source={{uri: this.state.currentProfile.profileImage}} />
+                                <Body style={{flex: 3}}>
+                                    <H1 style={styles.headingLarge}>{this.state.currentProfile.first} {this.state.currentProfile.last}</H1>
+                                    <Text note style={styles.subheadingLarge}>{this.state.currentProfile.tagline}</Text>
                                 </Body>
                             </Left>
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <H2>About</H2>
-                                <Text style={{color: "grey"}}>
-                                    From Urbino, Italy{"\n"}    
-                                    Seven-time MotoGP World Champion{"\n"}
-                                    Likes Italian and Japanese food
+                                <H2 style={styles.heading}>About</H2>
+                                <Text style={styles.subheading}>
+                                    {this.state.currentProfile.about}
                                 </Text>
                             </Body>
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <H2>Badges</H2>
+                                <H2 style={styles.heading}>Badges</H2>
                                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 <View style={{flexDirection: "row"}}>
                                     <Icon name="bonfire" style={styles.padding} />
@@ -84,7 +123,7 @@ export default class Profile extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <H2>Plates Eaten</H2>
+                                <H2 style={styles.heading}>Plates Eaten</H2>
                                 <Grid>
                                     <Col style={styles.columnStyle}>
                                         <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[0] }} />

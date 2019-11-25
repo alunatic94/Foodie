@@ -10,8 +10,6 @@ import AddPostPhoto from '../screens/AddPostPhoto.js';
 import AddPostComment from '../screens/AddPostComment.js'; 
 import { FontAwesome } from '@expo/vector-icons';
 
-
-
 const AppNavigatorTabs = createMaterialTopTabNavigator({
     Map: {
         screen: Map,
@@ -59,12 +57,18 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
 
 const AppNavigator = createStackNavigator({
     
-	
+
     Login:{
         screen: Login
     },
     Register:{
         screen: Register
+    },
+    Feed: {
+        screen: Feed
+    },
+    Profile: {
+        screen: Profile
     },
     AddPostPhoto: {
         screen: AddPostPhoto

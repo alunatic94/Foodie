@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import firebase from '../database/Database.js';
+import {firebase} from '../database/Database.js';
 
 class Login extends React.Component{
   constructor(props) {
