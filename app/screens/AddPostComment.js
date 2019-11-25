@@ -6,7 +6,6 @@ export default class AddPostComment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        disable: false,
         like: false,
         meh: false,
         dislike: false
@@ -53,7 +52,7 @@ export default class AddPostComment extends Component {
             <View style={{flexDirection: "row"}}>
               <Button 
                 transparent> 
-                  <AntDesign name={like ? 'like1' : 'like2'} color={like ? 'green' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ like : !like })} disabled= {this.state.dislike} disabled= {this.state.meh} />
+                  <AntDesign name={like ? 'like1' : 'like2'} color={like ? 'green' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ like : !like })}/>
              </Button>
 
               <Button 
@@ -66,7 +65,7 @@ export default class AddPostComment extends Component {
                   <AntDesign name={dislike ? 'dislike1' : 'dislike2'} color={dislike ? 'red' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ dislike : !dislike })}/>
               </Button>
             </View>
-          </View>
+          </View> 
 
             <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 30, paddingBottom: 15}}>Add a caption:</Text>
           <View style={{borderWidth: 1}}>
