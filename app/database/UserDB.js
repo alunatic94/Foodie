@@ -53,7 +53,6 @@ export class UserDB {
     users.doc(userID).get().then((doc) => {
       userData = doc.data();
       update(userData);
-      console.log(`Fetched existing user: ${userData}`);
       return userData;
     })
     .catch((err) => {
@@ -68,7 +67,6 @@ export class UserDB {
 
   // Add user to database
   add() {
-    console.log(`Creating new user: ${userID}, ${username}, ${first}, ${last}, ${age}, ${email}`);
     let userData = {
       userID: this.userID,
       username: this.username,
@@ -96,7 +94,6 @@ export class UserDB {
     var allUsers = {};
     users.get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
       allUsers[doc.id] = doc.data();
       });
     console.log(allUsers);
