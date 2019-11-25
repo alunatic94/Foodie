@@ -7,7 +7,8 @@ import Map from '../screens/Map.js';
 import Feed from '../screens/Feed.js';
 import Profile from '../screens/Profile.js';
 import AddPostPhoto from '../screens/AddPostPhoto.js'; 
-import AddPostComment from '../screens/AddPostComment.js'; 
+import AddPostComment from '../screens/AddPostComment.js';
+import Comments from '../screens/Comments.js'
 import { FontAwesome } from '@expo/vector-icons';
 
 const AppNavigatorTabs = createMaterialTopTabNavigator({
@@ -75,6 +76,9 @@ const AppNavigator = createStackNavigator({
     },
     AddPostComment: {
         screen: AddPostComment
+    },
+    Comments: {
+        screen: Comments
     },
     Main: AppNavigatorTabs,
 },
