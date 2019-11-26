@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -50,11 +50,6 @@ export default class AddPostPhoto extends React.Component {
         {image &&
           <Image source={{ uri: image }} style={{ width: 400, height: 400 }} />}
 
-         <Button 
-         block success 
-         onPress={() => this.props.navigation.navigate('AddPostComment')}>
-             <Text>Submit Photo</Text>
-         </Button>
      </Content>
    </Container>
     );
@@ -74,6 +69,7 @@ export default class AddPostPhoto extends React.Component {
   }
 
   _pickImage = async () => {
+    const { navigate } = this.props.navigation;
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -81,16 +77,25 @@ export default class AddPostPhoto extends React.Component {
     });
 
     console.log(result);
+    navigate(
+      'AddPostComment', 
+      { uri : result.uri }
+    );
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
     }
   };
   _takeImage = async () => {
+    const { navigate } = this.props.navigation;
     await Permissions.askAsync(Permissions.CAMERA);
     const { cancelled, uri } = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
     });
+    navigate(
+      'AddPostComment', 
+      { uri : uri }
+    );
     if (!cancelled) {
       this.setState({ image: uri });
     }

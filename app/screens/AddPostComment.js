@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Image } from 'react-native';
 import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
@@ -20,6 +21,8 @@ export default class AddPostComment extends Component {
 
   render() {
     const { like, meh, dislike } = this.state;
+    const { navigation } = this.props;
+    const uri = navigation.getParam('uri');
     return (
       <Container>
 
@@ -67,7 +70,7 @@ export default class AddPostComment extends Component {
               </Button>
             </View>
           </View> 
-
+            <Image  style={{width: 400, height: 400}} source={{uri:uri}}/>
             <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 30, paddingBottom: 15}}>Add a caption:</Text>
           <View style={{borderWidth: 1}}>
             <Input placeholder="Caption" />
