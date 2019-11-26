@@ -71,6 +71,7 @@ export default class AddPostPhoto extends React.Component {
     }
   }
 
+  /*PICKING IMAGE FROM PHONE IMAGE LIBRARY */
   _pickImage = async () => {
     const { navigate } = this.props.navigation;
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -89,7 +90,8 @@ export default class AddPostPhoto extends React.Component {
       this._handleImagePicked(result);
     }
   };
-  
+
+/*TAKE IMAGE FROM CAMERA */
   _takeImage = async () => {
     const { navigate } = this.props.navigation;
     await Permissions.askAsync(Permissions.CAMERA);
@@ -109,6 +111,7 @@ export default class AddPostPhoto extends React.Component {
     }
   };
 
+  /* HANDLE IMAGE UPLOADED TO APP, SEND TO FIREBASE */
   _handleImagePicked = async result => {
     try {
       this.setState({ uploading: true });
@@ -126,6 +129,7 @@ export default class AddPostPhoto extends React.Component {
   };
 }
 
+/* CONVERT TO BLOB FORMAT IN ORDER TO SEND TO FIREBASE */
 async function uploadImageAsync(uri) {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -146,8 +150,10 @@ async function uploadImageAsync(uri) {
     .ref()
     .child(uuid.v4());
   const snapshot = await ref.put(blob);
-
   blob.close();
+
+  /* Displays in console the download URL of the image just uploaded onto firebase storage */
+  console.log(await snapshot.ref.getDownloadURL());
 
   return await snapshot.ref.getDownloadURL();
 }
