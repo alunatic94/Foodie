@@ -89,6 +89,7 @@ export default class AddPostPhoto extends React.Component {
       this._handleImagePicked(result);
     }
   };
+  
   _takeImage = async () => {
     const { navigate } = this.props.navigation;
     await Permissions.askAsync(Permissions.CAMERA);
@@ -107,6 +108,7 @@ export default class AddPostPhoto extends React.Component {
       this._handleImagePicked(result);
     }
   };
+
   _handleImagePicked = async result => {
     try {
       this.setState({ uploading: true });
@@ -122,31 +124,8 @@ export default class AddPostPhoto extends React.Component {
       this.setState({ uploading: false });
     }
   };
-  _maybeRenderUploadingOverlay = () => {
-    if (this.state.uploading) {
-      return (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            },
-          ]}>
-          <ActivityIndicator color="#fff" animating size="large" />
-        </View>
-      );
-    }
-  };
+}
 
-  _maybeRenderImage = () => {
-    let { image } = this.state;
-    if (!image) {
-      return;
-    }
-}
-}
 async function uploadImageAsync(uri) {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();

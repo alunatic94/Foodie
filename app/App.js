@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, YellowBox} from 'react-native';
 import { Container, Text } from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import AppNavigator from './navigation/router.js';
 import * as Font from 'expo-font';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 Font.loadAsync({
   'Roboto': require('native-base/Fonts/Roboto.ttf'),
