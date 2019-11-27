@@ -21,7 +21,11 @@ export default class ProfileEdit extends Component{
             currentProfile: null,
             isProfileLoaded: false,
             image: null,
-            uploading: false
+            uploading: false,
+            newFirst: '',
+            newLast: '' ,
+            newAge: '', 
+            newAbout: ''
         }
     }
     componentDidMount() {
@@ -50,7 +54,7 @@ export default class ProfileEdit extends Component{
             <TextInput placeholder={this.state.currentProfile.first}
             style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
             returnKeyLabel = {"next"}
-            onChangeText={(text) => this.setState({text})}
+            onChangeText={(text) => this.setState({newFirst:text})}
             />  
             <Text style={styles.heading}>
                  Last Name:  
@@ -58,7 +62,7 @@ export default class ProfileEdit extends Component{
             <TextInput placeholder={this.state.currentProfile.last}
             style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
             returnKeyLabel = {"next"}
-            onChangeText={(text) => this.setState({text})}
+            onChangeText={(text) => this.setState({newLast:text})}
             />
             <Text style={styles.heading}>
                  Age:  
@@ -66,7 +70,7 @@ export default class ProfileEdit extends Component{
             <TextInput placeholder={this.state.currentProfile.age}
             style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
             returnKeyLabel = {"next"}
-            onChangeText={(text) => this.setState({text})}
+            onChangeText={(text) => this.setState({newAge:text})}
             />
             <Text style={styles.heading}>
                  About:  
@@ -74,7 +78,7 @@ export default class ProfileEdit extends Component{
             <TextInput placeholder={this.state.currentProfile.about}
             style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
             returnKeyLabel = {"next"}
-            onChangeText={(text) => this.setState({text})}
+            onChangeText={(text) => this.setState({newAbout:text})}
             />
             
             <Body>
@@ -96,7 +100,13 @@ export default class ProfileEdit extends Component{
                 <Image source={{ uri: image }} style={{ width: 75, height: 75 }} />}
             </Body>
             <Button block success onPress={() => this.props.navigation.navigate('Main') 
-                                                 }>
+                                                 && users.doc(this.state.userID).set({
+                                                     first: this.state.newFirst,
+                                                     last: this.state.newLast, 
+                                                     age: this.state.newAge, 
+                                                     about: this.state.newAbout,
+                                                     //profileImage: uploadImageAsync({uri:image)
+                                                 }, {merge: true})}>
                 <Text>Save Changes</Text>
             </Button>
          </KeyboardAvoidingView>
