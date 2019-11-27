@@ -35,26 +35,30 @@ export default class ProfileEdit extends Component{
         else return (
         <Container>
          <KeyboardAvoidingView style={{flex:1}} behavior="padding">
-            <Left>
-                <Text style={styles.heading}>
-                    Your Profile 
-                </Text>  
-            </Left>
             <Text style={styles.heading}>
                  First Name:  
-            </Text>  
+            </Text>
+            <TextInput placeholder={this.state.currentProfile.first}
+            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            returnKeyLabel = {"next"}
+            onChangeText={(text) => this.setState({text})}
+            />  
             <Text style={styles.heading}>
                  Last Name:  
             </Text> 
+            <TextInput placeholder={this.state.currentProfile.last}
+            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            returnKeyLabel = {"next"}
+            onChangeText={(text) => this.setState({text})}
+            />
             <Text style={styles.heading}>
                  Age:  
             </Text> 
-            <Text style={styles.heading}>
-                 Email:  
-            </Text> 
-            <Text style={styles.heading}>
-                 Password:  
-            </Text> 
+            <TextInput placeholder={this.state.currentProfile.age}
+            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            returnKeyLabel = {"next"}
+            onChangeText={(text) => this.setState({text})}
+            />
             <Text style={styles.heading}>
                  About:  
             </Text> 
@@ -64,7 +68,7 @@ export default class ProfileEdit extends Component{
             onChangeText={(text) => this.setState({text})}
             />
             
-            <Left>
+            <Body>
                 <Text style={styles.heading}>
                      Picture:  
                 </Text> 
@@ -73,7 +77,11 @@ export default class ProfileEdit extends Component{
                  rounded dark>
                      <Text>Upload Photo</Text>
                 </Button>
-            </Left>
+                <Button
+                 rounded dark>
+                     <Text>Take Photo</Text>
+                </Button>
+            </Body>
             <Button block success onPress={() => this.props.navigation.navigate('Main') 
                                                  }>
                 <Text>Save Changes</Text>
