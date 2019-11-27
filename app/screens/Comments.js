@@ -21,16 +21,17 @@ class Comments extends Component{
         comments = db.collection('comments');
 
         let commentData = {
-            body: this.state.comment
+            body: this.state.comment,
+            commentID: this.doc()
         };
 
         comments.doc().set(commentData)
-        .then((doc) => {
-            return doc.id;
-        })
-        .catch((err) => {
-            console.log("Could not upload comment");
-        })
+        // .then((doc) => {
+        //     return doc.id;
+        // })
+        // .catch((err) => {
+        //     console.log("Could not upload comment");
+        // })
     }
 
     render(){
