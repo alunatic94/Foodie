@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { Container, Header, Left, Right, Body, Content, Button, Text } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign'; 
 import styles from './styles.js';
+import {firebase} from '../database/Database';
+import uuid from 'uuid';
 
 export default class AddPostPhoto extends React.Component {
   state = {
     image: null,
+    uploading: false
   };
 
   render() {
@@ -46,15 +49,10 @@ export default class AddPostPhoto extends React.Component {
         <Button block success onPress={this._takeImage}>
            <Text>Take Photo</Text>
         </Button>
-
+        
         {image &&
           <Image source={{ uri: image }} style={{ width: 400, height: 400 }} />}
 
-         <Button 
-         block success 
-         onPress={() => this.props.navigation.navigate('AddPostComment')}>
-             <Text>Submit Photo</Text>
-         </Button>
      </Content>
    </Container>
     );
@@ -73,26 +71,89 @@ export default class AddPostPhoto extends React.Component {
     }
   }
 
+  /*PICKING IMAGE FROM PHONE IMAGE LIBRARY */
   _pickImage = async () => {
+    const { navigate } = this.props.navigation;
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
     });
-
     console.log(result);
+    navigate(
+      'AddPostComment', 
+      { uri : result.uri }
+    );
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
+      this._handleImagePicked(result);
     }
   };
+
+/*TAKE IMAGE FROM CAMERA */
   _takeImage = async () => {
+    const { navigate } = this.props.navigation;
     await Permissions.askAsync(Permissions.CAMERA);
-    const { cancelled, uri } = await ImagePicker.launchCameraAsync({
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
+      aspect: [4, 3],
     });
-    if (!cancelled) {
-      this.setState({ image: uri });
+    console.log(result);
+    navigate(
+      'AddPostComment', 
+      { uri : result.uri }
+    );
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+      this._handleImagePicked(result);
     }
   };
+
+  /* HANDLE IMAGE UPLOADED TO APP, SEND TO FIREBASE */
+  _handleImagePicked = async result => {
+    try {
+      this.setState({ uploading: true });
+
+      if (!result.cancelled) {
+        uploadUrl = await uploadImageAsync(result.uri);
+        this.setState({ image: uploadUrl });
+      }
+    } catch (e) {
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    } finally {
+      this.setState({ uploading: false });
+    }
+  };
+}
+
+/* CONVERT TO BLOB FORMAT IN ORDER TO SEND TO FIREBASE */
+async function uploadImageAsync(uri) {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function(e) {
+      console.log(e);
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(uuid.v4());
+  const snapshot = await ref.put(blob);
+  blob.close();
+
+  /* Displays in console the download URL of the image just uploaded onto firebase storage */
+  console.log(await snapshot.ref.getDownloadURL());
+
+  return await snapshot.ref.getDownloadURL();
 }

@@ -92,8 +92,14 @@ export default class Profile extends Component {
                                 <Thumbnail large source={{uri: this.state.currentProfile.profileImage}} />
                                 <Body style={{flex: 3}}>
                                     <H1 style={styles.headingLarge}>{this.state.currentProfile.first} {this.state.currentProfile.last}</H1>
+                                    <Text note style={styles.subheadingLarge}>{this.state.currentProfile.age}</Text>
                                     <Text note style={styles.subheadingLarge}>{this.state.currentProfile.tagline}</Text>
                                 </Body>
+                                <Button
+                                 rounded dark
+                                 onPress={() => this.props.navigation.navigate('ProfileEdit')}>
+                                     <Text>Edit</Text>
+                                </Button>
                             </Left>
                         </CardItem>
                         <CardItem>

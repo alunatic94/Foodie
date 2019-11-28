@@ -9,6 +9,7 @@ import Profile from '../screens/Profile.js';
 import AddPostPhoto from '../screens/AddPostPhoto.js'; 
 import AddPostComment from '../screens/AddPostComment.js';
 import Comments from '../screens/Comments.js'
+import ProfileEdit from '../screens/ProfileEdit.js'
 import { FontAwesome } from '@expo/vector-icons';
 
 const AppNavigatorTabs = createMaterialTopTabNavigator({
@@ -79,6 +80,9 @@ const AppNavigator = createStackNavigator({
     },
     Comments: {
         screen: Comments
+    },
+    ProfileEdit: {
+        screen: ProfileEdit
     },
     Main: AppNavigatorTabs,
 },
