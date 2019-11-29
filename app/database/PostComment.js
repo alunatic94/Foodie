@@ -1,10 +1,10 @@
 import {firebase, db} from '../database/Database';
 import User from './UserDB';
 
-class PostComment {
+export class PostComment {
 
     comments = db.collection('posts')
-                .doc('Qe1PUrFY32K8EYL9UYqW')
+                .doc(postId)//this.props.postsid
                 .collection('comments');
 
     time = new Date();        
@@ -18,6 +18,8 @@ class PostComment {
         }        
         this.comments.doc().set(commentData);        
     }
-}
 
-export { PostComment };
+    getAll = callback => { // TODO: Return all comments
+        // After all documents return from the query, you call the callback!
+    }
+}

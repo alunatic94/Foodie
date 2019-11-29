@@ -4,25 +4,51 @@ import { withNavigation, ScrollView } from 'react-navigation';
 import Comment from '../components/Comment.js';
 import { KeyboardAvoidingView, Text, Alert } from 'react-native';
 import { PostComment } from '../database/PostComment.js';
+import { firebase, db } from '../database/Database.js';;
+
 
 class Comments extends Component{
+
+    comments = db.collection('posts')
+                .doc('Qe1PUrFY32K8EYL9UYqW')//this.props.postsid
+                .collection('comments');
+    
+    time = new Date();
+
     constructor(props){
         super(props);
         this.state = {
-            comment: ''
+            comment: '',
+            comments: []
         }
-        obj = new PostComment();
+        // obj = new PostComment();
+    }
+    // TODO:
+    componentDidMount(){
+            //  establish database listener set comments array in listener
+            // 
+    }
+    componentWillUnmount(){        
+        // remove database listener
     }
         
     // TODO:
     handleSubmit = (event) => {
         event.preventDefault();
-        obj.add(this.state.comment);
+        this.add(this.state.comment);
         this.setState({
             comment: ''
         });
+    }
 
-        // Render new comment to comments screen
+    add = (comment) => {
+        let commentData = {
+            Body: comment,
+            comment_ID: 123,
+            time: this.time.getTime()
+            // user_ID: User.getCurrent()
+        }        
+        this.comments.doc().set(commentData);        
     }
 
     render(){
@@ -38,6 +64,7 @@ class Comments extends Component{
                 <KeyboardAvoidingView style={{flex:1}} behavior="padding">
                     {/* Must up slack comments dynamically  */}
                 <ScrollView>
+                {this.state.comments.map(comment => <Comment body={comment} />)}
                 <Comment/>                
                 </ScrollView>
                 <Footer>

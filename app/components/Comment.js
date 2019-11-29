@@ -10,11 +10,12 @@ class Comment extends Component{
                 <Thumbnail source={{ uri: 'image' }} />
               </Left>
               <Body>
-                <Text>{this.props.name} Name</Text>
+                <Text>TODO: Name</Text>
                 <Text note>{this.props.body} Body</Text>
               </Body>
               <Right>
-                <Text note>{this.props.time} 0:00</Text>
+                {/* TODO: {this.props.time} */}
+                <Text note>0:00</Text> 
               </Right>
             </ListItem>
           </List>
