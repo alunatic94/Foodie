@@ -20,12 +20,12 @@ class Comments extends Component{
         this.state = {
             comment: '',
             comments: []
-        }
-        // obj = new PostComment();
+        }        
     }
     // TODO:
+    // establish database listener set comments array in listener
+    // seed comments array
     componentDidMount(){
-            //  establish database listener set comments array in listener
             // 
     }
     componentWillUnmount(){        
@@ -50,6 +50,8 @@ class Comments extends Component{
         }        
         this.comments.doc().set(commentData);        
     }
+
+    
 
     render(){
         return(
