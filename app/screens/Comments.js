@@ -3,34 +3,26 @@ import { Container, Input, Left, Item, Icon, Thumbnail, Button, Header, Footer, 
 import { withNavigation, ScrollView } from 'react-navigation';
 import Comment from '../components/Comment.js';
 import { KeyboardAvoidingView, Text, Alert } from 'react-native';
-import {firebase, db} from '../database/Database';
+import { PostComment } from '../database/PostComment.js';
 
 class Comments extends Component{
     constructor(props){
         super(props);
         this.state = {
             comment: ''
-        }        
+        }
+        obj = new PostComment();
     }
         
     // TODO:
     handleSubmit = (event) => {
         event.preventDefault();
-        // alert("waog")
+        obj.add(this.state.comment);
+        this.setState({
+            comment: ''
+        });
 
-        comments = db.collection('comments');
-
-        let commentData = {
-            body: this.state.comment
-        };
-
-        comments.doc().set(commentData)
-        .then((doc) => {
-            return doc.id;
-        })
-        .catch((err) => {
-            console.log("Could not upload comment");
-        })
+        // Render new comment to comments screen
     }
 
     render(){
@@ -46,11 +38,7 @@ class Comments extends Component{
                 <KeyboardAvoidingView style={{flex:1}} behavior="padding">
                     {/* Must up slack comments dynamically  */}
                 <ScrollView>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
+                <Comment/>                
                 </ScrollView>
                 <Footer>
                     <ListItem avatar>
