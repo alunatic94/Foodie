@@ -10,14 +10,21 @@ import {
   Header,
   Footer,
   Content,
-  ListItem
+  ListItem,
+  Right
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
-import { KeyboardAvoidingView, Text, Alert } from "react-native";
-import { PostComment } from "../database/PostComment.js";
-import { firebase, db } from "../database/Database.js";
+import { KeyboardAvoidingView, Text, AppState } from "react-native";
+import styles from './styles.js';
+import { db } from "../database/Database.js";
 
+const tempImage = require('../screens/assets/dog.png');
+// TODO:
+// 1. change buttonTextColor when input is empty
+// 2. update with user info
+// 3. structure time
+// 4. Disable footer scroll
 class Comments extends Component {
   comments = db
     .collection("posts")
@@ -30,39 +37,57 @@ class Comments extends Component {
     super(props);
     this.state = {
       comment: "",
-      commentsArray: []
+      commentsArray: [],
+      buttonTextColor: '#0065ff'      
     };
   }
-  // TODO:
-  // establish database listener set comments array in listener
-  // seed comments array
+  
   componentDidMount() {
     this.getAll();
-  }
-  componentWillUnmount() {
-    // remove database listener
+    const query = this.comments
+    const listener = query.onSnapshot(querySnapshot => {
+      console.log('${querySnapshot.size}');
+      this.getAll();
+    }, err => {
+      console.log('There was an error');
+    });    
   }
 
-  // TODO:
+  componentWillUnmount() {
+    // remove database listener
+    const unMountListener = this.comments.onSnapshot(() => {
+    });
+  }
+
+  onChange = (comment) => {  
+      this.setState({
+        comment: comment,
+        buttonTextColor: '#0fd90d'
+      });
+      console.log(this.state.comment);    
+  }  
+
   handleSubmit = event => {
     event.preventDefault();
-    this.add(this.state.comment);
+    this.add(this.state.comment);    
     this.setState({
-      comment: ""
-    });
+      comment: "",
+      buttonTextColor: '#0065ff'
+    });    
   };
 
   add = comment => {
     let commentData = {
-      Body: comment,
+      body: comment,
       time: this.time.getTime()
-      // user_ID: User.getCurrent()
+      // TODO: user_ID: User.getCurrent()
     };
     this.comments.doc().set(commentData);
   };
 
   getAll = () => {
     const allComments = this.comments
+      .orderBy('time', 'asc')
       .get()
       .then(snapshot => {
         let existingComments = [];
@@ -79,7 +104,7 @@ class Comments extends Component {
 
   render() {
     return (
-      <Container>
+      <Container>        
         <Header>
           <Left>
             <Button
@@ -93,34 +118,36 @@ class Comments extends Component {
             </Button>
           </Left>
         </Header>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-          {/* Must up slack comments dynamically  */}
-          <ScrollView>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
+          <ScrollView>          
             {this.state.commentsArray.map(comment => (
-              <Comment body={comment.body} />
+              <Comment body={comment.body} time={comment.time} />
             ))}
-            <Comment />
-          </ScrollView>
+          </ScrollView>          
           <Footer>
-            <ListItem avatar>
+          <Container style={styles.commentsFooter}>
+            <ListItem avatar >
               <Left>
-                <Thumbnail source={{ uri: "image" }} />
+                <Thumbnail small source={tempImage} />
               </Left>
-            </ListItem>
-            <Container>
-              <Content>
-                <Item rounded>
+            </ListItem>            
+              <Content>            
+                <Item rounded >
                   <Input
                     placeholder="Comment"
-                    onChangeText={comment => this.setState({ comment })}
-                    value={this.state.comment}
+                    onChangeText={comment => this.onChange(comment)}
+                    value={this.state.comment}                    
                   />
-                </Item>
-              </Content>
-            </Container>
-            <Button transparent onPress={this.handleSubmit}>
-              <Text>Post</Text>
-            </Button>
+                    <Button transparent rounded
+                        onPress={this.handleSubmit}
+                        disabled={!this.state.comment}
+                        style={styles.postButton}
+                    >
+                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                    </Button>                 
+                </Item>            
+                </Content>            
+            </Container>            
           </Footer>
         </KeyboardAvoidingView>
       </Container>
