@@ -105,7 +105,7 @@ export default class ProfileEdit extends Component{
                                                      last: this.state.newLast, 
                                                      age: this.state.newAge, 
                                                      about: this.state.newAbout,
-                                                     //profileImage: uploadImageAsync({uri:image)
+                                                     profileImage: this.state.image
                                                  }, {merge: true})}>
                 <Text>Save Changes</Text>
             </Button>
@@ -160,6 +160,7 @@ export default class ProfileEdit extends Component{
     
           if (!result.cancelled) {
             uploadUrl = await uploadImageAsync(result.uri);
+            console.log(uploadUrl); 
             this.setState({ image: uploadUrl });
           }
         } catch (e) {
