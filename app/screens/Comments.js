@@ -2,23 +2,35 @@ import React, { Component } from 'react';
 import { Container, Input, Left, Item, Icon, Thumbnail, Button, Header, Footer, Content, ListItem } from 'native-base';
 import { withNavigation, ScrollView } from 'react-navigation';
 import Comment from '../components/Comment.js';
-import { KeyboardAvoidingView, Text } from 'react-native';
+import { KeyboardAvoidingView, Text, Alert } from 'react-native';
+import {firebase, db} from '../database/Database';
 
 class Comments extends Component{
     constructor(props){
         super(props);
         this.state = {
             comment: ''
-        }
-
-        this.handleCommentChange = this.handleCommentChange.bind(this);
+        }        
     }
-
-    handleCommentChange(comment) {
-        this.setState({comment});
-    }
+        
     // TODO:
-    handleSubmit(comment){
+    handleSubmit = (event) => {
+        event.preventDefault();
+        // alert("waog")
+
+        comments = db.collection('comments');
+
+        let commentData = {
+            body: this.state.comment
+        };
+
+        comments.doc().set(commentData)
+        .then((doc) => {
+            return doc.id;
+        })
+        .catch((err) => {
+            console.log("Could not upload comment");
+        })
     }
 
     render(){
@@ -51,13 +63,14 @@ class Comments extends Component{
                             <Item rounded>
                                 <Input
                                 placeholder='Comment'
-                                onChangeText={(comment) => this.handleCommentChange(comment)}
+                                onChangeText={(comment) => this.setState({comment})}
+                                value={this.state.comment}
                                 />
                             </Item>
                         </Content>
                     </Container>
                     <Button transparent
-                    onPress={(comment) => this.handleSubmit(comment)}>
+                    onPress={this.handleSubmit}>
                         <Text>Post</Text>
                     </Button>
                 </Footer>
