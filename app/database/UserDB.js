@@ -82,7 +82,7 @@ export class UserDB {
     };
     users.doc(this.userID).set(userData)
     .then((doc) => {
-      return doc.id;
+      return doc.id; // user ID
     })
     .catch((err) => {
       console.log("Could not create user given: \n" + userData);

@@ -3,11 +3,14 @@ import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail,
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Image, ScrollView, ActivityIndicator } from "react-native"
-import {ProfileDB} from "../database/ProfileDB.js"
-import {UserDB} from "../database/UserDB.js"
+import { Image, ScrollView, ActivityIndicator } from "react-native";
+import { Tooltip } from 'react-native-elements';
+import {ProfileDB} from "../database/ProfileDB.js";
+import {UserDB} from "../database/UserDB.js";
+import {BadgesDB} from "../database/BadgesDB.js";
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
+import { testSearch } from '../handlers/yelp-controller.js';
 
 const thumbnail = "";
 const platesURL = [
@@ -25,13 +28,25 @@ export default class Profile extends Component {
         this.state = {
             userID: this.props.navigation.getParam('userID', UserDB.getCurrentUserID()),
             currentProfile: null,
-            isProfileLoaded: false
+            isProfileLoaded: false,
+            badges: []
         }
     }
     componentDidMount() {
+       // getProfileData(); 
+    }
+    async getProfileData() {
         // Fetch profile data after component instance created
-        (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
-            this.setState({currentProfile: profile, isProfileLoaded: true});
+        var profile = await new ProfileDB(this.state.userID).getProfile();
+        var badges = await BadgesDB.getBadgesFromIDs(profile.badges);
+        /*getProfile().then((profile) => {
+            this.setState({currentProfile: profile});
+        }) */
+        this.setState({
+            currentProfile: profile,
+            badgesList: badgesList,
+            badges: badges,
+            isProfileLoaded: true
         });
     }
     render() {
@@ -76,7 +91,6 @@ export default class Profile extends Component {
                       <Body style={styles.headerBody}>
               <Text style={styles.heading}>{this.state.userID == UserDB.getCurrentUserID() ? "Profile" : this.state.currentProfile.username}</Text>
             </Body>
-
                   <Right>
                     <Button 
                         transparent
@@ -115,14 +129,22 @@ export default class Profile extends Component {
                                 <H2 style={styles.heading}>Badges</H2>
                                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 <View style={{flexDirection: "row"}}>
-                                    <Icon name="bonfire" style={styles.padding} />
+                                    {
+                                        // Loop through badges list and add Icon component for each one
+                                        this.state.badges.map(badge =>
+                                            <Tooltip popover={<Text>{badge.badgeID}</Text>}>
+                                                <Icon name={badge.icon} style={styles.padding} withOverlay={false} />
+                                            </Tooltip>
+                                        )
+                                    }
+                                    {/* <Icon name="bonfire" style={styles.padding} />
                                     <Icon name="bowtie" style={styles.padding} />
                                     <Icon name="cafe" style={styles.padding} />
                                     <Icon name="card" style={styles.padding} />
                                     <Icon name="logo-freebsd-devil" style={styles.padding} />
                                     <Icon name="images" style={styles.padding} />
                                     <Icon name="pizza" style={styles.padding} />
-                                    <Icon name="trophy" style={styles.padding} />
+                                    <Icon name="trophy" style={styles.padding} /> */}
                                 </View>
                                 </ScrollView>
                             </Body>
