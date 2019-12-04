@@ -80,7 +80,8 @@ class Comments extends Component {
     let commentData = {
       body: comment,
       time: this.time.getTime()
-      // TODO: user_ID: User.getCurrent()
+      // TODO: user_ID: User.getCurrentID()
+      // TODO: Name: User.getCurrent().username
     };
     this.comments.doc().set(commentData);
   };

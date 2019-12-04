@@ -5,6 +5,7 @@ import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
 import LikeButton  from '../components/LikeButton.js';
+
 const images = [require('../assets/images/burger.png'),
     require('../assets/images/hotdog.png'), 
     require('../assets/images/fish.png')];

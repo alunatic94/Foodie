@@ -85,11 +85,12 @@ export default class FeedCard extends Component {
     render() {
         return (
             <View style={styles.roundCard}>
-                <DeckSwiper style={{height: 325}}
+                {/* <DeckSwiper style={{height: 325}}
                 dataSource={cards}
                 renderEmpty={() => <RestaurantInfo />}
                 renderItem={item => <FeedCardItem card={item} />}
-                />
+                /> */}
+                <FeedCardItem card={cards[0]}/>
             </View>
         )
     }

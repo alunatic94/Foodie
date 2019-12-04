@@ -6,6 +6,10 @@ import FeedCard from '../components/FeedCard.js';
 import styles from './styles.js';
 import PostCard from '../components/PostCard.js';
 
+// TODO: get every doc in posts collection
+// sort by time asc
+// In postComment upload to database
+// In Feed listen to posts being generated
 export default class Feed extends Component {
     render() {
         return (
