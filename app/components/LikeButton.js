@@ -35,24 +35,18 @@ class LikeButton extends React.Component {
           updated: false
         };
       });
-
     }
   }
   
   
   
 
-  render(){
-	  
-	  
-		
-
+  render(){	  	  
     return(
     <View>
 	   <Icon active name="md-heart" onPress={this.updateLikes}/>
        <Text>{this.state.likes}</Text>
-	</View>
-      
+	  </View>      
     );
   }
 }

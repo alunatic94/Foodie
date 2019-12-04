@@ -91,6 +91,17 @@ const styles = StyleSheet.create({
     margin: 10
   },
   padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
-  columnStyle: { height: 200, padding: 10 }
+  columnStyle: { height: 200, padding: 10 },
+
+  commentsFooter: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 10
+  },
+  postButton: {
+    display: 'flex',    
+    justifyContent: 'center',
+    paddingRight: 10
+  },  
 });
 export default styles; 
