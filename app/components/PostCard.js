@@ -4,13 +4,13 @@ import { Image, ScrollView, View } from 'react-native';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
-
+import LikeButton  from '../components/LikeButton.js';
 const images = [require('../assets/images/burger.png'),
     require('../assets/images/hotdog.png'), 
     require('../assets/images/fish.png')];
 
 
-class CardItems extends Component {
+class PostCard extends Component {
     
     render(){
         return (
@@ -32,10 +32,8 @@ class CardItems extends Component {
                 />
                 </CardItem>
                 <CardItem>
-                <Left>        
-                    <Icon active name="thumbs-up" />
-                    <Text style={styles.boldText}></Text>
-                    <Text style={styles.lightText}>Likes</Text>                        
+                <Left>                    
+                    <LikeButton/>
                 </Left>
                 <Body>
                     <Button
@@ -53,4 +51,4 @@ class CardItems extends Component {
             );
         }        
 }
-export default withNavigation(CardItems);
+export default withNavigation(PostCard);
