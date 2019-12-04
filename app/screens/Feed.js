@@ -4,13 +4,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import FeedCard from '../components/FeedCard.js';
 import styles from './styles.js';
-import CardItems from '../components/CardItems.js';
+import PostCard from '../components/PostCard.js';
 
 export default class Feed extends Component {
     render() {
         return (
-	<Container>
-    
+	<Container>    
         <Header>
             <Left>
                 <Button 

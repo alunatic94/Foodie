@@ -4,7 +4,7 @@ import { Image, ScrollView, View } from 'react-native';
 import { Rating} from 'react-native-ratings';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
-import CardItems from '../components/CardItems.js';
+import PostCard from '../components/PostCard.js';
 import LikeButton from '../components/LikeButton.js';
 
 const mainInfo = {
@@ -40,7 +40,7 @@ const cards = [
 function FeedCardItem(props) {
     const {card} = props;
     if (card.part == 'main') {
-        return <CardItems/>
+        return <PostCard/>
     }
     else {        
         return RestaurantInfo();
