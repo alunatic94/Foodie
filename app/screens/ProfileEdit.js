@@ -23,8 +23,8 @@ export default class ProfileEdit extends Component{
             image: null,
             uploading: false,
             newFirst: '',
-            newLast: '' ,
-            newAge: '', 
+            newLast: '',
+            newAge: '',
             newAbout: ''
         }
     }
@@ -52,9 +52,10 @@ export default class ProfileEdit extends Component{
           </Content>
           )
       }
-        else return (
-        <Container>
-         <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+        else{ 
+          return (
+            <Container>
+            <KeyboardAvoidingView style={{flex:1}} behavior="padding">
             <Text style={styles.heading}>
                  First Name:  
             </Text>
@@ -87,8 +88,7 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAbout:text})}
             />
-            
-            <Body>
+             <Body>
                 <Text style={styles.heading}>
                      Picture:  
                 </Text> 
@@ -113,13 +113,14 @@ export default class ProfileEdit extends Component{
                                                      about: this.state.newAbout,
                                                      profileImage: this.state.image
                                                  }, {merge: true}) 
-                                                    && this.props.navigation.push('Profile')
+                                                    && this.props.navigation.push('Main')
                                                    }>
                 <Text>Save Changes</Text>
             </Button>
          </KeyboardAvoidingView>
         </Container>
        );
+      }
     }
       getPermissionAsync = async () => {
         if (Constants.platform.ios) {
