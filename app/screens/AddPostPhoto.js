@@ -80,10 +80,6 @@ export default class AddPostPhoto extends React.Component {
       aspect: [4, 3],
     });
     console.log(result);
-    navigate(
-      'AddPostComment', 
-      { uri : result.uri }
-    );
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
@@ -101,10 +97,6 @@ export default class AddPostPhoto extends React.Component {
       aspect: [4, 3],
     });
     console.log(result);
-    navigate(
-      'AddPostComment', 
-      { uri : result.uri }
-    );
     if (!result.cancelled) {
       this.setState({ image: result.uri });
       this._handleImagePicked(result);
@@ -125,6 +117,11 @@ export default class AddPostPhoto extends React.Component {
       alert('Upload failed, sorry :(');
     } finally {
       this.setState({ uploading: false });
+      this.props.navigation.navigate(
+        'AddPostComment', 
+        { uri : result.uri,
+          imageURL: this.state.image  }
+      );
     }
   };
 }
@@ -151,9 +148,5 @@ async function uploadImageAsync(uri) {
     .child(uuid.v4());
   const snapshot = await ref.put(blob);
   blob.close();
-
-  /* Displays in console the download URL of the image just uploaded onto firebase storage */
-  console.log(await snapshot.ref.getDownloadURL());
-
   return await snapshot.ref.getDownloadURL();
 }
