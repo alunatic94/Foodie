@@ -4,6 +4,8 @@ import { Container, Header, Left, Right, Body, Content, Button, Text, Input, Vie
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
+import { db } from '../database/Database.js';
+
 export default class AddPostComment extends Component {
   constructor(props) {
     super(props);
@@ -19,13 +21,22 @@ export default class AddPostComment extends Component {
     this.setState({ like, meh, dislike });
 }
 
+addPost(){
+  let postData = {
+    images: [],
+    likes: 0,
+    rating: 2,
+    uir: this.props.uri
+    // TODO:  user.getCurrentID()
+  }
+}
+
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
     const uri = navigation.getParam('uri');
     return (
       <Container>
-
           <Header>
             <Left>
                 <Button 
