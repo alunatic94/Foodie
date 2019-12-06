@@ -5,8 +5,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
 import { db } from '../database/Database.js';
+import User from '../database/UserDB.js';
 
 export default class AddPostComment extends Component {
+
+  // User = User._getData('DveCC8D0yeaKDmHFn5Nh0tiGFoE3');
+  posts = db.collection("posts");
+  photos = this.props.navigation.getParam('uri');
+  // userID = this.User.getCurrent();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,25 +23,35 @@ export default class AddPostComment extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
+    
 }
 
 addPost(){
   let postData = {
-    images: [],
+    images: [this.photos],
     likes: 0,
-    rating: 2,
-    uir: this.props.uri
-    // TODO:  user.getCurrentID()
+    rating: 2,    
+    // TODO:
+    // user.getCurrentID()
+    // comments collection
+    // likes_who
+    // 
   }
+  this.posts.doc().set(postData);
+  // comments = this.posts.doc().collection('comments');
+  // this.posts.doc().set(comments);
 }
 
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
     const uri = navigation.getParam('uri');
+    console.log("just before");
+    console.log({User});  
+    
     return (
       <Container>
           <Header>
@@ -89,7 +106,7 @@ addPost(){
             
             <Button
             block success 
-            onPress={() => this.props.navigation.navigate('Main')}>
+            onPress={() => this.addPost()}>
                 <Text>Post your plate</Text>
             </Button>
 
