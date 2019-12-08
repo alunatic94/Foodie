@@ -7,36 +7,45 @@ export class User {
   // Create new User instance either from:
   // 1) User(userID) - existing user
   // 2) User(userID, username...) - create a new user
-  constructor(userID="1234", username="foodie", first="John", last="Smith", age="99", email="jsmith@gmail.com") {
-    console.log("get data for user");
-    let existingUserData = null;
+  // constructor(userID="1234", username="foodie", first="John", last="Smith", age="99", email="jsmith@gmail.com") {
+  //   getData(userID, username, first, last, age, email);
+  // }
+
+  constructor(userData) {
+    this.data = userData;
+    this.update(userData);
+  }
+
+  static async getExisting(userID) {
+    var userData = {};
     users.doc(userID).get().then((doc) => {
+      console.log("User - getExisting() returned user document for ID=" + userID);
       if (doc.exists) {
         userData = doc.data();
-        this.update(userData);
-        // User._getData(userID).then((userData) => {
-        //   existingUserData = userData;
-        //   this.update(existingUserData);
-        //   console.log("existing user: " + JSON.stringify(existingUserData));
-        // })
-        console.log("existing user: " + JSON.stringify(userData));
+        console.log("User - getExisting() grabbed user data: " + JSON.stringify(userData));
+        user = new User(userData);
+        console.log("User - getExisting() returned new User: " + JSON.stringify(user.data));
+        return user;
       }
-      else {
-        // Default user parameters
-        this.username = username;
-        this.userID = userID;
-        this.first = first;
-        this.last = last;
-        this.age = age;
-        this.email = email;
-        this.profileImage = 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-        this.badges = [];
-        this.tagline = "Newbie";
-        this.about = `Hi, I'm ${first}!`;
-        this.plates = [];
+    });
+  }
 
-        this.add();
-      }
+  static async createNew(userID, username, first, last, age, email) {
+    userData = {};
+
+    userData.profileImage = 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+    userData.badges = [];
+    userData.tagline = "Newbie";
+    userData.about = `Hi, I'm ${first}!`;
+    userData.plates = [];
+
+    users.doc(this.userID).set(userData)
+    .then((doc) => {
+      console.log("User - createNew() returned new User");
+      return new User(userData);
+    })
+    .catch((err) => {
+      console.log("Could not create user given: \n" + JSON.stringify(userData));
     });
   }
 
@@ -56,13 +65,15 @@ export class User {
       plates: string[] of post ids
     } 
   */
-  static getCurrent(userID=null) {
+  static async getCurrent(userID=null) {
     if (firebase.auth().currentUser !== null) { // logged in
-        return new User(User.getCurrentUserID());
-        // let data = await User._getData(firebase.auth().currentUser.uid);
-        // return new User(data.userID, data.username, data.first, data.last, data.age, data.email);
+      //  return new User(User.getCurrentUserID());
+      console.log("User - getCurrent() called");
+      User.getExisting(User.getCurrentUserID()).then((user) => {
+        console.log("User - getCurrent() - retrieved user: " + JSON.stringify(user));
+        return user;
+      });
     }
-    return null; // no current user found
   }
 
   // User.getCurrentUserID() - Get only userID (as string) for current logged in user
@@ -73,61 +84,55 @@ export class User {
     return null; // no current user found
   }
 
-  static async _getData(userID) {
-    var userData = {};
-    users.doc(userID).get().then((doc) => {
-      userData = doc.data();
-      update(userData);
-      return userData;
-    })
-    .catch((err) => {
-      console.log("Could not find user from ID " + userID);
-    });
-  }
+  // static async _getData(userID) {
+  //   var userData = {};
+  //   await users.doc(userID).get().then((doc) => {
+  //     userData = doc.data();
+  //     update(userData);
+  //     return userData;
+  //   })
+  //   .catch((err) => {
+  //     console.log("Could not find user from ID " + userID);
+  //   });
+  // }
 
-  // Get JSON object of user fields in database document
-  async get() {
-    return User._getData(this.userID);
-  }
+  // // Get JSON object of user fields in database document
+  // async get() {
+  //   return User._getData(this.userID);
+  // }
 
-  // Add user to database
-  add() {
-    let userData = {
-      userID: this.userID,
-      username: this.username,
-      first: this.first,
-      last: this.last,
-      age: this.age,
-      email: this.email,
-      profileImage: this.profileImage,
-      badges: this.badges,
-      tagline: this.tagline,
-      about: this.about,
-      plates: this.plates
-    };
-    users.doc(this.userID).set(userData)
-    .then((doc) => {
-      return doc.id; // user ID
-    })
-    .catch((err) => {
-      console.log("Could not create user given: \n" + JSON.stringify(userData));
-    });
-  }
+  // // Add user to database
+  // async add() {
+  //   let userData = {
+  //     userID: this.userID,
+  //     username: this.username,
+  //     first: this.first,
+  //     last: this.last,
+  //     age: this.age,
+  //     email: this.email,
+  //     profileImage: this.profileImage,
+  //     badges: this.badges,
+  //     tagline: this.tagline,
+  //     about: this.about,
+  //     plates: this.plates
+  //   };
+    
+  // }
 
-  // User.getAll() - Get JSON object of all users in collection
-  static getAll() {
-    var allUsers = {};
-    users.get().then((snapshot) => {
-      snapshot.forEach((doc) => {
-      allUsers[doc.id] = doc.data();
-      });
-    console.log(allUsers);
-    return allUsers;
-    })
-    .catch((err) => {
-      console.log('Error getting users', err);
-    });
-  }
+  // // User.getAll() - Get JSON object of all users in collection
+  // static getAll() {
+  //   var allUsers = {};
+  //   users.get().then((snapshot) => {
+  //     snapshot.forEach((doc) => {
+  //     allUsers[doc.id] = doc.data();
+  //     });
+  //   console.log(allUsers);
+  //   return allUsers;
+  //   })
+  //   .catch((err) => {
+  //     console.log('Error getting users', err);
+  //   });
+  // }
 
   update(userData) {
     this.userID = userData.userID;

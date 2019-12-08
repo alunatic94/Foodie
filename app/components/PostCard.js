@@ -21,23 +21,38 @@ const postDefaults = {
     restaurantID: "1"
 };
 
+const dummyUser = {
+    userID: "1234",
+    username: "dummy",
+    first: "Dummy",
+    last: "User",
+    age: 99,
+    email: "dummy@user.com",
+    profileImage: 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png',
+    badges: [],
+    tagline: 'Dummy',
+    about: "I'm a dummy user.",
+    plates: []
+}
+
 class PostCard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            post: this.props.navigation.getParam('post', postDefaults),
-            user: {},
-            isLoaded: false
+            post: this.props.post || postDefaults,
+            user: dummyUser,
+            isLoaded: true // false
         }
     }
 
-    getPostUser = async () => {
-        return new User.getCurrent();
+    componentWillMount() {
+       // this.loadUser();
     }
 
-    componentWillMount() {
-        this.getPostUser().then((loadedUser) => {
+    loadUser = () => {
+        User.getCurrent().then((loadedUser) => {
+            console.log("PostCard - loadUser(): retrieved user: " + JSON.stringify(loadedUser.data));
             this.setState({
                 user: loadedUser,
                 isLoaded: true
@@ -47,7 +62,6 @@ class PostCard extends Component {
             console.log(err + ":" + "Could not load user [id = " + this.state.post.userID + "] for post");
         })
     }
-
    
     
     render() {
@@ -62,9 +76,9 @@ class PostCard extends Component {
             <Card>
                 <CardItem>
                 <Left>
-                <Thumbnail source={this.state.user.profileImage} style={styles.circleSmall} />
+                <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall} />
                     <Body>
-                    <Text style={styles.heading}>{this.props.user.username}</Text>
+                    <Text style={styles.heading}>{this.state.user.username}</Text>
                     <Text style={styles.subheading}>{this.props.post.timestamp}</Text>
                     </Body>
                 </Left>
@@ -82,7 +96,7 @@ class PostCard extends Component {
                 </Left>
                 <Body>
                     <Button
-                    onPress={() => this.props.navigation.navigate('Comments')}>
+                    onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}>
                     <Icon active name="chatbubbles" />
                     {/* <Text style={styles.boldText}></Text>
                     <Text style={styles.lightText}>Comments</Text> */}

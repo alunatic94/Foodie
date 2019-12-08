@@ -33,7 +33,7 @@ export default class FeedCard extends Component {
             <View style={styles.roundCard, {height: 325}}>
                 {this.state.isShowingRestaurant ? 
                 <RestaurantCard restaurantID={this.state.postObject.restaurantID} /> : 
-                <PostCard post={this.state.postObject} />}
+                <PostCard postID={this.props.postID} post={this.state.postObject} />}
             </View>
         )
     }
