@@ -1,18 +1,18 @@
 
-import MapView, {Marker} from "react-native-maps";
-import { Container, Left, Body, Right,  Button, Header, Item, Icon, Input, Text} from 'native-base';
+import MapView, { Marker } from "react-native-maps";
+import { Container, Left, Body, Right, Button, Header, Item, Icon, Input, Text } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {logout} from '../screens/Login.js';
+import { logout } from '../screens/Login.js';
 import styles from './styles.js';
 import React, { Component } from 'react';
-import { Platform, View, StyleSheet } from 'react-native';
+import { Platform, View, StyleSheet, Image } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import YelpRequest from "../handlers/YelpRequestHandler.js";
+import axios from 'axios';
 
-
-class Map extends React.Component{ 
+class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,171 +23,264 @@ class Map extends React.Component{
       nearbyRestaurants: [],
       isLoaded: false
     };
-}
+  }
 
-searchOn = () => {
-  this.setState({ showSearch: true});
-};
-searchOff = () => {
-  this.setState({ showSearch: false});
-};
+  searchOn = () => {
+    this.setState({ showSearch: true });
+  };
+  searchOff = () => {
+    this.setState({ showSearch: false });
+  };
 
- componentDidMount() {
-	 navigator.geolocation.getCurrentPosition(
-		position => {
-			this.setState({
-				latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-				error:null
-			});
-		},
-		error => this.setState({error: error.message }),
-			{enableHighAccuracy:true, timeout: 200000, maximumAge: 2000}
+  // async getRestaurantsByRadius() {
+  //   await axios.get('https://api.yelp.com/v3/businesses/search', {
+  //     headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
+  //     params: {
+  //       latitude: 34.2383,
+  //       longitude: -118.5237,
+  //       categories: "restaurants",
+  //       limit: 2
+  //     }
+  //   }).then((res) => {
+  //     console.log("1");
+  //     this.setState({
+  //       nearbyRestaurants: res.data.businesses,
+  //       isLoaded: true
+  //     });
+  //     console.log("2");
+  //     return res.data.businesses;
+  //   }).catch((err) => {
+  //     //console.log("Yelp request via Axios failed: " + err);
+  //     return err;
+  //   })
+
+
+  // }
+
+  async componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null
+        });
+      },
+      error => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
     )
-    
+
     // Grab restaurants nearby
-    YelpRequest.getRestaurantsByRadius(this.state.latitude, this.state.longitude, 5).then((restaurants) => {
+
+    //TEST 1
+    // var yReq = new YelpRequest('https://api.yelp.com/v3/businesses/search', {
+    //   latitude: 34.2410,
+    //   longitude: -118.5277,
+    //   //radius: radius, // max 25 miles
+    //   limit: 2,
+    //   categories: 'restaurants'
+    // });
+    // yReq.getRestaurantsByRadius().then((res) => {
+    //   this.setState({
+    //     isLoaded: true,
+    //     nearbyRestaurants: yReq.response
+    //   })
+    // },
+    // console.log("Map returned: " + this.nearbyRestaurants));
+
+
+    //TEST 2
+    // this.getRestaurantsByRadius().then((response) => {
+    //   this.setState({
+    //     isLoaded: true,
+    //     nearbyRestaurants: response
+    //   })
+    //   //console.log("compDidMount response:" + response);
+    // });
+    // console.log("3");
+
+    //TEST 3
+    axios.get('https://api.yelp.com/v3/businesses/search', {
+      headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
+      params: {
+        latitude: 34.2383,
+        longitude: -118.5237,
+        // latitude: this.latitude,
+        // longitude: this.longitude,
+        categories: "restaurants",
+        limit: 20
+      }
+    }).then((res) => {
+      this.nearbyRestaurants = res.data.businesses;
       this.setState({
-        nearbyRestaurants: restaurants, 
+        nearbyRestaurants: res.data.businesses,
         isLoaded: true
       });
-      console.log("Map: Returned from YelpRequestHandler:\n" + restaurants);
-    });
-};
+      return res.data.businesses;
+    }).catch((err) => {
+      console.log("Yelp request via Axios failed: " + err);
+      return err;
+    })
+
+
+  };
 
 
 
-	   
 
 
-    render(){
-      if (!this.state.isLoaded) {
-        return(
-          <Container>
 
-            <Header searchBar rounded>
-                  <Left>
-                    <Button 
-                        transparent
-                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Left>
+  render() {
+    if (!this.state.isLoaded) {
+      return (
+        <Container>
 
-                  <Body>
-                  {this.state.showSearch ?
-                    <Item>
-                    <Icon name="ios-search" />
-                    <Input placeholder="Search" />
-                    <Button transparent>
-                     <Text onPress={this.searchOff}>Cancel</Text>
+          <Header searchBar rounded>
+            <Left>
+              <Button
+                transparent
+                onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
+                <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
+              </Button>
+            </Left>
+
+            <Body>
+              {this.state.showSearch ?
+                <Item>
+                  <Icon name="ios-search" />
+                  <Input placeholder="Search" />
+                  <Button transparent>
+                    <Text onPress={this.searchOff}>Cancel</Text>
                   </Button>
-                    </Item>
-                  :
-                    <Text style={styles.heading}>Find a Restaurant</Text>
-                  }
-                  </Body>
-
-                 
-                  <Right>
-                  {this.state.showSearch ?
-                    null
-                  :
-                    <Button transparent onPress={this.searchOn}>
-                      <Icon name="ios-search" />
-                    </Button>
-                  }
-                   
-                    <Button 
-                      transparent
-                      onPress={() => logout(this.props.navigation)}>
-                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Right>
-            </Header>
-
-            <MapView
-              style={{flex: 5}}
-              region={{
-                // 37.78825, -122.4324
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-              }}
-			>
-			</MapView>
-              
-          </Container>  
-        )
-      }
-      else return(        
-          <Container>
-
-            <Header searchBar rounded>
-                  <Left>
-                    <Button 
-                        transparent
-                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Left>
-
-                  <Body>
-                  {this.state.showSearch ?
-                    <Item>
-                    <Icon name="ios-search" />
-                    <Input placeholder="Search" />
-                    <Button transparent>
-                     <Text onPress={this.searchOff}>Cancel</Text>
-                  </Button>
-                    </Item>
-                  :
-                    <Text style={styles.heading}>Find a Restaurant</Text>
-                  }
-                  </Body>
-
-                 
-                  <Right>
-                  {this.state.showSearch ?
-                    null
-                  :
-                    <Button transparent onPress={this.searchOn}>
-                      <Icon name="ios-search" />
-                    </Button>
-                  }
-                   
-                    <Button 
-                      transparent
-                      onPress={() => logout(this.props.navigation)}>
-                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Right>
-            </Header>
+                </Item>
+                :
+                <Text style={styles.heading}>Find a Restaurant</Text>
+              }
+            </Body>
 
 
+            <Right>
+              {this.state.showSearch ?
+                null
+                :
+                <Button transparent onPress={this.searchOn}>
+                  <Icon name="ios-search" />
+                </Button>
+              }
 
-            <MapView
-              style={{flex: 5}}
-              region={{
-                // 37.78825, -122.4324
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-              }}
-			>
-      
-      {
-        console.log(this.state.nearbyRestaurants),
-        this.state.nearbyRestaurants.map((restaurant) =>
-          <Marker coordinate={restaurant.coordinates} />
-        )
-      }
-			</MapView>
-              
-          </Container>        
+              <Button
+                transparent
+                onPress={() => logout(this.props.navigation)}>
+                <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
+              </Button>
+            </Right>
+          </Header>
+
+          <MapView
+            style={{ flex: 5 }}
+            region={{
+              // 37.78825, -122.4324
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }}
+          >
+          </MapView>
+
+        </Container>
       )
     }
+    else return (
+      <Container>
+
+        <Header searchBar rounded>
+          <Left>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
+              <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
+            </Button>
+          </Left>
+
+          <Body>
+            {this.state.showSearch ?
+              <Item>
+                <Icon name="ios-search" />
+                <Input placeholder="Search" />
+                <Button transparent>
+                  <Text onPress={this.searchOff}>Cancel</Text>
+                </Button>
+              </Item>
+              :
+              <Text style={styles.heading}>Find a Restaurant</Text>
+            }
+          </Body>
+
+
+          <Right>
+            {this.state.showSearch ?
+              null
+              :
+              <Button transparent onPress={this.searchOn}>
+                <Icon name="ios-search" />
+              </Button>
+            }
+
+            <Button
+              transparent
+              onPress={() => logout(this.props.navigation)}>
+              <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
+            </Button>
+          </Right>
+        </Header>
+
+
+
+        <MapView
+          style={{ flex: 5 }}
+          region={{
+            // 37.78825, -122.4324
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            latitudeDelta: 0.0122,
+            longitudeDelta: 0.0121
+          }}
+        >
+
+          <Marker
+            coordinate={{
+              latitude: this.state.latitude,
+              longitude: this.state.longitude
+            }}
+          />
+
+          {
+            this.nearbyRestaurants.map((marker, index) => {
+              console.log(marker.image_url);
+              return (
+                <Marker
+                  coordinate={{
+                    latitude: marker.coordinates.latitude,
+                    longitude: marker.coordinates.longitude
+                  }}
+                  title={marker.name}
+                  description={marker.categories[1].title}
+                >
+                  <View>
+                    <Image
+                      style={{ width: 100, height: 100, borderRadius: 100/2, borderWidth: 2, borderColor: "beige", left: 0 }}
+                      source={{ uri: marker.image_url }}
+                    />
+                  </View>
+                </Marker>
+              )
+            })
+          }
+        </MapView>
+
+      </Container>
+    )
   }
-  export default Map; 
+}
+export default Map; 

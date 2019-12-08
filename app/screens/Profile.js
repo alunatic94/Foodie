@@ -10,7 +10,6 @@ import {UserDB} from "../database/UserDB.js";
 import {BadgesDB} from "../database/BadgesDB.js";
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
-import { testSearch } from '../handlers/yelp-controller.js';
 
 const thumbnail = "";
 const platesURL = [
