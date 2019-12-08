@@ -5,14 +5,13 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
 import { db } from '../database/Database.js';
-import User from '../database/UserDB.js';
+import { UserDB } from '../database/UserDB.js';
 
 export default class AddPostComment extends Component {
 
   // User = User._getData('DveCC8D0yeaKDmHFn5Nh0tiGFoE3');
   posts = db.collection("posts");
-  photos = this.props.navigation.getParam('uri');
-  // userID = this.User.getCurrent();
+  photos = this.props.navigation.getParam('uri');  
 
   constructor(props) {
     super(props);
@@ -26,6 +25,8 @@ export default class AddPostComment extends Component {
   componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
+    console.log("Before call to UserDB");
+    userID = UserDB.getCurrent();
     
 }
 
@@ -48,9 +49,7 @@ addPost(){
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
-    const uri = navigation.getParam('uri');
-    console.log("just before");
-    console.log({User});  
+    const uri = navigation.getParam('uri');        
     
     return (
       <Container>
