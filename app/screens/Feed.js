@@ -32,9 +32,9 @@ export default class Feed extends Component {
             </Right>
         </Header>
         <Content>
-         <FeedCard />
-         <FeedCard />
-         <FeedCard />
+         <FeedCard postID="1234"/>
+         <FeedCard postID="1234"/>
+         <FeedCard postID="1234"/>
         </Content>
       </Container>
         )

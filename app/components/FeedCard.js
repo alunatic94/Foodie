@@ -6,90 +6,34 @@ import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import PostCard from '../components/PostCard.js';
 import LikeButton from '../components/LikeButton.js';
-
-const mainInfo = {
-    profileImage: require('../screens/assets/dog.png'),
-    name: 'Name',
-    location: 'Northridge, CA',
-    comments: '10',
-    likes: '4',
-    hours: '11'
-}
-
-const restaurantInfo = {
-    image: require('../assets/images/burger.png'),
-    name: 'Arbor Grill',
-    category: 'American',
-    rating: 3.5,
-    numRatings: 10
-}
-const images = [require('../assets/images/burger.png'),
-    require('../assets/images/hotdog.png'), 
-    require('../assets/images/fish.png')];
-
-const cards = [
-    {
-      part: 'main',
-      cardImages: images,
-    },
-    {
-     part: 'info',
-    }
-];
-
-function FeedCardItem(props) {
-    const {card} = props;
-    if (card.part == 'main') {
-        return <PostCard/>
-    }
-    else {        
-        return RestaurantInfo();
-    }
-}
-
-function RestaurantInfo() {
-    return (
-        <Card>
-            <CardItem style={{padding: 10}}>
-                <Left>
-                <Thumbnail source={restaurantInfo.image} style={styles.roundSquare} />
-                </Left>
-                <Body>
-                <Text style={styles.headingLarge}>{restaurantInfo.name}</Text>
-                <Rating
-                    imageSize={20}
-                    readOnly={true}
-                    startingValue={restaurantInfo.rating}
-                />
-                <Text style={styles.lightText}>({restaurantInfo.numRatings})</Text>
-                <Text style={styles.subheadingLarge}>{restaurantInfo.category}</Text>
-                </Body>
-            </CardItem>
-            <CardItem style={{padding: 10, paddingTop: 50}} cardBody>
-             <Text style={styles.headingLarge}>More Plates Eaten Here</Text>
-            </CardItem>
-                <CardItem>
-                <Body>
-                    <ScrollView horizontal style={{flex: 1}}>
-                         <Image source = {images[0]} style={styles.imageFeedSmall} />
-                         <Image source = {images[1]} style={styles.imageFeedSmall} />
-                         <Image source = {images[2]} style={styles.imageFeedSmall} />
-                    </ScrollView>
-                </Body>
-                </CardItem>
-            </Card>
-    );
-}
+import RestaurantCard from './RestaurantCard.js';
+import { withNavigation } from 'react-navigation';
 
 export default class FeedCard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            // TODO: Replace this static placeholder variable with dynamic post object call from Post database collection
+            postObject: {
+                images: ["https://i.imgur.com/Ht5l5n.png", "https://i.imgur.com/Ht5l5n.png"],
+                likes: 4,
+                likes_who: "1234",
+                rating: 'like',
+                review: "It's good!",
+                timestamp: "December 21, 2012",
+                userID: "1234",
+                restaurantID: "1"
+            },
+            // TODO: Add button on feed card to toggle between restaurant and post card
+            isShowingRestaurant: false
+        }
+    }
     render() {
         return (
-            <View style={styles.roundCard}>
-                <DeckSwiper style={{height: 325}}
-                dataSource={cards}
-                renderEmpty={() => <RestaurantInfo />}
-                renderItem={item => <FeedCardItem card={item} />}
-                />
+            <View style={styles.roundCard, {height: 325}}>
+                {this.state.isShowingRestaurant ? 
+                <RestaurantCard restaurantID={this.state.postObject.restaurantID} /> : 
+                <PostCard post={this.state.postObject} />}
             </View>
         )
     }

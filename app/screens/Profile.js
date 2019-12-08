@@ -3,14 +3,12 @@ import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail,
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Image, ScrollView, ActivityIndicator } from "react-native";
-import { Tooltip } from 'react-native-elements';
-import {ProfileDB} from "../database/ProfileDB.js";
-import {UserDB} from "../database/UserDB.js";
-import {BadgesDB} from "../database/BadgesDB.js";
+import { Image, ScrollView, ActivityIndicator } from "react-native"
+import {BadgesDB} from "../database/BadgesDB.js"
+import {ProfileDB} from "../database/ProfileDB.js"
+import {User} from "../database/User.js"
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
-import { testSearch } from '../handlers/yelp-controller.js';
 
 const thumbnail = "";
 const platesURL = [
@@ -26,28 +24,40 @@ export default class Profile extends Component {
         super(props);
         // Defaults
         this.state = {
-            userID: this.props.navigation.getParam('userID', UserDB.getCurrentUserID()),
+            userID: this.props.navigation.getParam('userID', User.getCurrentUserID()),
             currentProfile: null,
-            isProfileLoaded: false,
+            isProfileLoaded: false, 
             badges: []
         }
     }
     componentDidMount() {
-       // getProfileData(); 
-    }
-    async getProfileData() {
         // Fetch profile data after component instance created
-        var profile = await new ProfileDB(this.state.userID).getProfile();
-        var badges = await BadgesDB.getBadgesFromIDs(profile.badges);
-        /*getProfile().then((profile) => {
-            this.setState({currentProfile: profile});
-        }) */
-        this.setState({
-            currentProfile: profile,
-            badgesList: badgesList,
-            badges: badges,
-            isProfileLoaded: true
+        (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
+            this.setState({currentProfile: profile}, () => {
+                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                    this.setState({
+                        badges: newBadges,
+                        isProfileLoaded: true
+                    });
+                });
+            });
         });
+    }
+
+    // Loop through badges list and add Icon component for each one                                       
+    renderBadges = (badges) => {
+        if (badges.length == 0) {
+            return <Text style={styles.subheading}>None so far!</Text>;
+        }
+        else {
+            return(
+                badges.map((badge) => {
+                    <Tooltip popover={<Text>{badge.badgeID}</Text>}>
+                    <Icon name={badge.icon} style={styles.padding} withOverlay={false} />
+                </Tooltip>
+                })
+            )
+        }
     }
     render() {
         // Render empty profile screen until data is finished being fetched
@@ -89,8 +99,9 @@ export default class Profile extends Component {
                      </Button>
                   </Left>
                       <Body style={styles.headerBody}>
-              <Text style={styles.heading}>{this.state.userID == UserDB.getCurrentUserID() ? "Profile" : this.state.currentProfile.username}</Text>
+              <Text style={styles.heading}>{this.state.userID == User.getCurrentUserID() ? "Profile" : this.state.currentProfile.username}</Text>
             </Body>
+
                   <Right>
                     <Button 
                         transparent
@@ -129,14 +140,7 @@ export default class Profile extends Component {
                                 <H2 style={styles.heading}>Badges</H2>
                                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 <View style={{flexDirection: "row"}}>
-                                    {
-                                        // Loop through badges list and add Icon component for each one
-                                        this.state.badges.map(badge =>
-                                            <Tooltip popover={<Text>{badge.badgeID}</Text>}>
-                                                <Icon name={badge.icon} style={styles.padding} withOverlay={false} />
-                                            </Tooltip>
-                                        )
-                                    }
+                                    {this.renderBadges(this.state.badges)}
                                     {/* <Icon name="bonfire" style={styles.padding} />
                                     <Icon name="bowtie" style={styles.padding} />
                                     <Icon name="cafe" style={styles.padding} />
@@ -146,6 +150,7 @@ export default class Profile extends Component {
                                     <Icon name="pizza" style={styles.padding} />
                                     <Icon name="trophy" style={styles.padding} /> */}
                                 </View>
+
                                 </ScrollView>
                             </Body>
                         </CardItem>

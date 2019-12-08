@@ -32,8 +32,8 @@ searchOff = () => {
   this.setState({ showSearch: false});
 };
 
- componentDidMount() {
-	 navigator.geolocation.getCurrentPosition(
+componentDidMount() {
+  navigator.geolocation.getCurrentPosition(
 		position => {
 			this.setState({
 				latitude: position.coords.latitude,
@@ -43,18 +43,18 @@ searchOff = () => {
 		},
 		error => this.setState({error: error.message }),
 			{enableHighAccuracy:true, timeout: 200000, maximumAge: 2000}
-    )
-    
-    // Grab restaurants nearby
-    YelpRequest.getRestaurantsByRadius(this.state.latitude, this.state.longitude, 5).then((restaurants) => {
-      this.setState({
-        nearbyRestaurants: restaurants, 
-        isLoaded: true
-      });
-      console.log("Map: Returned from YelpRequestHandler:\n" + restaurants);
-    });
-};
+    );
 
+   // Grab restaurants nearby
+  //  YelpRequest.getRestaurantsByRadius(this.state.latitude, this.state.longitude, 5);
+  //  YelpRequest.getRestaurantsByRadius(this.state.latitude, this.state.longitude, 5).then((restaurants) => {
+  //   this.setState({
+  //     nearbyRestaurants: restaurants, 
+  //     isLoaded: true
+  //   });
+  //   console.log("Map - componentWillMount(): Returned from YelpRequestHandler:\n" + restaurants);
+  // });
+}
 
 
 	   
@@ -179,7 +179,7 @@ searchOff = () => {
 			>
       
       {
-        console.log(this.state.nearbyRestaurants),
+        console.log("Map - render(): nearbyRestaurants value = " + this.state.nearbyRestaurants),
         this.state.nearbyRestaurants.map((restaurant) =>
           <Marker coordinate={restaurant.coordinates} />
         )

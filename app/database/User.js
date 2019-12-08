@@ -2,45 +2,70 @@ import {firebase, db} from '../database/Database';
 
 users = db.collection('users');
 
-export class UserDB {
+export class User {
 
   // Create new User instance either from:
-  // 1) UserDB(userID) - existing user
-  // 2) UserDB(userID, username...) - create a new user
-  constructor(userID=null, username=null, first=null, last=null, age=null, email=null) {
+  // 1) User(userID) - existing user
+  // 2) User(userID, username...) - create a new user
+  constructor(userID="1234", username="foodie", first="John", last="Smith", age="99", email="jsmith@gmail.com") {
+    console.log("get data for user");
     let existingUserData = null;
-    if (users.doc(userID).exists) { // exists already - async update
-      existingUserData = UserDB._getData(userID);
-    }
-    else {
-      // Default user parameters
-      this.username = username;
-      this.userID = userID;
-      this.first = first;
-      this.last = last;
-      this.age = age;
-      this.email = email;
-      this.profileImage = 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-      this.badges = [];
-      this.tagline = "Newbie";
-      this.about = `Hi, I'm ${first}!`;
-      this.plates = [];
+    users.doc(userID).get().then((doc) => {
+      if (doc.exists) {
+        userData = doc.data();
+        this.update(userData);
+        // User._getData(userID).then((userData) => {
+        //   existingUserData = userData;
+        //   this.update(existingUserData);
+        //   console.log("existing user: " + JSON.stringify(existingUserData));
+        // })
+        console.log("existing user: " + JSON.stringify(userData));
+      }
+      else {
+        // Default user parameters
+        this.username = username;
+        this.userID = userID;
+        this.first = first;
+        this.last = last;
+        this.age = age;
+        this.email = email;
+        this.profileImage = 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
+        this.badges = [];
+        this.tagline = "Newbie";
+        this.about = `Hi, I'm ${first}!`;
+        this.plates = [];
 
-      this.add();
-    }
-  
+        this.add();
+      }
+    });
   }
 
-  // UserDB.getCurrent() - Get User object for current logged in user
+  /* User.getCurrent() - Get User object for current logged in user
+    Output: Object = 
+    {
+      userID: string,
+      username: string,
+      first: string,
+      last: string,
+      age: int,
+      email: string,
+      profileImage: string URL,
+      badges: string[],
+      tagline: string,
+      about: string,
+      plates: string[] of post ids
+    } 
+  */
   static getCurrent(userID=null) {
     if (firebase.auth().currentUser !== null) { // logged in
-        let data = User._getData(firebase.auth().currentUser.uid);
-        return new User(data.userID, data.username, data.first, data.last, data.age, data.email);
+        return new User(User.getCurrentUserID());
+        // let data = await User._getData(firebase.auth().currentUser.uid);
+        // return new User(data.userID, data.username, data.first, data.last, data.age, data.email);
     }
     return null; // no current user found
   }
 
-  // UserDB.getCurrentUserID() - Get only userID (as string) for current logged in user
+  // User.getCurrentUserID() - Get only userID (as string) for current logged in user
   static getCurrentUserID() {
     if (firebase.auth().currentUser !== null) { // logged in
         return firebase.auth().currentUser.uid;
@@ -48,7 +73,7 @@ export class UserDB {
     return null; // no current user found
   }
 
-  static _getData(userID) {
+  static async _getData(userID) {
     var userData = {};
     users.doc(userID).get().then((doc) => {
       userData = doc.data();
@@ -61,7 +86,7 @@ export class UserDB {
   }
 
   // Get JSON object of user fields in database document
-  get() {
+  async get() {
     return User._getData(this.userID);
   }
 
@@ -85,11 +110,11 @@ export class UserDB {
       return doc.id; // user ID
     })
     .catch((err) => {
-      console.log("Could not create user given: \n" + userData);
+      console.log("Could not create user given: \n" + JSON.stringify(userData));
     });
   }
 
-  // UserDB.getAll() - Get JSON object of all users in collection
+  // User.getAll() - Get JSON object of all users in collection
   static getAll() {
     var allUsers = {};
     users.get().then((snapshot) => {

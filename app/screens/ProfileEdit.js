@@ -3,7 +3,7 @@ import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thum
 import React, { Component } from 'react';
 import styles from './styles.js';
 import {ProfileDB} from "../database/ProfileDB.js"
-import {UserDB} from "../database/UserDB.js"
+import {User} from "../database/User.js"
 import {firebase, db} from '../database/Database';
 import uuid from 'uuid';
 import * as Permissions from 'expo-permissions';
@@ -17,7 +17,7 @@ export default class ProfileEdit extends Component{
         super(props);
         // Defaults
         this.state = {
-            userID: this.props.navigation.getParam('userID', UserDB.getCurrentUserID()),
+            userID: this.props.navigation.getParam('userID', User.getCurrentUserID()),
             currentProfile: null,
             isProfileLoaded: false,
             image: null,

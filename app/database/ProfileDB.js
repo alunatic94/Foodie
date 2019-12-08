@@ -1,5 +1,5 @@
 import {firebase, db} from '../database/Database';
-import {UserDB} from '../database/UserDB';
+import {User} from '../database/User';
 
 users = db.collection('users');
 
