@@ -23,8 +23,8 @@ export default class ProfileEdit extends Component{
             image: null,
             uploading: false,
             newFirst: '',
-            newLast: '' ,
-            newAge: '', 
+            newLast: '',
+            newAge: '',
             newAbout: ''
         }
     }
@@ -45,9 +45,17 @@ export default class ProfileEdit extends Component{
             </Content>
             )
         }
-        else return (
-        <Container>
-         <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+        if (this.state.uploading) {
+          return(
+          <Content styles={{flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" color="#ddd" />
+          </Content>
+          )
+      }
+        else{ 
+          return (
+            <Container>
+            <KeyboardAvoidingView style={{flex:1}} behavior="padding">
             <Text style={styles.heading}>
                  First Name:  
             </Text>
@@ -80,8 +88,7 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAbout:text})}
             />
-            
-            <Body>
+             <Body>
                 <Text style={styles.heading}>
                      Picture:  
                 </Text> 
@@ -99,19 +106,21 @@ export default class ProfileEdit extends Component{
                 {image &&
                 <Image source={{ uri: image }} style={{ width: 75, height: 75 }} />}
             </Body>
-            <Button block success onPress={() => this.props.navigation.navigate('Main') 
-                                                 && users.doc(this.state.userID).set({
+            <Button block success onPress={() =>  users.doc(this.state.userID).set({
                                                      first: this.state.newFirst,
                                                      last: this.state.newLast, 
                                                      age: this.state.newAge, 
                                                      about: this.state.newAbout,
                                                      profileImage: this.state.image
-                                                 }, {merge: true})}>
+                                                 }, {merge: true}) 
+                                                    && this.props.navigation.push('Main')
+                                                   }>
                 <Text>Save Changes</Text>
             </Button>
          </KeyboardAvoidingView>
         </Container>
        );
+      }
     }
       getPermissionAsync = async () => {
         if (Constants.platform.ios) {
@@ -193,9 +202,5 @@ async function uploadImageAsync(uri) {
       .child(uuid.v4());
     const snapshot = await ref.put(blob);
     blob.close();
-  
-    /* Displays in console the download URL of the image just uploaded onto firebase storage */
-    console.log(await snapshot.ref.getDownloadURL());
-  
     return await snapshot.ref.getDownloadURL();
   }

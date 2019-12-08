@@ -22,7 +22,14 @@ export default class AddPostComment extends Component {
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
+
+    //IMAGE DISPLAY 
     const uri = navigation.getParam('uri');
+
+    //IMAGE DOWNLOAD URL FROM FIREBASE 
+    const imageURL = navigation.getParam('imageURL'); 
+    
+    console.log(imageURL); 
     return (
       <Container>
 
