@@ -11,7 +11,7 @@ export default class RestaurantCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            restaurantID: this.navigation.props.getParam('restaurantID')
+            restaurantID: this.props.restaurantID || "1234"
         }
     }
 

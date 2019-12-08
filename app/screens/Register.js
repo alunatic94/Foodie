@@ -31,7 +31,7 @@ class Register extends React.Component{
         this.setState({userID: userCreds.user.uid});
 
         // Then add user data (with ID) to database
-        let userData = new User(userCreds.user.uid, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
+        let userData = User.createNew(userCreds.user.uid, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
         this.state.age.trim(), this.state.email.trim());
 
         this.navigateToLogin();

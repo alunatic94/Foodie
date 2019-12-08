@@ -28,7 +28,7 @@ const tempImage = require('../screens/assets/dog.png');
 class Comments extends Component {
   comments = db
     .collection("posts")
-    .doc("Qe1PUrFY32K8EYL9UYqW") //this.props.postsid -> Needs to be pasted from posts
+    .doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')) //this.props.postsid -> Needs to be pasted from posts
     .collection("comments");
 
   time = new Date();
