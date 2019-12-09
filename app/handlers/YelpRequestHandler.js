@@ -9,17 +9,19 @@ const ENDPOINTS = {
     categories: `${YELP_API_URL}/categories/`
 }
 import axios from 'axios';
+
 export default class YelpRequest {
     apiUrl = "";
-    response = {};
+    response = [];
     config = {
-        headers: {'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx'},
+        headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
         params: {}
     };
     constructor(apiUrl, paramArgs) {
         this.apiUrl = apiUrl;
-       this.config.params = paramArgs;
+        this.config.params = paramArgs;
     }
+
     async get() {
         console.log("YelpRequestHandler - get(): Getting Yelp request via Axios:\n" + JSON.stringify(this.config));
         axios.get(this.apiUrl, this.config)
@@ -33,21 +35,26 @@ export default class YelpRequest {
             return err;
         })
     }
+
     response() {
         return this.response;
     }
-    static getRestaurantsByRadius(latitude, longitude, radius) {
+    async static getRestaurantsByRadius(latitude, longitude, radius) {
+        var data;
         url = ENDPOINTS['business'] + 'search';
         params = {
             latitude: latitude,
             longitude: longitude,
-            radius: radius, // max 25 miles
-            categories: 'restaurants'
+            // radius: radius, // max 25 miles
+            categories: 'restaurants',
+            limit: 20
         }
         console.log("YelpRequestHandler - getRestaurantsByRadius(): Calling get(), sending to Yelp: \nurl: " + url + "params: " + JSON.stringify(params));
         req = new YelpRequest(url, params);
-        req.get().then((res) => {
+        await req.get().then((res) => {
             console.log("YelpRequestHandler - getRestaurantsByRadius(): Retrieved from get(): \n" + res);
+            data = res.businesses;
         })
+        return data;
     }
 }
