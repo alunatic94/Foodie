@@ -4,13 +4,50 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js';
 import FeedCard from '../components/FeedCard.js';
 import styles from './styles.js';
-import PostCard from '../components/PostCard.js';
+import { ScrollView } from 'react-native';
+import { db } from '../database/Database.js';
 
-// TODO: get every doc in posts collection
-// sort by time asc
-// In postComment upload to database
-// In Feed listen to posts being generated
 export default class Feed extends Component {
+
+  posts = db.collection('posts');
+
+  constructor(props){
+    super(props);
+    this.state = {
+      posts: []
+    }
+  }
+
+  componentDidMount(){
+    this.getAll();
+    const query = this.posts
+    const listener = query.onSnapshot(querySnapshot => {
+      this.getAll();
+    }, err => {
+      console.log("Encountered error: ${err}");
+    });
+  }
+
+  componentWillUnmount(){
+    const unMountListener = this.posts.onSnapshot(() => {});
+  }
+
+  getAll(){
+    const allPosts = this.posts
+      .get()
+      .then(snapshot => {
+        let existingPosts = [];
+        snapshot.forEach(doc => {
+          console.log(doc.data());
+          existingPosts.push(doc.data());
+        });
+        this.setState({posts: existingPosts});
+      })
+      .catch(err => {
+        console.log("Error getting existing posts " + err);
+      });
+  }
+
     render() {
         return (
 	<Container>    
@@ -36,9 +73,9 @@ export default class Feed extends Component {
             </Right>
         </Header>
         <Content>
-         <FeedCard />
-         <FeedCard />
-         <FeedCard />
+          <ScrollView/>
+          {this.state.posts.map(() => (<FeedCard/>))}        
+         <ScrollView/>       
         </Content>
       </Container>
         )

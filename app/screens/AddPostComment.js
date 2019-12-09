@@ -5,18 +5,18 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
 import { db } from '../database/Database.js';
-import User from '../database/UserDB.js';
+import { UserDB as User } from '../database/UserDB.js';
 
 export default class AddPostComment extends Component {
 
-  // User = User._getData('DveCC8D0yeaKDmHFn5Nh0tiGFoE3');
   posts = db.collection("posts");
   photos = this.props.navigation.getParam('uri');
-  // userID = this.User.getCurrent();
 
   constructor(props) {
     super(props);
     this.state = {
+        isLoading: true,
+        user: null,
         like: false,
         meh: false,
         dislike: false
@@ -26,34 +26,38 @@ export default class AddPostComment extends Component {
   componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
-    
-}
-
-addPost(){
-  let postData = {
-    images: [this.photos],
-    likes: 0,
-    rating: 2,    
-    // TODO:
-    // user.getCurrentID()
-    // comments collection
-    // likes_who
-    // 
+    this.getUser();
   }
-  this.posts.doc().set(postData);
-  // comments = this.posts.doc().collection('comments');
-  // this.posts.doc().set(comments);
-}
+
+  getUser = async () => {
+    const user = await User.getCurrent();
+    this.setState({ isLoading: false, user });
+  }
+
+  addPost() {
+    let postData = {
+      images: [this.photos],
+      likes: 0,
+      rating: 2,      
+      userID: this.state.user.userID
+      // TODO:
+      // this.state.user.userID
+      // user.getCurrentID()      
+      // likes_who
+      // caption
+    }
+    this.posts.doc().set(postData);
+    this.props.navigation.navigate('Main');      
+  }
 
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
-    const uri = navigation.getParam('uri');
-    console.log("just before");
-    console.log({User});  
+    const uri = navigation.getParam('uri');    
     
-    return (
-      <Container>
+    return this.state.isLoading 
+      ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text> 
+      : (<Container>
           <Header>
             <Left>
                 <Button 

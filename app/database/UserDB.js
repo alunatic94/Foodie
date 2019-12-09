@@ -27,16 +27,18 @@ export class UserDB {
       this.plates = [];
 
       this.add();
-    }
-  
+    }  
   }
 
-  // UserDB.getCurrent() - Get User object for current logged in user
-  static getCurrent(userID=null) {
-    if (firebase.auth().currentUser !== null) { // logged in
-        let data = User._getData(firebase.auth().currentUser.uid);
-        return new User(data.userID, data.username, data.first, data.last, data.age, data.email);
+  // UserDB.getCurrent() - Get User object for current logged in use
+  static getCurrent = async () => {
+    if (firebase.auth().currentUser !== null) {
+        const user = firebase.auth().currentUser;
+        const result = await users.doc(user.uid).get();
+        const data = result.data();
+        return new UserDB(data.userID, data.username, data.first, data.last, data.age, data.email);
     }
+    console.log("returning null");
     return null; // no current user found
   }
 
