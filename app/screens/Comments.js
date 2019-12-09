@@ -18,6 +18,7 @@ import Comment from "../components/Comment.js";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
 import { db } from "../database/Database.js";
+import {User} from "../database/User.js";
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -38,7 +39,8 @@ class Comments extends Component {
     this.state = {
       comment: "",
       commentsArray: [],
-      buttonTextColor: '#0065ff'      
+      buttonTextColor: '#0065ff',
+      user: User.dummyUser     
     };
   }
   
@@ -52,6 +54,17 @@ class Comments extends Component {
       console.log('There was an error');
     });    
   }
+  
+  loadUser = () => {
+    User.getCurrent().then((loadedUser) => {
+        this.setState({
+            user: loadedUser
+        })
+    })
+    .catch((err) => {
+        console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
+    })
+}
 
   componentWillUnmount() {
     // remove database listener
@@ -130,7 +143,7 @@ class Comments extends Component {
           <Container style={styles.commentsFooter}>
             <ListItem avatar >
               <Left>
-                <Thumbnail small source={tempImage} />
+                <Thumbnail small source={{uri: this.state.user.profileImage}} />
               </Left>
             </ListItem>            
               <Content>            

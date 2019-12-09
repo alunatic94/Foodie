@@ -11,7 +11,11 @@ export default class RestaurantCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            restaurantID: this.props.restaurantID || "1234"
+            restaurantID: this.props.restaurantID || "1234",
+            name: "Arbor Grill",
+            rating: 3,
+            numRatings: 10,
+            category: "American"
         }
     }
 

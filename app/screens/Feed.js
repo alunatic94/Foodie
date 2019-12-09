@@ -34,6 +34,7 @@ export default class Feed extends Component {
         <Content>
         {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
          <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
+         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/>
         </Content>
       </Container>
         )

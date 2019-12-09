@@ -6,9 +6,9 @@ import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
 import LikeButton  from '../components/LikeButton.js';
 import { User } from "../database/User.js";
-const images = [require('../assets/images/burger.png'),
-    require('../assets/images/hotdog.png'), 
-    require('../assets/images/fish.png')];
+const defaultImages = ['http://lorempixel.com/400/200/food/',
+    'http://lorempixel.com/400/200/food/', 
+    'http://lorempixel.com/400/200/food/'];
 
 const postDefaults = {
     images: ["https://i.imgur.com/Ht5l5n.png", "https://i.imgur.com/Ht5l5n.png"],
@@ -41,7 +41,8 @@ class PostCard extends Component {
         super(props);
         this.state = {
             user: {},
-            isLoaded: false
+            isLoaded: false,
+            images: defaultImages
         }
     }
 
@@ -70,6 +71,7 @@ class PostCard extends Component {
                 );
         }
         else {
+            console.log(this.props.post.images[0]);
             return (
             <Card>
                 <CardItem>
@@ -81,12 +83,13 @@ class PostCard extends Component {
                     </Body>
                 </Left>
                 </CardItem>
-                <CardItem cardBody>
+                <CardItem cardBody> 
         
-                <ImageSlider
+                {<ImageSlider
                     style={styles.imageFeed}
-                    images={this.props.post.images}
-                />
+                    images={defaultImages}
+                />}
+                    {/* <Image source={{uri: 'https://i.imgur.com/Ht5l5n.png'}} style={styles.imageFeed}/> */}
                 </CardItem>
                 <CardItem>
                 <Left>                    

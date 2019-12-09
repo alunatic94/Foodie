@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   imageFeed: {
     height: 200,
-    width: null,
+    width: 300,
     flex: 1
   },
   imageFeedSmall: {

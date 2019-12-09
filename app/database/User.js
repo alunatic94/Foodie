@@ -4,6 +4,28 @@ users = db.collection('users');
 
 export class User {
 
+  static defaults = {
+    profileImage: 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png',
+    badges: [],
+    tagline: "Newbie",
+    about: "Hello there!",
+    plates: []
+  };
+
+  static dummyUser = {
+    userID: "1234",
+    username: "jsmith",
+    first: "John",
+    last: "Smith",
+    age: 99,
+    email: "dummy@user.com",
+    profileImage: 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png',
+    badges: [],
+    tagline: 'Dummy',
+    about: "I'm a dummy user.",
+    plates: []
+};
+
   constructor(userData) {
     this.data = userData;
     this.update(userData);
@@ -25,11 +47,11 @@ export class User {
   static async createNew(userID, username, first, last, age, email) {
     userData = {};
 
-    userData.profileImage = 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png';
-    userData.badges = [];
-    userData.tagline = "Newbie";
+    userData.profileImage = User.defaults.profileImage;
+    userData.badges = User.defaults.badges;
+    userData.tagline = User.defaults.tagline;
     userData.about = `Hi, I'm ${first}!`;
-    userData.plates = [];
+    userData.plates = User.defaults.plates;
 
     users.doc(this.userID).set(userData)
     .then((doc) => {
