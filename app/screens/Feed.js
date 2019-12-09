@@ -34,6 +34,7 @@ export default class Feed extends Component {
 
   getAll(){
     const allPosts = this.posts
+      .orderBy('timestamp', 'desc')
       .get()
       .then(snapshot => {
         let existingPosts = [];

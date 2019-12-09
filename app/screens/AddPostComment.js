@@ -9,6 +9,8 @@ import { UserDB as User } from '../database/UserDB.js';
 
 export default class AddPostComment extends Component {
 
+  time = new Date();
+
   posts = db.collection("posts");
   photos = this.props.navigation.getParam('uri');
 
@@ -44,7 +46,8 @@ export default class AddPostComment extends Component {
       images: [this.photos],
       likes: 0,
       rating: 2,      
-      userID: this.state.user.userID
+      userID: this.state.user.userID,
+      timestamp: "December 9, 2019"
       // TODO:
       // this.state.user.userID
       // user.getCurrentID()      
