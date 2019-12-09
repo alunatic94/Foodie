@@ -4,28 +4,60 @@ import { Container, Header, Left, Right, Body, Content, Button, Text, Input, Vie
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
+import { db } from '../database/Database.js';
+import { UserDB as User } from '../database/UserDB.js';
+
 export default class AddPostComment extends Component {
+
+  posts = db.collection("posts");
+  photos = this.props.navigation.getParam('uri');
+
   constructor(props) {
     super(props);
     this.state = {
+        isLoading: true,
+        user: null,
         like: false,
         meh: false,
         dislike: false
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
-}
+    this.getUser();
+  }
+
+  getUser = async () => {
+    const user = await User.getCurrent();
+    this.setState({ isLoading: false, user });
+  }
+
+  addPost() {
+    let postData = {
+      images: [this.photos],
+      likes: 0,
+      rating: 2,      
+      userID: this.state.user.userID
+      // TODO:
+      // this.state.user.userID
+      // user.getCurrentID()      
+      // likes_who
+      // caption
+    }
+    this.posts.doc().set(postData);
+    this.props.navigation.navigate('Main');      
+  }
 
   render() {
     const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
-    const uri = navigation.getParam('uri');
-    return (
-      <Container>
-
+    const uri = navigation.getParam('uri');    
+    
+    return this.state.isLoading 
+      ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text> 
+      : (<Container>
           <Header>
             <Left>
                 <Button 
@@ -78,7 +110,7 @@ export default class AddPostComment extends Component {
             
             <Button
             block success 
-            onPress={() => this.props.navigation.navigate('Main')}>
+            onPress={() => this.addPost()}>
                 <Text>Post your plate</Text>
             </Button>
 
