@@ -8,9 +8,12 @@ export default class AddPostComment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        like: false,
-        meh: false,
-        dislike: false
+        likeButtonColor: '#a9a9a9',
+        mehButtonColor: '#a9a9a9',
+        dislikeButtonColor: '#a9a9a9',
+        rating: 'meh',
+        caption: ''
+        // image will be passed
     };
   }
 
@@ -19,17 +22,48 @@ export default class AddPostComment extends Component {
     this.setState({ like, meh, dislike });
 }
 
+onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled
+  this.setState({
+    likeButtonColor: 'green',
+    mehButtonColor: '#a9a9a9',
+    dislikeButtonColor: '#a9a9a9',
+    rating: 'like'
+  });   
+} 
+
+onChangeMeh = () => { // Meh button will be activated while like and dislike button are disabled
+  this.setState({
+    mehButtonColor: 'black',
+    likeButtonColor: '#a9a9a9',
+    dislikeButtonColor: '#a9a9a9',
+    rating: 'meh'
+  });
+}
+
+onChangeDislike = () => { // Dislike button will be activated while like and meh button are disabled
+  this.setState({
+   dislikeButtonColor: 'red',
+   likeButtonColor: '#a9a9a9',
+   mehButtonColor: '#a9a9a9',
+   rating: 'dislike'
+ });
+}
+
+submitButton = () => {
+  // this.state.image, this.state.caption, this.state.rating 
+
+}
+
   render() {
-    const { like, meh, dislike } = this.state;
     const { navigation } = this.props;
 
     //IMAGE DISPLAY 
     const uri = navigation.getParam('uri');
 
     //IMAGE DOWNLOAD URL FROM FIREBASE 
-    const imageURL = navigation.getParam('imageURL'); 
-    
+    const imageURL = navigation.getParam('imageURL');  
     console.log(imageURL); 
+    
     return (
       <Container>
 
@@ -57,34 +91,54 @@ export default class AddPostComment extends Component {
 
         <Content>
          
-            <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 18, paddingBottom: 25}}>Rate your plate:</Text>
+            <Text style = {{fontSize:25, 
+              fontWeight:"bold", 
+              paddingTop: 18, 
+              paddingBottom: 25}}>Rate your plate:</Text>
     
-         <View style={{ borderWidth: 1, height: 100, alignItems: 'center', justifyContent: 'center', justifyContent:'space-between', paddingTop: 15, paddingBottom: 20 }}>
+    <View style={{ borderWidth: 1, 
+          height: 100, 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          justifyContent:'space-between',
+           paddingTop: 15, paddingBottom: 20 }}>
             <View style={{flexDirection: "row"}}>
               <Button 
                 transparent> 
-                  <AntDesign name={like ? 'like1' : 'like2'} color={like ? 'green' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ like : !like })}/>
+                  <AntDesign name={'like1'} color={this.state.likeButtonColor}
+                    size={30} style={{padding: 30}} 
+                    onPress={() => this.onChangeLike()}/>
              </Button>
 
               <Button 
                transparent> 
-                  <AntDesign name={meh ? 'meho' : 'meh'} color={meh ? 'grey' : 'rgb(50, 50, 50)'}  size={30} style={{padding: 30}} onPress={() => this.setState({ meh : !meh })}/>
+                  <AntDesign name={'meho'}  color={this.state.mehButtonColor}
+                    size={30} style={{padding: 30}} 
+                    onPress={() => this.onChangeMeh()}/>
              </Button>
 
              <Button 
                transparent> 
-                  <AntDesign name={dislike ? 'dislike1' : 'dislike2'} color={dislike ? 'red' : 'rgb(50, 50, 50)'} size={30} style={{padding: 30}} onPress={() => this.setState({ dislike : !dislike })}/>
+                  <AntDesign name={'dislike1'} color={this.state.dislikeButtonColor}
+                  size={30} style={{padding: 30}} 
+                  onPress={() => this.onChangeDislike()}/>
               </Button>
             </View>
           </View> 
-            <Image  style={{width: 400, height: 400}} source={{uri:uri}}/>
-            <Text style = {{fontSize:25, fontWeight:"bold", paddingTop: 30, paddingBottom: 15}}>Add a caption:</Text>
+
+            <Text style = {{fontSize:25,
+               fontWeight:"bold", 
+               paddingTop: 30,
+                paddingBottom: 15}}>Add a caption:</Text>
           <View style={{borderWidth: 1}}>
-            <Input placeholder="Caption" />
+            <Input placeholder="Caption" onChangeText={(text) => this.setState({caption:text})}/>
             </View>
             
             <Button
             block success 
+            /*  onPress = { () => {
+             this.submitButton();
+            } }  */
             onPress={() => this.props.navigation.navigate('Main')}>
                 <Text>Post your plate</Text>
             </Button>
