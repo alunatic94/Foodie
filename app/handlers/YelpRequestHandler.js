@@ -23,38 +23,38 @@ export default class YelpRequest {
     }
 
     async get() {
+        var data = {};
         console.log("YelpRequestHandler - get(): Getting Yelp request via Axios:\n" + JSON.stringify(this.config));
-        axios.get(this.apiUrl, this.config)
+        await axios.get(this.apiUrl, this.config)
         .then((response) => {
             this.response = response;
-            console.log("YelpRequestHandler - get(): Returned from Axios: \n" + JSON.stringify(response.data));
-            return response.data;
+            data = response.data;
         })
         .catch((err) => {
             console.log("YelpRequestHandler - get(): Yelp request via Axios failed: " + err);
             return err;
         })
+        return data;
     }
 
     response() {
         return this.response;
     }
-    async static getRestaurantsByRadius(latitude, longitude, radius) {
-        var data;
+    
+    static async getRestaurantsByRadius(latitude, longitude, radius) {
+        var data = {};
         url = ENDPOINTS['business'] + 'search';
         params = {
             latitude: latitude,
             longitude: longitude,
-            // radius: radius, // max 25 miles
             categories: 'restaurants',
-            limit: 20
+            limit: 1,
+            radius: radius
         }
-        console.log("YelpRequestHandler - getRestaurantsByRadius(): Calling get(), sending to Yelp: \nurl: " + url + "params: " + JSON.stringify(params));
         req = new YelpRequest(url, params);
         await req.get().then((res) => {
-            console.log("YelpRequestHandler - getRestaurantsByRadius(): Retrieved from get(): \n" + res);
-            data = res.businesses;
-        })
+           data = res.businesses;
+        });
         return data;
     }
 }

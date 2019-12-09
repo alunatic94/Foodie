@@ -72,7 +72,7 @@ class Comments extends Component {
     this.add(this.state.comment);    
     this.setState({
       comment: "",
-      buttonTextColor: '#0065ff'
+      buttonTextColor: '#0065ff',
     });    
   };
 
@@ -80,7 +80,8 @@ class Comments extends Component {
   add = comment => {
     let commentData = {
       body: comment,
-      time: this.time.getTime()
+      time: this.time.getTime(),
+      userID: User.getCurrentUserID()
       // TODO: user_ID: User.getCurrent()
     };
     this.comments.doc().set(commentData);
@@ -121,8 +122,8 @@ class Comments extends Component {
         </Header>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
-            {this.state.commentsArray.map(comment => (
-              <Comment body={comment.body} time={comment.time} />
+            {this.state.commentsArray.map((comment, index) => (
+              <Comment body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
             ))}
           </ScrollView>          
           <Footer>

@@ -93,12 +93,8 @@ class PostCard extends Component {
                     <LikeButton/>
                 </Left>
                 <Body>
-                    <Button
-                    onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}>
-                    <Icon active name="chatbubbles" />
-                    {/* <Text style={styles.boldText}></Text>
-                    <Text style={styles.lightText}>Comments</Text> */}
-                    </Button>
+                    <Icon active name="chatbubbles" color="black" onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}/>
+                    <Text style={styles.lightText}>Comments</Text>
                 </Body>
                 <Right>
                     <Text style={styles.lightTextSmall}></Text>
