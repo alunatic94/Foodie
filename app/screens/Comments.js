@@ -76,6 +76,7 @@ class Comments extends Component {
     });    
   };
 
+
   add = comment => {
     let commentData = {
       body: comment,

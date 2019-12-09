@@ -17,12 +17,12 @@ const postDefaults = {
     rating: 'like',
     review: "It's good!",
     timestamp: "December 21, 2012",
-    userID: "1234",
+    userID: "W5eaN2HwBBeYzTtEKGqwzDByUh12",
     restaurantID: "1"
 };
 
 const dummyUser = {
-    userID: "1234",
+    userID: "W5eaN2HwBBeYzTtEKGqwzDByUh12",
     username: "dummy",
     first: "Dummy",
     last: "User",
@@ -40,26 +40,24 @@ class PostCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            post: this.props.post || postDefaults,
-            user: dummyUser,
-            isLoaded: true // false
+            user: {},
+            isLoaded: false
         }
     }
 
     componentWillMount() {
-       // this.loadUser();
+       this.loadUser();
     }
 
     loadUser = () => {
-        User.getCurrent().then((loadedUser) => {
-            console.log("PostCard - loadUser(): retrieved user: " + JSON.stringify(loadedUser.data));
+        User.getExisting(this.props.post.userID).then((loadedUser) => {
             this.setState({
                 user: loadedUser,
                 isLoaded: true
             })
         })
         .catch((err) => {
-            console.log(err + ":" + "Could not load user [id = " + this.state.post.userID + "] for post");
+            console.log(err + ":" + "Could not load user [id = " + this.props.post.userID + "] for post");
         })
     }
    
@@ -87,7 +85,7 @@ class PostCard extends Component {
         
                 <ImageSlider
                     style={styles.imageFeed}
-                    images={this.state.post.images}
+                    images={this.props.post.images}
                 />
                 </CardItem>
                 <CardItem>

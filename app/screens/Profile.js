@@ -83,7 +83,7 @@ export default class Profile extends Component {
                      </Button>
                   </Right>
                 </Header>
-                <Content styles={{flex: 1, justifyContent: 'center'}}>
+                <Content styles={{flex: 1, justifyContent: 'center', alignSelf: 'center'}}>
                 <ActivityIndicator size="large" color="#ddd" />
                 </Content>
             </Container>)

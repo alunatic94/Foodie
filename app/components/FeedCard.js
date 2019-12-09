@@ -8,33 +8,45 @@ import PostCard from '../components/PostCard.js';
 import LikeButton from '../components/LikeButton.js';
 import RestaurantCard from './RestaurantCard.js';
 import { withNavigation } from 'react-navigation';
+import {db} from '../database/Database.js'
 
 export default class FeedCard extends Component {
+    postDoc = db.collection("posts").doc(this.props.postID);
     constructor(props) {
         super(props);
         this.state = {
-            // TODO: Replace this static placeholder variable with dynamic post object call from Post database collection
-            postObject: {
-                images: ["https://i.imgur.com/Ht5l5n.png", "https://i.imgur.com/Ht5l5n.png"],
-                likes: 4,
-                likes_who: "1234",
-                rating: 'like',
-                review: "It's good!",
-                timestamp: "December 21, 2012",
-                userID: "1234",
-                restaurantID: "1"
-            },
+            post: {},
             // TODO: Add button on feed card to toggle between restaurant and post card
-            isShowingRestaurant: false
+            isShowingRestaurant: false,
+            isPostLoaded: false
         }
     }
+
+    componentDidMount() {
+        this.postDoc.get().then((doc) => {
+            postData = doc.data();
+            this.setState({
+                post: postData,
+                isPostLoaded: true
+            })
+        })
+        .catch((err) => {
+            console.log("Could not find user from ID '" + userID);
+        });
+    }
     render() {
-        return (
+        if (!this.state.isPostLoaded) {
+            return (<View style={styles.roundCard, {height: 325}}>
+            </View>);
+        }
+        else {
+            return (
             <View style={styles.roundCard, {height: 325}}>
                 {this.state.isShowingRestaurant ? 
-                <RestaurantCard restaurantID={this.state.postObject.restaurantID} /> : 
-                <PostCard postID={this.props.postID} post={this.state.postObject} />}
+                <RestaurantCard restaurantID={this.state.post.restaurantID} /> : 
+                <PostCard postID={this.props.postID} post={this.state.post} />}
             </View>
-        )
+            )
+        }
     }
 }
