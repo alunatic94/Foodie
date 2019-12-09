@@ -12,7 +12,7 @@ export default class AddPostComment extends Component {
   time = new Date();
 
   posts = db.collection("posts");
-  photos = this.props.navigation.getParam('uri');
+  photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
     super(props);
@@ -43,7 +43,7 @@ export default class AddPostComment extends Component {
 
   addPost() {
     let postData = {
-      images: [this.photos],
+      images: this.photos,
       likes: 0,
       rating: 2,      
       userID: this.state.user.userID,

@@ -87,7 +87,7 @@ class PostCard extends Component {
         
                 {<ImageSlider
                     style={styles.imageFeed}
-                    images={defaultImages}
+                    images={this.props.post.images}
                 />}
                     {/* <Image source={{uri: 'https://i.imgur.com/Ht5l5n.png'}} style={styles.imageFeed}/> */}
                 </CardItem>
