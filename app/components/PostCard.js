@@ -5,22 +5,79 @@ import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
 import LikeButton  from '../components/LikeButton.js';
+import { User } from "../database/User.js";
 const images = [require('../assets/images/burger.png'),
     require('../assets/images/hotdog.png'), 
     require('../assets/images/fish.png')];
 
+const postDefaults = {
+    images: ["https://i.imgur.com/Ht5l5n.png", "https://i.imgur.com/Ht5l5n.png"],
+    likes: 4,
+    likes_who: "1234",
+    rating: 'like',
+    review: "It's good!",
+    timestamp: "December 21, 2012",
+    userID: "W5eaN2HwBBeYzTtEKGqwzDByUh12",
+    restaurantID: "1"
+};
+
+const dummyUser = {
+    userID: "W5eaN2HwBBeYzTtEKGqwzDByUh12",
+    username: "dummy",
+    first: "Dummy",
+    last: "User",
+    age: 99,
+    email: "dummy@user.com",
+    profileImage: 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png',
+    badges: [],
+    tagline: 'Dummy',
+    about: "I'm a dummy user.",
+    plates: []
+}
 
 class PostCard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {},
+            isLoaded: false
+        }
+    }
+
+    componentWillMount() {
+       this.loadUser();
+    }
+
+    loadUser = () => {
+        User.getExisting(this.props.post.userID).then((loadedUser) => {
+            this.setState({
+                user: loadedUser,
+                isLoaded: true
+            })
+        })
+        .catch((err) => {
+            console.log(err + ":" + "Could not load user [id = " + this.props.post.userID + "] for post");
+        })
+    }
+   
     
-    render(){
-        return (
+    render() {
+        if (!this.state.isLoaded) {
+            return (
+                <Card>
+                </Card>
+                );
+        }
+        else {
+            return (
             <Card>
                 <CardItem>
                 <Left>
-                <Thumbnail source={this.props.profileImage} style={styles.circleSmall} />
+                <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall} />
                     <Body>
-                    <Text style={styles.heading}>{this.props.name}</Text>
-                    <Text style={styles.subheading}>{this.props.location}</Text>
+                    <Text style={styles.heading}>{this.state.user.username}</Text>
+                    <Text style={styles.subheading}>{this.props.post.timestamp}</Text>
                     </Body>
                 </Left>
                 </CardItem>
@@ -28,7 +85,7 @@ class PostCard extends Component {
         
                 <ImageSlider
                     style={styles.imageFeed}
-                    images={images}
+                    images={this.props.post.images}
                 />
                 </CardItem>
                 <CardItem>
@@ -37,10 +94,10 @@ class PostCard extends Component {
                 </Left>
                 <Body>
                     <Button
-                    onPress={() => this.props.navigation.navigate('Comments')}>
+                    onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}>
                     <Icon active name="chatbubbles" />
-                    <Text style={styles.boldText}></Text>
-                    <Text style={styles.lightText}>Comments</Text>
+                    {/* <Text style={styles.boldText}></Text>
+                    <Text style={styles.lightText}>Comments</Text> */}
                     </Button>
                 </Body>
                 <Right>
@@ -49,6 +106,7 @@ class PostCard extends Component {
                 </CardItem>
             </Card>
             );
-        }        
+        }  
+    }      
 }
 export default withNavigation(PostCard);

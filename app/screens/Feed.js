@@ -32,9 +32,8 @@ export default class Feed extends Component {
             </Right>
         </Header>
         <Content>
-         <FeedCard />
-         <FeedCard />
-         <FeedCard />
+        {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
+         <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
         </Content>
       </Container>
         )

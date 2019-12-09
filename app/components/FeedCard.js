@@ -6,91 +6,47 @@ import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import PostCard from '../components/PostCard.js';
 import LikeButton from '../components/LikeButton.js';
-
-const mainInfo = {
-    profileImage: require('../screens/assets/dog.png'),
-    name: 'Name',
-    location: 'Northridge, CA',
-    comments: '10',
-    likes: '4',
-    hours: '11'
-}
-
-const restaurantInfo = {
-    image: require('../assets/images/burger.png'),
-    name: 'Arbor Grill',
-    category: 'American',
-    rating: 3.5,
-    numRatings: 10
-}
-const images = [require('../assets/images/burger.png'),
-    require('../assets/images/hotdog.png'), 
-    require('../assets/images/fish.png')];
-
-const cards = [
-    {
-      part: 'main',
-      cardImages: images,
-    },
-    {
-     part: 'info',
-    }
-];
-
-function FeedCardItem(props) {
-    const {card} = props;
-    if (card.part == 'main') {
-        return <PostCard/>
-    }
-    else {        
-        return RestaurantInfo();
-    }
-}
-
-function RestaurantInfo() {
-    return (
-        <Card>
-            <CardItem style={{padding: 10}}>
-                <Left>
-                <Thumbnail source={restaurantInfo.image} style={styles.roundSquare} />
-                </Left>
-                <Body>
-                <Text style={styles.headingLarge}>{restaurantInfo.name}</Text>
-                <Rating
-                    imageSize={20}
-                    readOnly={true}
-                    startingValue={restaurantInfo.rating}
-                />
-                <Text style={styles.lightText}>({restaurantInfo.numRatings})</Text>
-                <Text style={styles.subheadingLarge}>{restaurantInfo.category}</Text>
-                </Body>
-            </CardItem>
-            <CardItem style={{padding: 10, paddingTop: 50}} cardBody>
-             <Text style={styles.headingLarge}>More Plates Eaten Here</Text>
-            </CardItem>
-                <CardItem>
-                <Body>
-                    <ScrollView horizontal style={{flex: 1}}>
-                         <Image source = {images[0]} style={styles.imageFeedSmall} />
-                         <Image source = {images[1]} style={styles.imageFeedSmall} />
-                         <Image source = {images[2]} style={styles.imageFeedSmall} />
-                    </ScrollView>
-                </Body>
-                </CardItem>
-            </Card>
-    );
-}
+import RestaurantCard from './RestaurantCard.js';
+import { withNavigation } from 'react-navigation';
+import {db} from '../database/Database.js'
 
 export default class FeedCard extends Component {
+    postDoc = db.collection("posts").doc(this.props.postID);
+    constructor(props) {
+        super(props);
+        this.state = {
+            post: {},
+            // TODO: Add button on feed card to toggle between restaurant and post card
+            isShowingRestaurant: false,
+            isPostLoaded: false
+        }
+    }
+
+    componentDidMount() {
+        this.postDoc.get().then((doc) => {
+            postData = doc.data();
+            this.setState({
+                post: postData,
+                isPostLoaded: true
+            })
+        })
+        .catch((err) => {
+            console.log("Could not find user from ID '" + userID);
+        });
+    }
     render() {
-        return (
-            <View style={styles.roundCard}>
-                <DeckSwiper style={{height: 325}}
-                dataSource={cards}
-                renderEmpty={() => <RestaurantInfo />}
-                renderItem={item => <FeedCardItem card={item} />}
-                />
+        if (!this.state.isPostLoaded) {
+            return (<View style={styles.roundCard, {height: 325}}>
+            </View>);
+        }
+        else {
+            return (
+            <View style={styles.roundCard, {height: 325}}>
+                {this.state.isShowingRestaurant ? 
+                <RestaurantCard restaurantID={this.state.post.restaurantID} /> : 
+                <PostCard postID={this.props.postID} post={this.state.post} />}
             </View>
-        )
+            )
+        }
     }
 }

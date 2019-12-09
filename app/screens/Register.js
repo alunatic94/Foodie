@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import {UserDB} from '../database/UserDB.js';
+import {User} from '../database/User.js';
 import {firebase} from '../database/Database.js';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -31,7 +31,7 @@ class Register extends React.Component{
         this.setState({userID: userCreds.user.uid});
 
         // Then add user data (with ID) to database
-        let userData = new UserDB(userCreds.user.uid, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
+        let userData = User.createNew(userCreds.user.uid, this.state.username.trim(), this.state.first.trim(), this.state.last.trim(),
         this.state.age.trim(), this.state.email.trim());
 
         this.navigateToLogin();
