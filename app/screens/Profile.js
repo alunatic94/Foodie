@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail, Card, CardItem, H1, H2, Icon, View } from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {logout} from '../screens/Login.js';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Image, ScrollView, ActivityIndicator } from "react-native"
 import {BadgesDB} from "../database/BadgesDB.js"
@@ -9,6 +7,7 @@ import {ProfileDB} from "../database/ProfileDB.js"
 import {User} from "../database/User.js"
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
+import ScreenHeader from '../components/common/ScreenHeader.js'
 
 const thumbnail = "";
 const platesURL = [
@@ -63,26 +62,9 @@ export default class Profile extends Component {
         // Render empty profile screen until data is finished being fetched
         if (!this.state.isProfileLoaded) {
             return (<Container>
-                <Header>
-                  <Left>
-                    <Button 
-                        transparent
-                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Left>
-                      <Body>
-                        <Text style={styles.heading}>Profile</Text>
-                    </Body>
+                <ScreenHeader navigation = {this.props.navigation}>
+                </ScreenHeader>
 
-                  <Right>
-                    <Button 
-                        transparent
-                        onPress={() => logout(this.props.navigation)}>
-                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Right>
-                </Header>
                 <Content styles={{flex: 1, justifyContent: 'center', alignSelf: 'center'}}>
                 <ActivityIndicator size="large" color="#ddd" />
                 </Content>
@@ -90,26 +72,8 @@ export default class Profile extends Component {
         }
         else return (
             <Container>
-                <Header>
-                  <Left>
-                    <Button 
-                        transparent
-                         onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                        <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Left>
-                      <Body style={styles.headerBody}>
-              <Text style={styles.heading}>{this.state.userID == User.getCurrentUserID() ? "Profile" : this.state.currentProfile.username}</Text>
-            </Body>
-
-                  <Right>
-                    <Button 
-                        transparent
-                        onPress={() => logout(this.props.navigation)}>
-                         <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
-                     </Button>
-                  </Right>
-                </Header>
+                <ScreenHeader navigation = {this.props.navigation}>
+                </ScreenHeader>
                 <Content>
                     <Card>
                         <CardItem>

@@ -1,17 +1,15 @@
 
 import MapView, { Marker } from "react-native-maps";
-import { Container, Left, Body, Right, Button, Header, Item, Icon, Input, Text } from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { logout } from '../screens/Login.js';
-import styles from './styles.js';
+import { Container } from 'native-base';
 import React, { Component } from 'react';
-import { Platform, View, StyleSheet, Image } from 'react-native';
+import {View, Image } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import YelpRequest from "../handlers/YelpRequestHandler.js";
 import axios from 'axios';
-import { Dimensions } from 'react-native'
+import { Dimensions } from 'react-native';
+import ScreenHeader from '../components/common/ScreenHeader.js'
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -124,46 +122,8 @@ class Map extends React.Component {
       return (
         <Container>
 
-          <Header searchBar rounded>
-            <Left>
-              <Button
-                transparent
-                onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
-                <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
-              </Button>
-            </Left>
-
-            <Body>
-              {this.state.showSearch ?
-                <Item>
-                  <Icon name="ios-search" />
-                  <Input placeholder="Search" />
-                  <Button transparent>
-                    <Text onPress={this.searchOff}>Cancel</Text>
-                  </Button>
-                </Item>
-                :
-                <Text style={styles.heading}>Find a Restaurant</Text>
-              }
-            </Body>
-
-
-            <Right>
-              {this.state.showSearch ?
-                null
-                :
-                <Button transparent onPress={this.searchOn}>
-                  <Icon name="ios-search" />
-                </Button>
-              }
-
-              <Button
-                transparent
-                onPress={() => logout(this.props.navigation)}>
-                <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
-              </Button>
-            </Right>
-          </Header>
+          <ScreenHeader navigation = {this.props.navigation}>
+          </ScreenHeader>
 
           <MapView
             style={{ flex: 5 }}
@@ -193,48 +153,8 @@ class Map extends React.Component {
       return (
       <Container>
 
-        <Header searchBar rounded>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
-              <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Left>
-
-          <Body>
-            {this.state.showSearch ?
-              <Item>
-                <Icon name="ios-search" />
-                <Input placeholder="Search" />
-                <Button transparent>
-                  <Text onPress={this.searchOff}>Cancel</Text>
-                </Button>
-              </Item>
-              :
-              <Text style={styles.heading}>Find a Restaurant</Text>
-            }
-          </Body>
-
-
-          <Right>
-            {this.state.showSearch ?
-              null
-              :
-              <Button transparent onPress={this.searchOn}>
-                <Icon name="ios-search" />
-              </Button>
-            }
-
-            <Button
-              transparent
-              onPress={() => logout(this.props.navigation)}>
-              <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Right>
-        </Header>
-
-
+        <ScreenHeader navigation = {this.props.navigation}>
+        </ScreenHeader>
 
         <MapView
           style={{ flex: 5 }}
