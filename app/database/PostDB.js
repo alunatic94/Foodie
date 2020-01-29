@@ -95,7 +95,6 @@ export class PostDB {
         snapshot.forEach((doc) => {
         allUsers[doc.id] = doc.data();
         });
-      console.log(allUsers);
       return allUsers;
       })
       .catch((err) => {

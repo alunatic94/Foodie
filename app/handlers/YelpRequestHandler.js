@@ -24,7 +24,6 @@ export default class YelpRequest {
 
     async get() {
         var data = {};
-        console.log("YelpRequestHandler - get(): Getting Yelp request via Axios:\n" + JSON.stringify(this.config));
         await axios.get(this.apiUrl, this.config)
         .then((response) => {
             this.response = response;

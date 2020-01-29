@@ -27,7 +27,6 @@ class Register extends React.Component{
       firebase.auth()
       .createUserWithEmailAndPassword(this.state.email.trim(), this.state.password)
       .then((userCreds) => { // firebase returns UserCredentials object
-        console.log("Created in Firebase: " + userCreds.user.uid);
         this.setState({userID: userCreds.user.uid});
 
         // Then add user data (with ID) to database

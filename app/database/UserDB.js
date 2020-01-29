@@ -38,7 +38,6 @@ export class UserDB {
         const data = result.data();
         return new UserDB(data.userID, data.username, data.first, data.last, data.age, data.email);
     }
-    console.log("returning null");
     return null; // no current user found
   }
 
@@ -98,7 +97,6 @@ export class UserDB {
       snapshot.forEach((doc) => {
       allUsers[doc.id] = doc.data();
       });
-    console.log(allUsers);
     return allUsers;
     })
     .catch((err) => {

@@ -48,7 +48,6 @@ class Comments extends Component {
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
-      console.log('${querySnapshot.size}');
       this.getAll();
     }, err => {
       console.log('There was an error');
@@ -76,8 +75,7 @@ class Comments extends Component {
       this.setState({
         comment: comment,
         buttonTextColor: '#0fd90d'
-      });
-      console.log(this.state.comment);    
+      });   
   }  
 
   handleSubmit = event => {
@@ -107,7 +105,6 @@ class Comments extends Component {
       .then(snapshot => {
         let existingComments = [];
         snapshot.forEach(doc => {
-          console.log(doc.data());
           existingComments.push(doc.data());
         });
         this.setState({commentsArray: existingComments});

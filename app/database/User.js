@@ -52,8 +52,13 @@ export class User {
     userData.tagline = User.defaults.tagline;
     userData.about = `Hi, I'm ${first}!`;
     userData.plates = User.defaults.plates;
+    userData.username = username;
+    userData.first = first;
+    userData.last = last;
+    userData.age = age;
+    userData.email = email;
 
-    users.doc(this.userID).set(userData)
+    users.doc(userID).set(userData)
     .then((doc) => {
       return new User(userData);
     })
@@ -80,7 +85,6 @@ export class User {
   */
   static async getCurrent(userID=null) {
     if (firebase.auth().currentUser !== null) { // logged in
-      console.log("User - getCurrent() called");
       user = await User.getExisting(User.getCurrentUserID());
       return user;
     }

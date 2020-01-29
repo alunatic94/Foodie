@@ -5,7 +5,7 @@ users = db.collection('users');
 
 export class ProfileDB {
   // Create new Profile instance from:
-  // ProfileDB(userID) - can get current user ID with UserDB.getCurrentUserID()
+  // ProfileDB(userID) - can get current user ID with User.getCurrentUserID()
   constructor(userID) {
     this.userID = userID;
   }

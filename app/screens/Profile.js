@@ -32,14 +32,16 @@ export default class Profile extends Component {
     }
     componentDidMount() {
         // Fetch profile data after component instance created
+        console.log(this.state.userID);
         (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
             this.setState({currentProfile: profile}, () => {
-                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-                    this.setState({
-                        badges: newBadges,
-                        isProfileLoaded: true
+                    BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                        this.setState({
+                            badges: newBadges,
+                            isProfileLoaded: true
+                        });
                     });
-                });
+                
             });
         });
     }

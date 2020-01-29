@@ -79,7 +79,6 @@ export default class AddPostPhoto extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
@@ -96,7 +95,6 @@ export default class AddPostPhoto extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
     if (!result.cancelled) {
       this.setState({ image: result.uri });
       this._handleImagePicked(result);

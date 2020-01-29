@@ -139,7 +139,6 @@ export default class ProfileEdit extends Component{
           allowsEditing: true,
           aspect: [4, 3],
         });
-        console.log(result);
         if (!result.cancelled) {
           this.setState({ image: result.uri });
           this._handleImagePicked(result);
@@ -169,7 +168,6 @@ export default class ProfileEdit extends Component{
     
           if (!result.cancelled) {
             uploadUrl = await uploadImageAsync(result.uri);
-            console.log(uploadUrl); 
             this.setState({ image: uploadUrl });
           }
         } catch (e) {

@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../screens/Login.js'; 
 import styles from './styles.js';
 import { db } from '../database/Database.js';
-import { UserDB as User } from '../database/UserDB.js';
+import { User } from '../database/User.js';
 
 export default class AddPostComment extends Component {
 
@@ -98,9 +98,8 @@ submitButton = () => {
 
     //IMAGE DOWNLOAD URL FROM FIREBASE 
     const imageURL = navigation.getParam('imageURL');  
-    console.log(imageURL); 
     
-    return this.state.isLoading 
+    return this.state.isLoading  
       ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text> 
       : (<Container>
           <Header>

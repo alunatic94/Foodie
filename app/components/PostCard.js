@@ -71,7 +71,6 @@ class PostCard extends Component {
                 );
         }
         else {
-            console.log(this.props.post.images[0]);
             return (
             <Card>
                 <CardItem>

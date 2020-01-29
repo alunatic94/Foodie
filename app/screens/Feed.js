@@ -39,7 +39,6 @@ export default class Feed extends Component {
       .then(snapshot => {
         let existingPosts = [];
         snapshot.forEach(doc => {
-          console.log(doc.data());
           post = {
             postID: doc.id,
             data: doc.data()
