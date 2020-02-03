@@ -11,12 +11,13 @@ import AddPostComment from '../screens/AddPostComment.js';
 import Comments from '../screens/Comments.js'
 import ProfileEdit from '../screens/ProfileEdit.js'
 import { FontAwesome } from '@expo/vector-icons';
+import { View } from 'native-base';
 
 const AppNavigatorTabs = createMaterialTopTabNavigator({
     Map: {
         screen: Map,
         navigationOptions:{
-            tabBarLabel: 'Map',
+            tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
                 <FontAwesome name ="map-marker" size={24} color="grey" />
             )
@@ -25,7 +26,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
     Feed: {
         screen: Feed,
         navigationOptions:{
-            tabBarLabel: 'Feed',
+            tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
                 <FontAwesome name ="home" size={24} color="grey" />
             )
@@ -35,7 +36,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
     Profile: {
         screen: Profile,
         navigationOptions:{
-            tabBarLabel: 'Profile',
+            tabBarLabel: <View/>,            
             tabBarIcon: ({ tintColor }) => (
                 <FontAwesome name ="user" size={24} color="grey" />
             )

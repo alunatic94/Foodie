@@ -153,7 +153,7 @@ class Map extends React.Component {
       return (
       <Container>
 
-        <ScreenHeader navigation = {this.props.navigation}>
+        <ScreenHeader navigation = {this.props.navigation} title="Map">
         </ScreenHeader>
 
         <MapView
