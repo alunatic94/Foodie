@@ -19,7 +19,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
-                <FontAwesome name ="map-marker" size={24} color="grey" />
+                <FontAwesome name ="map-marker" size={24} color={tintColor} />
             )
         }   
     },
@@ -28,7 +28,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
-                <FontAwesome name ="home" size={24} color="grey" />
+                <FontAwesome name ="home" size={24} color={tintColor} />
             )
         }
     },
@@ -38,7 +38,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         navigationOptions:{
             tabBarLabel: <View/>,            
             tabBarIcon: ({ tintColor }) => (
-                <FontAwesome name ="user" size={24} color="grey" />
+                <FontAwesome name ="user" size={24} color={tintColor} />
             )
         }
     }
@@ -46,7 +46,10 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
     initialRouteName: 'Feed',
     tabBarPosition: 'bottom',
     tabBarOptions:{
-        activeTintColor: 'orange',
+        indicatorStyle: {
+            opacity: 0
+        },
+        activeTintColor: '#6fdedc',
         inactiveTintColor: 'grey',
         showIcon: true, 
         style: {
