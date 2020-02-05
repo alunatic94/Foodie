@@ -45,9 +45,10 @@ export default class AddPostComment extends Component {
     let postData = {
       images: this.photos,
       likes: 0,
-      rating: 2,      
+      rating: this.state.rating,  
+      caption: this.state.caption,     
       userID: this.state.user.userID,
-      timestamp: "December 9, 2019"
+      timestamp: new Date()
       // TODO:
       // this.state.user.userID
       // user.getCurrentID()      

@@ -6,6 +6,8 @@ import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
 import LikeButton  from '../components/LikeButton.js';
 import { User } from "../database/User.js";
+import Moment from 'moment';
+
 const defaultImages = ['http://lorempixel.com/400/200/food/',
     'http://lorempixel.com/400/200/food/', 
     'http://lorempixel.com/400/200/food/'];
@@ -37,6 +39,7 @@ const dummyUser = {
 
 class PostCard extends Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -64,6 +67,7 @@ class PostCard extends Component {
    
     
     render() {
+
         if (!this.state.isLoaded) {
             return (
                 <Card>
@@ -78,7 +82,7 @@ class PostCard extends Component {
                 <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall} />
                     <Body>
                     <Text style={styles.heading}>{this.state.user.username}</Text>
-                    <Text style={styles.subheading}>{this.props.post.timestamp}</Text>
+                    <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                     </Body>
                 </Left>
                 </CardItem>
