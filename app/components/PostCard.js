@@ -83,6 +83,7 @@ class PostCard extends Component {
                     <Body>
                     <Text style={styles.heading}>{this.state.user.username}</Text>
                     <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                    <Text style={styles.subheading}>{this.props.post.caption}</Text>
                     </Body>
                 </Left>
                 </CardItem>
@@ -92,6 +93,7 @@ class PostCard extends Component {
                     style={styles.imageFeed}
                     images={this.props.post.images}
                 />}
+                
                     {/* <Image source={{uri: 'https://i.imgur.com/Ht5l5n.png'}} style={styles.imageFeed}/> */}
                 </CardItem>
                 <CardItem>
