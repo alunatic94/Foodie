@@ -54,13 +54,13 @@ export default class Feed extends Component {
         return (
 	<Container>    
     
-        <ScreenHeader navigation = {this.props.navigation}>
+        <ScreenHeader navigation = {this.props.navigation} title="Feed">
         </ScreenHeader>
 
         <Content>
         {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
          {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
-         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/> */}
+         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/> */}         
           <ScrollView/>
           {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID}/>)}        
          <ScrollView/>       

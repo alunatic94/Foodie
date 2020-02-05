@@ -74,7 +74,7 @@ export default class Profile extends Component {
         }
         else return (
             <Container>
-                <ScreenHeader navigation = {this.props.navigation}>
+                <ScreenHeader navigation = {this.props.navigation} title="Profile">
                 </ScreenHeader>
                 <Content>
                     <Card>
