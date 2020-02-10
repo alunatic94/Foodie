@@ -9,6 +9,8 @@ import styles from './styles.js';
 import {firebase, db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js'
 
+posts = db.collection("posts");
+
 const thumbnail = "";
 const platesURL = [
     "https://www.williams-sonoma.com/wsimgs/rk/images/dp/wcm/201938/0181/williams-sonoma-pantry-dinner-plates-set-of-6-c.jpg",
@@ -26,22 +28,51 @@ export default class Profile extends Component {
             userID: this.props.navigation.getParam('userID', User.getCurrentUserID()),
             currentProfile: null,
             isProfileLoaded: false, 
-            badges: []
+            badges: [],
+            plates: []
         }
     }
     componentDidMount() {
+        this.loadProfileInformation();
+    }
+
+    async loadProfileInformation() {
+        var profileDB = new ProfileDB(this.state.userID);
+
+        // // Fetch profile data after component instance created
+        // await profileDB.getProfile().then((profile) => {
+        //     this.setState({currentProfile: profile});
+        // });
+        // await loadBadges();
+        // await loadPlates();
+        // this.setState({isProfileLoaded: true});
         // Fetch profile data after component instance created
-        console.log(this.state.userID);
-        (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
+        await profileDB.getProfile().then((profile) => {
             this.setState({currentProfile: profile}, () => {
-                    BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-                        this.setState({
-                            badges: newBadges,
-                            isProfileLoaded: true
+                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                    this.setState({badges: newBadges}, () => {
+                        profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
+                            this.setState({plates: newPlates, isProfileLoaded: true});
                         });
                     });
-                
+                });
             });
+        });
+        // await loadBadges();
+        // await loadPlates();
+        // this.setState({isProfileLoaded: true});
+        // }
+    }
+
+    async loadBadges() {
+        BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+            this.setState({badges: newBadges});
+        });
+    }
+
+    async loadPlates() {
+        profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
+            this.setState({plates: newPlates});
         });
     }
 
@@ -60,6 +91,42 @@ export default class Profile extends Component {
             )
         }
     }
+
+    // Loop through user's plate IDs and add image component for each one                                       
+    renderPlates = (plates) => {
+        console.log(plates);
+
+        if (plates.length == 0) {
+            return <Text style={styles.subheading}>None so far!</Text>;
+        }
+
+        // Necessary to close <Row> component
+        else if (plates.length == 1) {
+            return (
+                <Row>
+                    <Col style={styles.columnStyle}>
+                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
+                    </Col>
+                </Row>
+            )
+        }
+        else {
+            for (i = 0; i < plates.length; i += 2) {
+                console.log(plates[i].images[0]);
+                return (
+                    <Row>
+                        <Col style={styles.columnStyle}>
+                            <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i].images[0] }} />
+                        </Col>
+                        <Col style={styles.columnStyle}>
+                            <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i + 1].images[0] }} />
+                        </Col>
+                    </Row>
+                )
+            }
+        }
+    }
+
     render() {
         // Render empty profile screen until data is finished being fetched
         if (!this.state.isProfileLoaded) {
@@ -124,6 +191,9 @@ export default class Profile extends Component {
                             <Body>
                                 <H2 style={styles.heading}>Plates Eaten</H2>
                                 <Grid>
+                                    {this.renderPlates(this.state.plates)}
+                                </Grid>
+                                {/* <Grid>
                                     <Col style={styles.columnStyle}>
                                         <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[0] }} />
                                     </Col>
@@ -146,7 +216,7 @@ export default class Profile extends Component {
                                     <Col style={styles.columnStyle}>
                                         <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[5] }} />
                                     </Col>
-                                </Grid>
+                                </Grid> */}
                             </Body>
                         </CardItem>
                     </Card>
