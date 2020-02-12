@@ -6,8 +6,17 @@ import {logout} from '../screens/Login.js';
 import styles from './styles.js';
 import { db } from '../database/Database.js';
 import { User } from '../database/User.js';
+import { SearchBar } from 'react-native-elements';
 
 export default class AddPostComment extends Component {
+
+  state = {
+    search: '',
+  };
+
+  updateSearch = search => {
+    this.setState({ search });
+  };
 
   time = new Date();
 
@@ -93,6 +102,7 @@ submitButton = () => {
 
   render() {
     const { navigation } = this.props;
+    const { search } = this.state;
 
     //IMAGE DISPLAY 
     const uri = navigation.getParam('uri');
@@ -169,7 +179,18 @@ submitButton = () => {
           <View style={{borderWidth: 1}}>
             <Input placeholder="Caption" onChangeText={(text) => this.setState({caption:text})}/>
             </View>
-            
+
+          <Text style = {{fontSize:25,
+               fontWeight:"bold", 
+               paddingTop: 30,
+                paddingBottom: 15}}>Add location:</Text>
+
+            <SearchBar placeholder ="location"
+        onChangeText = {this.updateSearch}
+      lightTheme
+       placeholderTextColor = 'grey'
+        value= {search}/>
+        
             <Button
             block success 
             /*  onPress = { () => {
