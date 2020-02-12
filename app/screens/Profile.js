@@ -103,25 +103,25 @@ export default class Profile extends Component {
         // Necessary to close <Row> component
         else if (plates.length == 1) {
             return (
-                <Row>
+                <Grid>
                     <Col style={styles.columnStyle}>
-                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
+                        <Image style={{flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
                     </Col>
-                </Row>
+                </Grid>
             )
         }
         else {
             for (i = 0; i < plates.length; i += 2) {
                 console.log(plates[i].images[0]);
                 return (
-                    <Row>
+                    <Grid>
                         <Col style={styles.columnStyle}>
                             <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i].images[0] }} />
                         </Col>
                         <Col style={styles.columnStyle}>
                             <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i + 1].images[0] }} />
                         </Col>
-                    </Row>
+                    </Grid>
                 )
             }
         }
@@ -190,9 +190,9 @@ export default class Profile extends Component {
                         <CardItem>
                             <Body>
                                 <H2 style={styles.heading}>Plates Eaten</H2>
-                                <Grid>
+                                {/* <Grid> */}
                                     {this.renderPlates(this.state.plates)}
-                                </Grid>
+                                {/* </Grid> */}
                                 {/* <Grid>
                                     <Col style={styles.columnStyle}>
                                         <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[0] }} />

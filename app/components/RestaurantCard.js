@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardItem, Body, Text, Left, Thumbnail } from 'native-base';
 import { Image, ScrollView, View } from 'react-native';
+import { Rating } from 'react-native-ratings';
 import styles from '../screens/styles.js';
 
 const images = [require('../assets/images/burger.png'),

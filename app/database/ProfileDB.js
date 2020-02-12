@@ -28,4 +28,18 @@ export class ProfileDB {
       return this.profileData.profileImage;
   }
 
+  async getPlatesFromIDs(IDarray) {
+    var plates = [];
+    for (let ID of IDarray) {
+      await posts.doc(ID).get().then((doc) => {
+        plate = doc.data();
+        plates.push(plate);
+      })
+      .catch((err) => {
+        console.log("Could not find plate from ID '" + ID);
+      });
+    }
+    return plates;
+  }
+
 }
