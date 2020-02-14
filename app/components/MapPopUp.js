@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import Modal from 'react-native-modal';
 import { Text } from 'react-native';
 import { View, Button} from 'native-base';
-// Functional component might be better
+
+// TODO:
+// 1. Review layout from powerpoint
+// 2. Implement Front-End layout
+// 3. Implement Back-End Data collection in componentWillMount function
+// 4. Display Back-End Data to Front-End
 
  export class MapPopUp extends Component{
 
