@@ -2,7 +2,7 @@
 import MapView, { Marker } from "react-native-maps";
 import { Container } from 'native-base';
 import React, { Component } from 'react';
-import {View, Image } from 'react-native';
+import {View, Image, Text } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -10,13 +10,14 @@ import YelpRequest from "../handlers/YelpRequestHandler.js";
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js'
+import { MapPopUp } from '../components/MapPopUp.js'
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
   return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-class Map extends React.Component {
+class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +29,8 @@ class Map extends React.Component {
       error: null,
       nearbyRestaurants: [],
       isLoaded: false,
-      zoomLevel: 16
+      zoomLevel: 16,
+      showPopUp: false
     };
   }
 
@@ -38,31 +40,6 @@ class Map extends React.Component {
   searchOff = () => {
     this.setState({ showSearch: false });
   };
-
-  // async getRestaurantsByRadius() {
-  //   await axios.get('https://api.yelp.com/v3/businesses/search', {
-  //     headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
-  //     params: {
-  //       latitude: 34.2383,
-  //       longitude: -118.5237,
-  //       categories: "restaurants",
-  //       limit: 2
-  //     }
-  //   }).then((res) => {
-  //     console.log("1");
-  //     this.setState({
-  //       nearbyRestaurants: res.data.businesses,
-  //       isLoaded: true
-  //     });
-  //     console.log("2");
-  //     return res.data.businesses;
-  //   }).catch((err) => {
-  //     //console.log("Yelp request via Axios failed: " + err);
-  //     return err;
-  //   })
-
-
-  // }
 
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
@@ -115,6 +92,11 @@ class Map extends React.Component {
       console.log("Yelp request via Axios failed: " + err);
       return err;
     })
+  }
+
+  togglePopUp = () => {    
+    console.log("Setting to true")
+    this.setState({showPopUp: !this.state.showPopUp})
   }
 
   render() {
@@ -173,22 +155,34 @@ class Map extends React.Component {
           {
             this.state.nearbyRestaurants.map((marker, index) => {
               return(
-                <Marker
+                // TODO: check teams folder/frontend for content                
+                // <Marker                
+                //   key={index}
+                //   coordinate={{
+                //     latitude: marker.coordinates.latitude,
+                //     longitude: marker.coordinates.longitude
+                //   }}
+                //   title={marker.name + "Suuhh DUDE"}
+                //   description={marker.categories[0].title}
+                  
+                // >                
+                <Marker                
                   key={index}
                   coordinate={{
                     latitude: marker.coordinates.latitude,
                     longitude: marker.coordinates.longitude
                   }}
-                  title={marker.name}
-                  description={marker.categories[0].title}
-                >
+                  onPress = {this.togglePopUp}
+                  >
+                  {this.state.showPopUp ? <MapPopUp/> : null}
                   <View>
                     <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}
                         source={{ uri: marker.image_url }}
-                    />
+                    />                    
                   </View>
-                </Marker>
+                </Marker>                
+
               )
             })
           }
