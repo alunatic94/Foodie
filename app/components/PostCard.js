@@ -98,7 +98,7 @@ class PostCard extends Component {
                 </CardItem>
                 <CardItem>
                 <Left>                    
-                    <LikeButton/>
+                    <LikeButton postID={post.postID}/>
                 </Left>
                 <Body>
                     <Icon active name="chatbubbles" color="black" onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}/>

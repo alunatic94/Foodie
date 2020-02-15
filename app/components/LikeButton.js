@@ -13,26 +13,12 @@ import styles from '../screens/styles.js';
 class LikeButton extends React.Component {
   componentDidMount() {
     
-    //const statRef = db.collection('posts').doc('yZtajMCp8XKB8DwVjoIA').collection('likes').doc('ObRxoiLtx2g6gg6JWlKb');
-    //like=db.collection('posts').doc('yZtajMCp8XKB8DwVjoIA',count);
-    //numberOfLikes=db.collection('posts').doc()
     
     
-    
-   
+  }
 
-    //const batch = db.batch();
-    //batch.set(likeRef, { title: 'Total Likes' });
-    //batch.set(statRef, { likecount: increment }, {merge: true});
-    //batch.commit();
+  componentDidUpdate(prevProps){
 
-  // Update read count
-  //likeRef.update({ count: increment });
-  //likeRef.update({ reads: decrement });
-
-
-  //const statRef = db.collection('post').doc(`${Math.random()}`);
-    
   }
 
   constructor(props){
@@ -43,9 +29,9 @@ class LikeButton extends React.Component {
       updated: false,
       hearto: false,
 
-      likesArray: [],
-      buttonTextColor: '#0065ff',
-      user: User.dummyUser 
+      //likesArray: [],
+      //buttonTextColor: '#0065ff',
+      //user: User.dummyUser 
 	  
     };
 
@@ -53,7 +39,7 @@ class LikeButton extends React.Component {
 
  
   updateLikes = () => {
-    likeRef = db.collection('posts').doc('yZtajMCp8XKB8DwVjoIA');
+    likeRef = db.collection('posts').doc(this.props.postID);
     decrement = firebase.firestore.FieldValue.increment(-1);
      increment = firebase.firestore.FieldValue.increment(1);
 
