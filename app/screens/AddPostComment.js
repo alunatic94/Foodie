@@ -173,7 +173,7 @@ submitButton = () => {
           </View> 
 
             <Text style = {{fontSize:25,
-               fontWeight:"bold", 
+               fontWeight:"  bold", 
                paddingTop: 30,
                 paddingBottom: 15}}>Add a caption:</Text>
           <View style={{borderWidth: 1}}>
@@ -188,6 +188,7 @@ submitButton = () => {
             <SearchBar placeholder ="location"
         onChangeText = {this.updateSearch}
       lightTheme
+      round
        placeholderTextColor = 'grey'
         value= {search}/>
         

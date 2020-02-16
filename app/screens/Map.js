@@ -1,15 +1,15 @@
-
 import MapView, { Marker } from "react-native-maps";
 import { Container } from 'native-base';
 import React, { Component } from 'react';
-import {View, Image } from 'react-native';
+import {View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import YelpRequest from "../handlers/YelpRequestHandler.js";
 import axios from 'axios';
 import { Dimensions } from 'react-native';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import { FontAwesome } from 'react-native-vector-icons';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -213,6 +213,29 @@ class Map extends React.Component {
               )
             })
           }
+
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+              <View style={{
+              backgroundColor: "grey", 
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              shadowColor: "#333",
+              shadowOpacity: 1,
+              shadowOffset:
+               {x: 2, y: 0},
+              shadowRadius: 2,
+              borderRadius: 30,
+              position: "absolute",
+              bottom: 30,
+              right: 20,
+              }}>   
+              <View>
+              <FontAwesome name='search' style={{fontSize: 25, color: "yellow"}}/>
+              </View> 
+            </View>
+          </TouchableWithoutFeedback>
         </MapView>
 
       </Container>
