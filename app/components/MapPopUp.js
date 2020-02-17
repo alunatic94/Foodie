@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
+import { Marker } from 'react-native-maps';
 import { Container, Header, Content, Card, CardItem, Text, Body, View, Button } from 'native-base';
 
 // TODO:
 // 1. Review layout from powerpoint
 // 2. Implement Front-End layout
-// 3. Implement Back-End Data collection in componentWillMount function
-// 4. Display Back-End Data to Front-End
+// 3. Get restaurant data
+// 4. Implement Back-End Data collection in componentWillMount function
+// 5. Display Back-End Data to Front-End
 
  export class MapPopUp extends Component{
 
@@ -22,17 +24,17 @@ import { Container, Header, Content, Card, CardItem, Text, Body, View, Button } 
                 <Modal isVisible={this.state.show}>
                     <Card>
                         <CardItem header>
-                            <Text>NativeBase</Text>
+                            <Text>Title</Text>
                             </CardItem>
                             <CardItem>
                             <Body>
                                 <Text>
-                                //Your text here
+                                Short description and linear icons of plates
                                 </Text>
                             </Body>
                             </CardItem>
                             <CardItem footer>
-                            <Text>GeekyAnts</Text>
+                            <Text>Contact</Text>
                         </CardItem>
                     </Card>
                     <Text>Try this</Text>
