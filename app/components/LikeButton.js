@@ -8,13 +8,22 @@ import {User} from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
+//import { ref } from '@hapi/joi';
 
 
 class LikeButton extends React.Component {
   componentDidMount() {
     
-    
-    
+    db.ref('/posts/zOPy8Tnbk7P5gIFSqIotfUGKtV13').on('likes', querySnapShot =>{
+      let data = querySnapShot.val() ? querySnapShot.val() : {};
+      let numOfLikes = {...data};
+      this.setState({
+        like: numOfLikes,
+      });
+
+    });
+      
+     
   }
 
   componentDidUpdate(prevProps){
@@ -25,7 +34,7 @@ class LikeButton extends React.Component {
 
     super(props);
     this.state = {
-      like: "0",
+      like:this.numOfLikes, // In constructor we should read DB to see how many likes a post currently has
       updated: false,
       hearto: false,
 
@@ -45,7 +54,7 @@ class LikeButton extends React.Component {
 
     if(!this.state.updated) {
       this.setState((prevState, props) => {
-        likeRef.update({ count: increment });
+        likeRef.update({ likes: increment });
         return {
           like: prevState.like + 1,
           updated: true
@@ -57,7 +66,7 @@ class LikeButton extends React.Component {
     } else {
 
       this.setState((prevState, props) => {
-        likeRef.update({ count: decrement });
+        likeRef.update({ likes: decrement });
         return {
           like: prevState.like - 1,
           updated: false
