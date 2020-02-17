@@ -40,31 +40,6 @@ class Map extends React.Component {
     this.setState({ showSearch: false });
   };
 
-  // async getRestaurantsByRadius() {
-  //   await axios.get('https://api.yelp.com/v3/businesses/search', {
-  //     headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
-  //     params: {
-  //       latitude: 34.2383,
-  //       longitude: -118.5237,
-  //       categories: "restaurants",
-  //       limit: 2
-  //     }
-  //   }).then((res) => {
-  //     console.log("1");
-  //     this.setState({
-  //       nearbyRestaurants: res.data.businesses,
-  //       isLoaded: true
-  //     });
-  //     console.log("2");
-  //     return res.data.businesses;
-  //   }).catch((err) => {
-  //     //console.log("Yelp request via Axios failed: " + err);
-  //     return err;
-  //   })
-
-
-  // }
-
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -214,7 +189,7 @@ class Map extends React.Component {
             })
           }
 
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants')}> 
               <View style={{
               backgroundColor: "grey", 
               width: 60,

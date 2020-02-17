@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  centeredTest: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   left: {
     flex: 1,
     backgroundColor: '#fff',
@@ -23,14 +28,14 @@ const styles = StyleSheet.create({
   },
   headerBody: {
     flex: 3,
-    flexDirection:'row',
-    justifyContent:'center'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   heading: {
     color: "#000",
     fontFamily: "Raleway Bold",
     fontSize: 20
-  }, 
+  },
   headingLarge: {
     color: "#000",
     fontFamily: "Raleway Bold",
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
   },
   circleSmall: {
     width: 30,
-    height:30,
+    height: 30,
     borderRadius: 15
   },
   imageFeed: {
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10
   },
-  padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
+  padding: { paddingLeft: 10, paddingRight: 10, paddingTop: 10 },
   columnStyle: { height: 200, padding: 10 },
 
   commentsFooter: {
@@ -99,9 +104,22 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   postButton: {
-    display: 'flex',    
+    display: 'flex',
     justifyContent: 'center',
     paddingRight: 10
-  },  
+  },
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
 });
 export default styles; 
