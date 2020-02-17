@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
-import { Text } from 'react-native';
-import { View, Button} from 'native-base';
+import { Container, Header, Content, Card, CardItem, Text, Body, View, Button } from 'native-base';
 
 // TODO:
 // 1. Review layout from powerpoint
@@ -21,6 +20,21 @@ import { View, Button} from 'native-base';
         return(
             <View>
                 <Modal isVisible={this.state.show}>
+                    <Card>
+                        <CardItem header>
+                            <Text>NativeBase</Text>
+                            </CardItem>
+                            <CardItem>
+                            <Body>
+                                <Text>
+                                //Your text here
+                                </Text>
+                            </Body>
+                            </CardItem>
+                            <CardItem footer>
+                            <Text>GeekyAnts</Text>
+                        </CardItem>
+                    </Card>
                     <Text>Try this</Text>
                     <Button
                     onPress={() => {this.setState({show: !this.state.show})}}
