@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail, Card, CardItem, H1, H2, Icon, View } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Image, ScrollView, ActivityIndicator } from "react-native"
+import { Image, ScrollView, ActivityIndicator, FlatList, Dimensions, StyleSheet } from "react-native"
 import {BadgesDB} from "../database/BadgesDB.js"
 import {ProfileDB} from "../database/ProfileDB.js"
 import {User} from "../database/User.js"
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import PlatePopup from '../components/PlatePopup.js';
+import Modal from "react-native-modal";
+import PostCard  from '../components/PostCard.js'; 
 
 posts = db.collection("posts");
 
@@ -20,6 +23,20 @@ const platesURL = [
     "https://www.lomonosov-russia.com/sites/default/files/dinner.jpg",
     "https://travel.home.sndimg.com/content/dam/images/travel/fullset/2015/10/26/50-states-50-plates/alabama-white-bbq-sauce.jpg.rend.hgtvcom.966.644.suffix/1491581554822.jpeg"
 ];
+const plateCols = 2;
+const plateSize = 150; //Dimensions.get('window').width / plateCols;
+const plateStyles = StyleSheet.create({
+  container: {
+    width: plateSize,
+    height: plateSize,
+    backgroundColor: 'blue'
+  },
+  item: {
+    flex: 1,
+    margin: 3
+  }
+});
+
 export default class Profile extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +46,8 @@ export default class Profile extends Component {
             currentProfile: null,
             isProfileLoaded: false, 
             badges: [],
-            plates: []
+            plates: [],
+            modalData: null
         }
     }
     componentDidMount() {
@@ -76,6 +94,12 @@ export default class Profile extends Component {
         });
     }
 
+    toggleModal(data=null) {
+        console.log("\ntapped\n");
+        if (data) {this.setState({modalData: data})};
+        this.setState({modalVisible: !this.state.modalVisible}); 
+    }
+
     // Loop through badges list and add Icon component for each one                                       
     renderBadges = (badges) => {
         if (badges.length == 0) {
@@ -94,37 +118,79 @@ export default class Profile extends Component {
 
     // Loop through user's plate IDs and add image component for each one                                       
     renderPlates = (plates) => {
-        console.log(plates);
 
         if (plates.length == 0) {
             return <Text style={styles.subheading}>None so far!</Text>;
         }
 
-        // Necessary to close <Row> component
-        else if (plates.length == 1) {
-            return (
-                <Grid>
-                    <Col style={styles.columnStyle}>
-                        <Image style={{flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
-                    </Col>
-                </Grid>
-            )
-        }
         else {
-            for (i = 0; i < plates.length; i += 2) {
-                console.log(plates[i].images[0]);
-                return (
-                    <Grid>
-                        <Col style={styles.columnStyle}>
-                            <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i].images[0] }} />
-                        </Col>
-                        <Col style={styles.columnStyle}>
-                            <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i + 1].images[0] }} />
-                        </Col>
-                    </Grid>
-                )
-            }
+            let gridItems = [];
+            for (let i = 0; i < plates.length; i += 2) {
+                let rowItem = [];
+                rowItem.push(plates[i]);
+                if (plates[i + 1]) rowItem.push(plates[i + 1]);
+                gridItems.push(rowItem);
+              }
+            return (
+                gridItems.map((rowItem) => {
+                    return(
+                        <Grid key={rowItem[0].id}>
+                            {
+                                rowItem.map((item) => {
+                                    return (
+                                        <Col onPress={() => {this.toggleModal(item)}} key={item.id} style={styles.columnStyle}>
+                                                <Image style={{flex: 1, borderRadius: 20, backgroundColor: 'gray'}} source={{ uri: item.images[0] }}/>
+                                           
+                                            {/* <PlatePopup id={item.id} data={item}/>  */}
+                                        </Col>
+                                )})
+                            }
+                        </Grid>
+                    )
+                })
+            );
+            // return (
+            //     <FlatList
+            //     data={plates}
+            //     renderItem={(plate) => (
+            //       <View style={plateStyles.container}>
+            //         {/* <Text style={plateStyles.item}>{console.log(plate)} {plate.index}</Text> */}
+            //         <PlatePopup style={plateStyles.item} size={plateSize} id={plate.id} data={plate.item}/>
+            //       </View>
+            //     )}
+            //     keyExtractor={plate => plate.id}
+            //     numColumns={2} />
+            // )
         }
+        // else if (plates.length == 1) {
+        //     return (
+        //         <Grid>
+        //             <Col style={styles.columnStyle}>
+        //                 <Image style={{flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
+        //             </Col>
+        //         </Grid>
+        //     )
+        // }
+        // else {
+        //     for (i = 0; i < plates.length; i += 2) {
+        //         if (plates[i + 1]) {
+
+        //         }
+        //         else {
+
+        //         }
+        //         return (
+        //             <Grid>
+        //                 <Col style={styles.columnStyle}>
+        //                     <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i].images[0] }} />
+        //                 </Col>
+        //                 <Col style={styles.columnStyle}>
+        //                     <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i + 1].images[0] }} />
+        //                 </Col>
+        //             </Grid>
+        //         )
+        //     }
+        // }
     }
 
     render() {
@@ -174,14 +240,6 @@ export default class Profile extends Component {
                                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                 <View style={{flexDirection: "row"}}>
                                     {this.renderBadges(this.state.badges)}
-                                    {/* <Icon name="bonfire" style={styles.padding} />
-                                    <Icon name="bowtie" style={styles.padding} />
-                                    <Icon name="cafe" style={styles.padding} />
-                                    <Icon name="card" style={styles.padding} />
-                                    <Icon name="logo-freebsd-devil" style={styles.padding} />
-                                    <Icon name="images" style={styles.padding} />
-                                    <Icon name="pizza" style={styles.padding} />
-                                    <Icon name="trophy" style={styles.padding} /> */}
                                 </View>
 
                                 </ScrollView>
@@ -190,33 +248,24 @@ export default class Profile extends Component {
                         <CardItem>
                             <Body>
                                 <H2 style={styles.heading}>Plates Eaten</H2>
-                                {/* <Grid> */}
                                     {this.renderPlates(this.state.plates)}
-                                {/* </Grid> */}
-                                {/* <Grid>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[0] }} />
-                                    </Col>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[1] }} />
-                                    </Col>
-                                </Grid>
-                                <Grid>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[2] }} />
-                                    </Col>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[3] }} />
-                                    </Col>
-                                </Grid>
-                                <Grid>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[4] }} />
-                                    </Col>
-                                    <Col style={styles.columnStyle}>
-                                        <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: platesURL[5] }} />
-                                    </Col>
-                                </Grid> */}
+                                    <Modal isVisible={this.state.modalVisible}>
+                                        {this.state.modalData ? 
+                                            <View style={styles.profileModal}>
+                                                 <PostCard style={{width: '100%'}} postID={this.state.modalData.id} post={this.state.modalData} />
+                                                 <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                                                        <Button
+                                                        rounded dark
+                                                        onPress={() => this.toggleModal()}
+                                                        style={{width: '25%'}}>
+                                                            <Text>Close</Text>
+                                                        </Button>
+                                                    </View>
+                                            </View>
+                                         :
+                                         ""
+                                         }
+                                    </Modal>
                             </Body>
                         </CardItem>
                     </Card>

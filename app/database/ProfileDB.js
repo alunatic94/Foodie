@@ -33,6 +33,7 @@ export class ProfileDB {
     for (let ID of IDarray) {
       await posts.doc(ID).get().then((doc) => {
         plate = doc.data();
+        plate.id = ID;
         plates.push(plate);
       })
       .catch((err) => {

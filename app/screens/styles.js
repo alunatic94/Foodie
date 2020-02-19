@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     margin: 10
   },
   padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
-  columnStyle: { height: 200, padding: 10 },
+  columnStyle: { height: 200, padding: 5 },
 
   commentsFooter: {
     display: "flex",
@@ -103,5 +103,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingRight: 10
   },  
+  profileModal: {
+    borderRadius: 10,
+    padding: 5,
+    backgroundColor: '#ddd'
+  }
 });
 export default styles; 
