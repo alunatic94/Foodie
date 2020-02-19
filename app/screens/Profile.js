@@ -149,48 +149,7 @@ export default class Profile extends Component {
                     )
                 })
             );
-            // return (
-            //     <FlatList
-            //     data={plates}
-            //     renderItem={(plate) => (
-            //       <View style={plateStyles.container}>
-            //         {/* <Text style={plateStyles.item}>{console.log(plate)} {plate.index}</Text> */}
-            //         <PlatePopup style={plateStyles.item} size={plateSize} id={plate.id} data={plate.item}/>
-            //       </View>
-            //     )}
-            //     keyExtractor={plate => plate.id}
-            //     numColumns={2} />
-            // )
         }
-        // else if (plates.length == 1) {
-        //     return (
-        //         <Grid>
-        //             <Col style={styles.columnStyle}>
-        //                 <Image style={{flex: 1, borderRadius: 20}} source={{ uri: plates[0].images[0] }} />
-        //             </Col>
-        //         </Grid>
-        //     )
-        // }
-        // else {
-        //     for (i = 0; i < plates.length; i += 2) {
-        //         if (plates[i + 1]) {
-
-        //         }
-        //         else {
-
-        //         }
-        //         return (
-        //             <Grid>
-        //                 <Col style={styles.columnStyle}>
-        //                     <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i].images[0] }} />
-        //                 </Col>
-        //                 <Col style={styles.columnStyle}>
-        //                     <Image style={{ flex: 1, borderRadius: 20}} source={{ uri: plates[i + 1].images[0] }} />
-        //                 </Col>
-        //             </Grid>
-        //         )
-        //     }
-        // }
     }
 
     render() {

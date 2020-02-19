@@ -7,6 +7,7 @@ import { withNavigation } from 'react-navigation';
 import LikeButton  from '../components/LikeButton.js';
 import { User } from "../database/User.js";
 import Moment from 'moment';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const defaultImages = ['http://lorempixel.com/400/200/food/',
     'http://lorempixel.com/400/200/food/', 
@@ -64,7 +65,27 @@ class PostCard extends Component {
             console.log(err + ":" + "Could not load user [id = " + this.props.post.userID + "] for post");
         })
     }
-   
+   returnRatingIcon(){
+        if(this.props.post.rating == 'meh'){
+            return(
+                <AntDesign name={'meho'} color={'black'}
+                size={30}
+                 />
+            )
+        }else if(this.props.post.rating == 'like'){
+            return(
+                <AntDesign name={'like1'} color={'black'}
+                size={30}
+                 />
+            )
+        }else if(this.props.post.rating == 'dislike'){
+            return(
+                <AntDesign name={'dislike1'} color={'black'}
+                size={30}
+                 />
+            )
+        }
+   }
     
     render() {
 
@@ -98,14 +119,15 @@ class PostCard extends Component {
                 </CardItem>
                 <CardItem>
                 <Left>                    
-                    <LikeButton/>
+                    <LikeButton postID={this.props.postID}/>
                 </Left>
                 <Body>
                     <Icon active name="chatbubbles" color="black" onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}/>
                     <Text style={styles.lightText}>Comments</Text>
+                     
                 </Body>
                 <Right>
-                    <Text style={styles.lightTextSmall}></Text>
+                    {this.returnRatingIcon()}
                 </Right>
                 </CardItem>
             </Card>
