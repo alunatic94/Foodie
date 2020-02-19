@@ -154,18 +154,7 @@ class Map extends Component {
 
           {
             this.state.nearbyRestaurants.map((marker, index) => {
-              return(
-                // TODO: check teams folder/frontend for content                
-                // <Marker                
-                //   key={index}
-                //   coordinate={{
-                //     latitude: marker.coordinates.latitude,
-                //     longitude: marker.coordinates.longitude
-                //   }}
-                //   title={marker.name + "Suuhh DUDE"}
-                //   description={marker.categories[0].title}
-                  
-                // >                
+              return(                
                 <Marker                
                   key={index}
                   coordinate={{
@@ -174,7 +163,7 @@ class Map extends Component {
                   }}
                   onPress = {this.togglePopUp}
                   >
-                  {this.state.showPopUp ? <MapPopUp/> : null}
+                  {this.state.showPopUp ? <MapPopUp title={Marker.name}/> : null}
                   <View>
                     <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}

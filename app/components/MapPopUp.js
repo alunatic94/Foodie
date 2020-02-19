@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
 import { Marker } from 'react-native-maps';
-import { Container, Header, Content, Card, CardItem, Text, Body, View, Button } from 'native-base';
+import { List, Card, CardItem, Text, Body, View, Button, ListItem, Left, Thumbnail } from 'native-base';
 
 // TODO:
 // 1. Review layout from powerpoint
 // 2. Implement Front-End layout
-// 3. Get restaurant data
+// 3. Get restaurant data from Map
 // 4. Implement Back-End Data collection in componentWillMount function
 // 5. Display Back-End Data to Front-End
 
+// Temp Image
+const image = require('../screens/assets/howlin.png');
  export class MapPopUp extends Component{
 
     constructor(props){
@@ -24,15 +26,22 @@ import { Container, Header, Content, Card, CardItem, Text, Body, View, Button } 
                 <Modal isVisible={this.state.show}>
                     <Card>
                         <CardItem header>
-                            <Text>Title</Text>
+                            <Text>{this.props.title}</Text>
                             </CardItem>
                             <CardItem>
                             <Body>
                                 <Text>
                                 Short description and linear icons of plates
                                 </Text>
+                                <List>
+                                    <ListItem avatar>
+                                        <Left>
+                                            <Thumbnail source={image}/>
+                                        </Left>                                        
+                                    </ListItem>                                    
+                                </List>                                
                             </Body>
-                            </CardItem>
+                            </CardItem>                            
                             <CardItem footer>
                             <Text>Contact</Text>
                         </CardItem>
