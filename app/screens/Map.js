@@ -212,9 +212,10 @@ class Map extends React.Component {
                 </Marker>
               )
             })
-          }
+          } 
+        </MapView>
 
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
+        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
               <View style={{
               backgroundColor: "grey", 
               width: 60,
@@ -231,13 +232,9 @@ class Map extends React.Component {
               bottom: 30,
               right: 20,
               }}>   
-              <View>
-              <FontAwesome name='search' style={{fontSize: 25, color: "yellow"}}/>
-              </View> 
+              <FontAwesome name='search' style={{fontSize: 25, color: "white"}}/> 
             </View>
           </TouchableWithoutFeedback>
-        </MapView>
-
       </Container>
       )
     }
