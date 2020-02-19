@@ -31,7 +31,7 @@ const image = require('../screens/assets/howlin.png');
                             <CardItem>
                             <Body>
                                 <Text>
-                                Short description and linear icons of plates
+                                    {this.props.description}                                
                                 </Text>
                                 <List>
                                     <ListItem avatar>

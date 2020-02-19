@@ -54,7 +54,7 @@ class Map extends Component {
       },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
-    );
+    );  
   }
 
   onRegionChangeComplete = (region) => {
@@ -163,7 +163,7 @@ class Map extends Component {
                   }}
                   onPress = {this.togglePopUp}
                   >
-                  {this.state.showPopUp ? <MapPopUp title={Marker.name}/> : null}
+                  {this.state.showPopUp ? <MapPopUp title={marker.name} description={marker.description}/> : null}
                   <View>
                     <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}
