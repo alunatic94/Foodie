@@ -8,20 +8,15 @@ import {User} from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
+import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunityIcons';
 //import { ref } from '@hapi/joi';
 
 
 class LikeButton extends React.Component {
+  //state={postData:null}
   componentDidMount() {
     
-    db.ref('/posts/zOPy8Tnbk7P5gIFSqIotfUGKtV13').on('likes', querySnapShot =>{
-      let data = querySnapShot.val() ? querySnapShot.val() : {};
-      let numOfLikes = {...data};
-      this.setState({
-        like: numOfLikes,
-      });
 
-    });
       
      
   }
@@ -33,8 +28,12 @@ class LikeButton extends React.Component {
   constructor(props){
 
     super(props);
+
+
+       //var postData=db.collection('posts').doc(this.props.postID).get()
+    
     this.state = {
-      like:this.numOfLikes, // In constructor we should read DB to see how many likes a post currently has
+      like:'0', // In constructor we should read DB to see how many likes a post currently has
       updated: false,
       hearto: false,
 
@@ -62,7 +61,7 @@ class LikeButton extends React.Component {
         };
         
       });
-
+      
     } else {
 
       this.setState((prevState, props) => {
@@ -86,10 +85,11 @@ class LikeButton extends React.Component {
     return(
     <View style= { color= 'white'}>
 	   <Button transparent>
-     <Text>Likes:{this.state.like}</Text>
-	    <AntDesign name={hearts ? "heart" : "heart"} color={updated ? 'red' : 'rgb(237, 237, 237)'} size={30} onPress={this.updateLikes}/> 
+     <Text>Like:{this.state.like}</Text>
+     <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={updated ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes}/>
 	   </Button>
-	  </View>  
+    </View>  
+    
     );
   }
 }
