@@ -1,8 +1,7 @@
-
 import MapView, { Marker } from "react-native-maps";
 import { Container } from 'native-base';
 import React, { Component } from 'react';
-import {View, Image, Text } from 'react-native';
+import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -12,6 +11,7 @@ import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js'
 import { MapPopUp } from '../components/MapPopUp.js'
 import { List, Card, CardItem, Body, Button, ListItem, Left, Thumbnail } from 'native-base';
+import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
 
 const screenWidth = Dimensions.get('window').width;
@@ -30,6 +30,7 @@ class Map extends Component {
       longitudeDelta: 0.0121,
       error: null,
       nearbyRestaurants: [],
+      searchedRestaurantID: '',
       isLoaded: false,
       zoomLevel: 16,
       showPopUp: false
@@ -70,9 +71,14 @@ class Map extends Component {
   }
 
   getZoomLevel = (region) => {
-    return Math.log2(360 * ((screenWidth/256) / region.longitudeDelta)) + 1;
+    return Math.log2(360 * ((screenWidth / 256) / region.longitudeDelta)) + 1;
   }
 
+  refresh = (data) => {
+    this.setState({
+      searchedRestaurantID: data
+    })
+  }
 
   updateRestaurants = () => {
     axios.get('https://api.yelp.com/v3/businesses/search', {
@@ -140,7 +146,7 @@ class Map extends Component {
       return (
         <Container>
 
-          <ScreenHeader navigation = {this.props.navigation}>
+          <ScreenHeader navigation={this.props.navigation}>
           </ScreenHeader>
 
           <MapView
@@ -166,7 +172,7 @@ class Map extends Component {
         latitudeDelta: this.state.latitudeDelta,
         longitudeDelta: this.state.longitudeDelta
       }
-      zoomLevel = Math.log2(360 * ((screenWidth/256) / region.longitudeDelta)) + 1;
+      zoomLevel = Math.log2(360 * ((screenWidth / 256) / region.longitudeDelta)) + 1;
       markerSize = 50;
       return (
       <Container>
@@ -243,9 +249,35 @@ class Map extends Component {
 
               )
             })
-          }
+          } 
         </MapView>
 
+        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
+              {
+                lat: this.state.latitude,
+                long: this.state.longitude,
+                onGoBack: this.refresh
+              }
+            )}>
+              <View style={{
+              backgroundColor: "grey", 
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              shadowColor: "#333",
+              shadowOpacity: 1,
+              shadowOffset:
+               {x: 2, y: 0},
+              shadowRadius: 2,
+              borderRadius: 30,
+              position: "absolute",
+              bottom: 30,
+              right: 20,
+              }}>   
+              <FontAwesome name='search' style={{fontSize: 25, color: "white"}}/> 
+            </View>
+          </TouchableWithoutFeedback>
       </Container>
       )
     }

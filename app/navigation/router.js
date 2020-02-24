@@ -8,6 +8,7 @@ import Feed from '../screens/Feed.js';
 import Profile from '../screens/Profile.js';
 import AddPostPhoto from '../screens/AddPostPhoto.js'; 
 import AddPostComment from '../screens/AddPostComment.js';
+import SearchRestaurants from "../screens/SearchRestaurants.js"
 import Comments from '../screens/Comments.js'
 import ProfileEdit from '../screens/ProfileEdit.js'
 import { FontAwesome } from '@expo/vector-icons';
@@ -76,6 +77,9 @@ const AppNavigator = createStackNavigator({
     Profile: {
         screen: Profile
     },
+    SearchRestaurants: {
+        screen: SearchRestaurants
+    },
     AddPostPhoto: {
         screen: AddPostPhoto
     },
@@ -87,6 +91,9 @@ const AppNavigator = createStackNavigator({
     },
     ProfileEdit: {
         screen: ProfileEdit
+    },
+    Map: {
+        screen: Map
     },
     Main: AppNavigatorTabs,
 },

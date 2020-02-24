@@ -24,7 +24,7 @@ export default class RestaurantCard extends Component {
         // TODO: Grab restaurant ID from post database document
         //       Pass to component state
     }
-
+    
     render() {
         return (
             <Card>
