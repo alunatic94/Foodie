@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import Constants from 'expo-constants';
 const styles = StyleSheet.create({
   centered: {
     backgroundColor: '#fff',
@@ -107,10 +108,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     paddingRight: 10
-  },
-  container: {
+  },container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: Constants.statusBarHeight,
   },
   item: {
     backgroundColor: '#f9c2ff',
