@@ -11,6 +11,8 @@ import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js'
 import { MapPopUp } from '../components/MapPopUp.js'
+import { List, Card, CardItem, Body, Button, ListItem, Left, Thumbnail } from 'native-base';
+import Modal from 'react-native-modal';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -163,7 +165,40 @@ class Map extends Component {
                   }}
                   onPress = {this.togglePopUp}
                   >
-                  {this.state.showPopUp ? <MapPopUp title={marker.name} description={marker.description}/> : null}
+                  {this.state.showPopUp ? 
+                  <View>
+                  <Modal isVisible={this.state.showPopUp}>
+                      <Card>
+                          <CardItem header>
+                              <Text>{marker.name}</Text>
+                              </CardItem>
+                              <CardItem>
+                              <Body>
+                                  <Text>
+                                    Description                                                               
+                                  </Text>
+                                  <List>
+                                      <ListItem avatar>
+                                          <Left>
+                                              <Thumbnail/>
+                                          </Left>                                        
+                                      </ListItem>                                    
+                                  </List>                                
+                              </Body>
+                              </CardItem>                            
+                              <CardItem footer>
+                              <Text>Contact</Text>
+                          </CardItem>
+                      </Card>
+                      <Text>Try this</Text>
+                      <Button
+                      onPress={() => {this.setState({showPopUp: false})}}
+                      >
+                      <Text>close</Text>
+                      </Button>
+                  </Modal>                
+              </View>
+                  : null}
                   <View>
                     <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}
