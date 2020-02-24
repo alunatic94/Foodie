@@ -102,6 +102,40 @@ class Map extends Component {
   }
 
   render() {
+    {this.state.showPopUp ? 
+      <View>
+      <Modal isVisible={this.state.showPopUp}>
+          <Card>
+              <CardItem header>
+                  <Text>name</Text>
+                  </CardItem>
+                  <CardItem>
+                  <Body>
+                      <Text>
+                        Description                                                               
+                      </Text>
+                      <List>
+                          <ListItem avatar>
+                              <Left>
+                                  <Thumbnail/>
+                              </Left>                                        
+                          </ListItem>                                    
+                      </List>                                
+                  </Body>
+                  </CardItem>                            
+                  <CardItem footer>
+                  <Text>Contact</Text>
+              </CardItem>
+          </Card>
+          <Text>Try this</Text>
+          <Button
+          onPress={() => {this.setState({showPopUp: false})}}
+          >
+          <Text>close</Text>
+          </Button>
+      </Modal>                
+  </View>
+      : null}
     if (!this.state.isLoaded) {
       return (
         <Container>
