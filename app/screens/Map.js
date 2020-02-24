@@ -101,41 +101,7 @@ class Map extends Component {
     this.setState({showPopUp: !this.state.showPopUp})
   }
 
-  render() {
-    {this.state.showPopUp ? 
-      <View>
-      <Modal isVisible={this.state.showPopUp}>
-          <Card>
-              <CardItem header>
-                  <Text>name</Text>
-                  </CardItem>
-                  <CardItem>
-                  <Body>
-                      <Text>
-                        Description                                                               
-                      </Text>
-                      <List>
-                          <ListItem avatar>
-                              <Left>
-                                  <Thumbnail/>
-                              </Left>                                        
-                          </ListItem>                                    
-                      </List>                                
-                  </Body>
-                  </CardItem>                            
-                  <CardItem footer>
-                  <Text>Contact</Text>
-              </CardItem>
-          </Card>
-          <Text>Try this</Text>
-          <Button
-          onPress={() => {this.setState({showPopUp: false})}}
-          >
-          <Text>close</Text>
-          </Button>
-      </Modal>                
-  </View>
-      : null}
+  render() {    
     if (!this.state.isLoaded) {
       return (
         <Container>
@@ -198,41 +164,7 @@ class Map extends Component {
                     longitude: marker.coordinates.longitude
                   }}
                   onPress = {this.togglePopUp}
-                  >
-                  {this.state.showPopUp ? 
-                  <View>
-                  <Modal isVisible={this.state.showPopUp}>
-                      <Card>
-                          <CardItem header>
-                              <Text>{marker.name}</Text>
-                              </CardItem>
-                              <CardItem>
-                              <Body>
-                                  <Text>
-                                    Description                                                               
-                                  </Text>
-                                  <List>
-                                      <ListItem avatar>
-                                          <Left>
-                                              <Thumbnail/>
-                                          </Left>                                        
-                                      </ListItem>                                    
-                                  </List>                                
-                              </Body>
-                              </CardItem>                            
-                              <CardItem footer>
-                              <Text>Contact</Text>
-                          </CardItem>
-                      </Card>
-                      <Text>Try this</Text>
-                      <Button
-                      onPress={() => {this.setState({showPopUp: false})}}
-                      >
-                      <Text>close</Text>
-                      </Button>
-                  </Modal>                
-              </View>
-                  : null}
+                  >                  
                   <View>
                     <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}
@@ -245,6 +177,40 @@ class Map extends Component {
             })
           }
         </MapView>
+        {this.state.showPopUp ? 
+      <View>
+      <Modal isVisible={this.state.showPopUp}>
+          <Card>
+              <CardItem header>
+                  <Text>name</Text>
+                  </CardItem>
+                  <CardItem>
+                  <Body>
+                      <Text>
+                        Description                                                               
+                      </Text>
+                      <List>
+                          <ListItem avatar>
+                              <Left>
+                                  <Thumbnail/>
+                              </Left>                                        
+                          </ListItem>                                    
+                      </List>                                
+                  </Body>
+                  </CardItem>                            
+                  <CardItem footer>
+                  <Text>Contact</Text>
+              </CardItem>
+          </Card>
+          <Text>Try this</Text>
+          <Button
+          onPress={() => {this.setState({showPopUp: false})}}
+          >
+          <Text>close</Text>
+          </Button>
+      </Modal>                
+  </View>
+      : null}
 
       </Container>
       )
