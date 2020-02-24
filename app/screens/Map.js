@@ -167,14 +167,15 @@ class Map extends React.Component {
                       <Image
                         style={{ width: markerSize, height: markerSize, borderRadius: markerSize / 2, borderWidth: 2, borderColor: "beige", left: 0 }}
                         source={{ uri: marker.image_url }}
-                      />
-                    </View>
-                  </Marker>
-                )
-              })
-            }
+                    />
+                  </View>
+                </Marker>
+              )
+            })
+          } 
+        </MapView>
 
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
+        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
                 lat: this.state.latitude,
                 long: this.state.longitude,
@@ -182,30 +183,25 @@ class Map extends React.Component {
               }
             )}>
               <View style={{
-                backgroundColor: "grey",
-                width: 60,
-                height: 60,
-                alignItems: "center",
-                justifyContent: "center",
-                shadowColor: "#333",
-                shadowOpacity: 1,
-                shadowOffset:
-                  { x: 2, y: 0 },
-                shadowRadius: 2,
-                borderRadius: 30,
-                position: "absolute",
-                bottom: 30,
-                right: 20,
-              }}>
-                <View>
-                  <FontAwesome name='search' style={{ fontSize: 25, color: "yellow" }} />
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-
-          </MapView>
-
-        </Container>
+              backgroundColor: "grey", 
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              shadowColor: "#333",
+              shadowOpacity: 1,
+              shadowOffset:
+               {x: 2, y: 0},
+              shadowRadius: 2,
+              borderRadius: 30,
+              position: "absolute",
+              bottom: 30,
+              right: 20,
+              }}>   
+              <FontAwesome name='search' style={{fontSize: 25, color: "white"}}/> 
+            </View>
+          </TouchableWithoutFeedback>
+      </Container>
       )
     }
   }
