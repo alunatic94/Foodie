@@ -48,23 +48,9 @@ export default class AddPostComment extends Component {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
     this.getUser();
-
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          origLat: position.coords.latitude,
-          origLong: position.coords.longitude,
-          error: null
-        });
-      },
-      error => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
-    );
   }
 
-  getUser = async () => {
+  getUser = () => {
     User.getCurrent().then(user => {
       this.setState({user, isLoading: false});
     });
@@ -228,7 +214,7 @@ export default class AddPostComment extends Component {
           </View> 
 
             <Text style = {{fontSize:25,
-               fontWeight:"  bold", 
+               fontWeight:"bold", 
                paddingTop: 30,
                 paddingBottom: 15}}>Add a caption:</Text>
           <View style={{borderWidth: 1}}>
