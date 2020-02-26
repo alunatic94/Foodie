@@ -23,7 +23,6 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSearch: false,
       latitude: 0,
       longitude: 0,
       latitudeDelta: 0.0122,
@@ -36,14 +35,6 @@ class Map extends Component {
       showPopUp: false
     };
   }
-
-  searchOn = () => {
-    this.setState({ showSearch: true });
-  };
-  searchOff = () => {
-    this.setState({ showSearch: false });
-  };
-
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -57,7 +48,7 @@ class Map extends Component {
       },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
-    );  
+    );
   }
 
   onRegionChangeComplete = (region) => {
@@ -102,12 +93,12 @@ class Map extends Component {
     })
   }
 
-  togglePopUp = () => {    
+  togglePopUp = () => {
     console.log("Setting to true")
-    this.setState({showPopUp: !this.state.showPopUp})
+    this.setState({ showPopUp: !this.state.showPopUp })
   }
 
-  render() {    
+  render() {
     if (!this.state.isLoaded) {
       return (
         <Container>
@@ -141,92 +132,92 @@ class Map extends Component {
       zoomLevel = Math.log2(360 * ((screenWidth / 256) / region.longitudeDelta)) + 1;
       markerSize = 50;
       return (
-      <Container>
+        <Container>
 
-        <ScreenHeader navigation = {this.props.navigation} title="Map">
-        </ScreenHeader>
+          <ScreenHeader navigation={this.props.navigation} title="Map">
+          </ScreenHeader>
 
-        <MapView
-          style={{ flex: 5 }}
-          intialRegion={region}
-          showsPointsOfInterest={false}
-          onRegionChangeComplete={(newRegion) => this.onRegionChangeComplete(newRegion)}
-        >
+          <MapView
+            style={{ flex: 5 }}
+            intialRegion={region}
+            showsPointsOfInterest={false}
+            onRegionChangeComplete={(newRegion) => this.onRegionChangeComplete(newRegion)}
+          >
 
-          <Marker
-            coordinate={{
-              latitude: this.state.origLat,
-              longitude: this.state.origLong
-            }}
-          />
+            <Marker
+              coordinate={{
+                latitude: this.state.origLat,
+                longitude: this.state.origLong
+              }}
+            />
 
-          {
-            this.state.nearbyRestaurants.map((marker, index) => {
-              return(                
-                <Marker                
-                  key={index}
-                  coordinate={{
-                    latitude: marker.coordinates.latitude,
-                    longitude: marker.coordinates.longitude
-                  }}
-                  onPress = {this.togglePopUp}
-                  >                  
-                  <View>
-                    <Image
-                        style={{ width: markerSize, height: markerSize, borderRadius: markerSize /2, borderWidth: 2, borderColor: "beige", left: 0 }}
+            {
+              this.state.nearbyRestaurants.map((marker, index) => {
+                return (
+                  <Marker
+                    key={index}
+                    coordinate={{
+                      latitude: marker.coordinates.latitude,
+                      longitude: marker.coordinates.longitude
+                    }}
+                    onPress={this.togglePopUp}
+                  >
+                    <View>
+                      <Image
+                        style={{ width: markerSize, height: markerSize, borderRadius: markerSize / 2, borderWidth: 2, borderColor: "beige", left: 0 }}
                         source={{ uri: marker.image_url }}
-                    />                    
-                  </View>
-                </Marker>                
+                      />
+                    </View>
+                  </Marker>
 
-              )
-            })
-          } 
-        </MapView>
-        {this.state.showPopUp ? 
-      <View>
-      <Modal isVisible={this.state.showPopUp}>
-          <Card>
-              <CardItem header>
-                  <Text>name</Text>
+                )
+              })
+            }
+          </MapView>
+          {this.state.showPopUp ?
+            <View>
+              <Modal isVisible={this.state.showPopUp}>
+                <Card>
+                  <CardItem header>
+                    <Text>name</Text>
                   </CardItem>
                   <CardItem>
-                  <Body>
+                    <Body>
                       <Text>
-                        Description                                                               
+                        Description
                       </Text>
                       <List>
-                          <ListItem avatar>
-                              <Left>
-                                  <Thumbnail/>
-                              </Left>                                        
-                          </ListItem>                                    
-                      </List>                                
-                  </Body>
-                  </CardItem>                            
+                        <ListItem avatar>
+                          <Left>
+                            <Thumbnail />
+                          </Left>
+                        </ListItem>
+                      </List>
+                    </Body>
+                  </CardItem>
                   <CardItem footer>
-                  <Text>Contact</Text>
-              </CardItem>
-          </Card>
-          <Text>Try this</Text>
-          <Button
-          onPress={() => {this.setState({showPopUp: false})}}
-          >
-          <Text>close</Text>
-          </Button>
-      </Modal>                
-  </View>
-      : null}
+                    <Text>Contact</Text>
+                  </CardItem>
+                </Card>
+                <Text>Try this</Text>
+                <Button
+                  onPress={() => { this.setState({ showPopUp: false }) }}
+                >
+                  <Text>close</Text>
+                </Button>
+              </Modal>
+            </View>
+            : null}
 
-        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
-              {
-                lat: this.state.latitude,
-                long: this.state.longitude,
-                onGoBack: this.refresh
-              }
-            )}>
-              <View style={{
-              backgroundColor: "grey", 
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
+            {
+              lat: this.state.latitude,
+              long: this.state.longitude,
+              onGoBack: this.refresh
+            }
+          )}>
+            <View style={{
+              backgroundColor: "grey",
               width: 60,
               height: 60,
               alignItems: "center",
@@ -234,17 +225,17 @@ class Map extends Component {
               shadowColor: "#333",
               shadowOpacity: 1,
               shadowOffset:
-               {x: 2, y: 0},
+                { x: 2, y: 0 },
               shadowRadius: 2,
               borderRadius: 30,
               position: "absolute",
               bottom: 30,
               right: 20,
-              }}>   
-              <FontAwesome name='search' style={{fontSize: 25, color: "white"}}/> 
+            }}>
+              <FontAwesome name='search' style={{ fontSize: 25, color: "white" }} />
             </View>
           </TouchableWithoutFeedback>
-      </Container>
+        </Container>
       )
     }
   }
