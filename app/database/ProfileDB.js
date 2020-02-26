@@ -34,7 +34,7 @@ export class ProfileDB {
       await posts.doc(ID).get().then((doc) => {
         plate = doc.data();
         plate.id = ID;
-        plates.push(plate);
+        plates.unshift(plate); // add most recent plates to beginning
       })
       .catch((err) => {
         console.log("Could not find plate from ID '" + ID);
