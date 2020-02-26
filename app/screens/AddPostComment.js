@@ -23,6 +23,7 @@ export default class AddPostComment extends Component {
   time = new Date();
 
   posts = db.collection("posts");
+  users = db.collection("users");
   photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
@@ -35,7 +36,7 @@ export default class AddPostComment extends Component {
       caption: '',
       isLoading: true,
       isLoaded: false,
-      user: null,
+      userID: '',
       like: false,
       meh: false,
       dislike: false,
@@ -64,8 +65,9 @@ export default class AddPostComment extends Component {
   }
 
   getUser = async () => {
-    const user = await User.getCurrent();
-    this.setState({ isLoading: false, user });
+    User.getCurrent().then(user => {
+      this.setState({user, isLoading: false});
+    });
   }
 
   addPost() {
@@ -74,7 +76,7 @@ export default class AddPostComment extends Component {
       likes: 0,
       rating: this.state.rating,
       caption: this.state.caption,
-      userID: this.state.user.userID,
+      userID: User.getCurrentUserID(),
       timestamp: new Date()
       // TODO:
       // this.state.user.userID
@@ -82,7 +84,15 @@ export default class AddPostComment extends Component {
       // likes_who
       // caption
     }
-    this.posts.doc().set(postData);
+    this.posts.add(postData)
+    .then((doc) => {
+      this.posts.doc(doc.id).update({id: doc.id}); // Add auto-generated ID to existing doc
+      
+      // Add reference to new post ID in user doc
+      plates = this.state.user.plates;
+      plates.push(doc.id);
+      users.doc(User.getCurrentUserID()).update({plates: plates});
+    })
     this.props.navigation.navigate('Main');
   }
 
