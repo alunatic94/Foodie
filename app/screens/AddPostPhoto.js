@@ -78,6 +78,7 @@ export default class AddPostPhoto extends React.Component {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
+      quality: 0,
     });
 
     if (!result.cancelled) {
@@ -94,6 +95,7 @@ export default class AddPostPhoto extends React.Component {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
+      quality: 0, 
     });
     if (!result.cancelled) {
       this.setState({ image: result.uri });

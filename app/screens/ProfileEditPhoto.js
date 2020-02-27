@@ -97,6 +97,7 @@ export default class ProfileEditPhoto extends Component{
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
           aspect: [4, 3],
+          quality: 0,
         });
         if (!result.cancelled) {
           this.setState({ image: result.uri });
@@ -112,6 +113,7 @@ export default class ProfileEditPhoto extends Component{
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
           aspect: [4, 3],
+          quality: 0, 
         });
         console.log(result);
         if (!result.cancelled) {
