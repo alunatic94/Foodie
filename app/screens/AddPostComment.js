@@ -12,6 +12,7 @@ export default class AddPostComment extends Component {
   time = new Date();
 
   posts = db.collection("posts");
+  users = db.collection("users");
   photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
@@ -28,6 +29,7 @@ export default class AddPostComment extends Component {
       isLoaded: false,
       user: null,
       error: null,
+      userID: '',
       like: false,
       meh: false,
       dislike: false,
@@ -42,9 +44,10 @@ export default class AddPostComment extends Component {
     this.getUser();
   }
 
-  getUser = async () => {
-    const user = await User.getCurrent();
-    this.setState({ isLoading: false, user });
+  getUser = () => {
+    User.getCurrent().then(user => {
+      this.setState({user, isLoading: false});
+    });
   }
 
   addPost() {
@@ -53,16 +56,24 @@ export default class AddPostComment extends Component {
       likes: 0,
       rating: this.state.rating,
       caption: this.state.caption,
-      userID: this.state.user.userID,
-      timestamp: new Date(),
-      yelpID: this.state.searchedRestaurantID
+      yelpID: this.state.searchedRestaurantID,
+      userID: User.getCurrentUserID(),
+      timestamp: new Date()
       // TODO:
       // this.state.user.userID
       // user.getCurrentID()      
       // likes_who
       // caption
     }
-    this.posts.doc().set(postData);
+    this.posts.add(postData)
+    .then((doc) => {
+      this.posts.doc(doc.id).update({id: doc.id}); // Add auto-generated ID to existing doc
+      
+      // Add reference to new post ID in user doc
+      plates = this.state.user.plates;
+      plates.push(doc.id);
+      users.doc(User.getCurrentUserID()).update({plates: plates});
+    })
     this.props.navigation.navigate('Main');
   }
 
@@ -186,7 +197,15 @@ export default class AddPostComment extends Component {
                   onPress={() => this.onChangeDislike()} />
               </Button>
             </View>
-          </View>
+          </View> 
+
+            <Text style = {{fontSize:25,
+               fontWeight:"bold", 
+               paddingTop: 30,
+                paddingBottom: 15}}>Add a caption:</Text>
+          <View style={{borderWidth: 1}}>
+            <Input placeholder="Caption" onChangeText={(text) => this.setState({caption:text})}/>
+            </View>
 
           <Text style={{
             fontSize: 25,

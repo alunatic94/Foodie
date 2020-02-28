@@ -52,18 +52,45 @@ export default class Profile extends Component {
     }
     componentDidMount() {
         this.loadProfileInformation();
+        this.addPostsListener();
+    }
+
+    componentWillUnmount(){
+        this.removePostsListener();
+    }
+
+    removePostsListener() {
+        this.posts.onSnapshot(() => {});
+    }
+
+    addPostsListener() {
+        // Listen for updates/removals/deletions in plates posted by user
+        // Grab changed post documents and update array of plates stored in state
+        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    plates = this.state.plates;
+                    addedPlate = change.doc.data();
+                    plates.unshift(addedPlate);
+                    this.setState({plates});
+                }
+                if (change.type === "modified") {
+                    modifiedPlate = change.doc.data();
+                    var i = this.state.plates.findIndex(x => x.id == modifiedPlate.id);
+                    plates[i] = modifiedPlate;
+                }
+                if (change.type === "removed") {
+                    removedPlate = change.doc.data();
+                    var i = this.state.plates.indexOf(removedPlate);
+                    plates.splice(i, 1);
+                }
+            });
+        });
     }
 
     async loadProfileInformation() {
         var profileDB = new ProfileDB(this.state.userID);
 
-        // // Fetch profile data after component instance created
-        // await profileDB.getProfile().then((profile) => {
-        //     this.setState({currentProfile: profile});
-        // });
-        // await loadBadges();
-        // await loadPlates();
-        // this.setState({isProfileLoaded: true});
         // Fetch profile data after component instance created
         await profileDB.getProfile().then((profile) => {
             this.setState({currentProfile: profile}, () => {
@@ -76,26 +103,21 @@ export default class Profile extends Component {
                 });
             });
         });
-        // await loadBadges();
-        // await loadPlates();
-        // this.setState({isProfileLoaded: true});
-        // }
     }
 
-    async loadBadges() {
-        BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-            this.setState({badges: newBadges});
-        });
-    }
+    // async loadBadges() {
+    //     BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+    //         this.setState({badges: newBadges});
+    //     });
+    // }
 
-    async loadPlates() {
-        profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-            this.setState({plates: newPlates});
-        });
-    }
+    // async loadPlates() {
+    //     profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
+    //         this.setState({plates: newPlates});
+    //     });
+    // }
 
     toggleModal(data=null) {
-        console.log("\ntapped\n");
         if (data) {this.setState({modalData: data})};
         this.setState({modalVisible: !this.state.modalVisible}); 
     }
