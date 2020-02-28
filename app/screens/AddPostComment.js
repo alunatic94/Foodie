@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { logout } from '../screens/Login.js';
@@ -31,6 +31,7 @@ export default class AddPostComment extends Component {
       like: false,
       meh: false,
       dislike: false,
+      searchedRestaurantName: 'Search restaurants',
       searchedRestaurantID: ''
     };
   }
@@ -53,7 +54,8 @@ export default class AddPostComment extends Component {
       rating: this.state.rating,
       caption: this.state.caption,
       userID: this.state.user.userID,
-      timestamp: new Date()
+      timestamp: new Date(),
+      yelpID: this.state.searchedRestaurantID
       // TODO:
       // this.state.user.userID
       // user.getCurrentID()      
@@ -98,7 +100,15 @@ export default class AddPostComment extends Component {
 
   refresh = (data) => {
     this.setState({
-      searchedRestaurantID: data
+      searchedRestaurantName: data.name,
+      searchedRestaurantID: data.id,
+    })
+  }
+
+  refreshLoc = (data) => {
+    this.setState({
+      latitude: data.latitude,
+      longitude: data.longitude
     })
   }
 
@@ -196,22 +206,27 @@ export default class AddPostComment extends Component {
           }}>Add location:</Text>
 
           <Button
-            title='Add restaurant'
+            block
             onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
                 lat: this.state.latitude,
                 long: this.state.longitude,
-                onGoBack: this.refresh
+                onGoBack: this.refresh,
+                location: this.refreshLoc
               }
-            )}
-          />
+            )}>
+            <Text>{this.state.searchedRestaurantName}</Text>
+          </Button>
 
           <Button
             block success
             /*  onPress = { () => {
              this.submitButton();
             } }  */
-            onPress={() => { this.props.navigation.navigate('Main'); this.addPost() }}>
+            onPress={() => {
+              this.props.navigation.navigate('Main');
+              this.addPost();
+            }}>
             <Text>Post your plate</Text>
           </Button>
 

@@ -13,8 +13,10 @@ export default class SearchRestaurants extends React.Component {
             search: '',
             latitude: 0,
             longitude: 0,
+            neededLoc: false,
             isLoaded: false,
             isInitialized: false,
+            location: [],
             autocompleteResult: [],
         };
     }
@@ -28,9 +30,11 @@ export default class SearchRestaurants extends React.Component {
                         longitude: position.coords.longitude,
                         origLat: position.coords.latitude,
                         origLong: position.coords.longitude,
-                        error: null,
-                        isInitialized: true
-                    },
+                        location: position.coords,
+                        isInitialized: true,
+                        neededLoc: true,
+                        error: null
+                    }, console.log("Position completed"));
                 },
                 error => this.setState({ error: error.message }),
                 { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
@@ -42,9 +46,6 @@ export default class SearchRestaurants extends React.Component {
                 isInitialized: true
             });
         }
-        // this.setState({
-        //     isInitialized: true
-        // });
         this.refs.searchBar.focus();
     }
 
@@ -59,6 +60,10 @@ export default class SearchRestaurants extends React.Component {
             });
         }
     };
+
+    getLocation = () => {
+        return location = [latitude, longitude];
+    }
 
     autocompleteRestaurants = (search) => {
         axios.get('https://api.yelp.com/v3/autocomplete', {
@@ -111,7 +116,11 @@ export default class SearchRestaurants extends React.Component {
                                 color='#696969'
 
                                 onPress={() => {
-                                    this.props.navigation.state.params.onGoBack(r.id);
+                                    this.props.navigation.state.params.onGoBack(r);
+                                    temp = this.getLocation;
+                                    if (this.state.neededLoc) {
+                                        this.props.navigation.state.params.location(this.state.location);
+                                    }
                                     this.props.navigation.goBack();
                                 }}
                             />;
