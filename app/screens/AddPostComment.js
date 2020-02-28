@@ -46,7 +46,7 @@ export default class AddPostComment extends Component {
 
   getUser = () => {
     User.getCurrent().then(user => {
-      this.setState({user, isLoading: false});
+      this.setState({ user, isLoading: false });
     });
   }
 
@@ -66,14 +66,14 @@ export default class AddPostComment extends Component {
       // caption
     }
     this.posts.add(postData)
-    .then((doc) => {
-      this.posts.doc(doc.id).update({id: doc.id}); // Add auto-generated ID to existing doc
-      
-      // Add reference to new post ID in user doc
-      plates = this.state.user.plates;
-      plates.push(doc.id);
-      users.doc(User.getCurrentUserID()).update({plates: plates});
-    })
+      .then((doc) => {
+        this.posts.doc(doc.id).update({ id: doc.id }); // Add auto-generated ID to existing doc
+
+        // Add reference to new post ID in user doc
+        plates = this.state.user.plates;
+        plates.push(doc.id);
+        users.doc(User.getCurrentUserID()).update({ plates: plates });
+      })
     this.props.navigation.navigate('Main');
   }
 
@@ -197,19 +197,11 @@ export default class AddPostComment extends Component {
                   onPress={() => this.onChangeDislike()} />
               </Button>
             </View>
-          </View> 
-
-            <Text style = {{fontSize:25,
-               fontWeight:"bold", 
-               paddingTop: 30,
-                paddingBottom: 15}}>Add a caption:</Text>
-          <View style={{borderWidth: 1}}>
-            <Input placeholder="Caption" onChangeText={(text) => this.setState({caption:text})}/>
-            </View>
+          </View>
 
           <Text style={{
             fontSize: 25,
-            fontWeight: "  bold",
+            fontWeight: "bold",
             paddingTop: 30,
             paddingBottom: 15
           }}>Add a caption:</Text>
