@@ -33,7 +33,9 @@ class Map extends Component {
       searchedRestaurantID: '',
       isLoaded: false,
       zoomLevel: 16,
-      showPopUp: false
+      showPopUp: false,
+      restaurantName: "",
+      restaurantPhone: ""
     };
   }
 
@@ -102,9 +104,14 @@ class Map extends Component {
     })
   }
 
-  togglePopUp = () => {    
+  togglePopUp = (name, phone) => {
     console.log("Setting to true")
-    this.setState({showPopUp: !this.state.showPopUp})
+    // console.log(this.state.nearbyRestaurants[0])
+    console.log(phone)
+    this.setState({showPopUp: !this.state.showPopUp,
+      restaurantName: name,
+      restaurantPhone: phone
+    })
   }
 
   render() {    
@@ -168,8 +175,8 @@ class Map extends Component {
                   coordinate={{
                     latitude: marker.coordinates.latitude,
                     longitude: marker.coordinates.longitude
-                  }}
-                  onPress = {this.togglePopUp}
+                  }}                  
+                  onPress = {() => this.togglePopUp(marker.name, marker.display_phone)}
                   >                  
                   <View>
                     <Image
@@ -183,40 +190,42 @@ class Map extends Component {
             })
           } 
         </MapView>
+
         {this.state.showPopUp ? 
-      <View>
-      <Modal isVisible={this.state.showPopUp}>
-          <Card>
-              <CardItem header>
-                  <Text>name</Text>
-                  </CardItem>
-                  <CardItem>
-                  <Body>
-                      <Text>
-                        Description                                                               
-                      </Text>
-                      <List>
-                          <ListItem avatar>
-                              <Left>
-                                  <Thumbnail/>
-                              </Left>                                        
-                          </ListItem>                                    
-                      </List>                                
-                  </Body>
-                  </CardItem>                            
-                  <CardItem footer>
-                  <Text>Contact</Text>
-              </CardItem>
-          </Card>
-          <Text>Try this</Text>
-          <Button
-          onPress={() => {this.setState({showPopUp: false})}}
-          >
-          <Text>close</Text>
-          </Button>
-      </Modal>                
-  </View>
-      : null}
+            <View>
+              <Modal isVisible={this.state.showPopUp}>
+                  <Card>
+                      <CardItem header>
+                          <Text>{this.state.restaurantName}</Text>
+                          </CardItem>
+                          <CardItem>
+                          <Body>
+                              <Text>
+                                Description                                                               
+                              </Text>
+                              <List>
+                                  <ListItem avatar>
+                                      <Left>
+                                          <Thumbnail/>
+                                      </Left>                                        
+                                  </ListItem>                                    
+                              </List>                                
+                          </Body>
+                          </CardItem>                            
+                          <CardItem footer>
+                          <FontAwesome name='mobile' style={{fontSize: 25, color: "black", paddingRight: 5}}/>
+                          <Text>{this.state.restaurantPhone}</Text>
+                      </CardItem>
+                  </Card>
+                  <Text>Try this</Text>
+                  <Button
+                  onPress={() => {this.setState({showPopUp: false})}}
+                  >
+                  <Text>close</Text>
+                  </Button>
+              </Modal>                
+          </View>
+              : null}
 
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
