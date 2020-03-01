@@ -13,39 +13,36 @@ import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunity
 
 
 class LikeButton extends React.Component {
-  //state={postData:null}
+  ref=db.collection('posts').doc(this.props.postID);
   componentDidMount() {
-    
 
-      
-     
-  }
-
-  componentDidUpdate(prevProps){
-
-  }
+    this.ref.get().then((doc) => {
+      ref = doc.data();
+      this.setState({
+          like: ref.likes,
+          updated: false,
+          hearto: false
+      })
+  })
+}
 
   constructor(props){
 
     super(props);
-
-
-       //var postData=db.collection('posts').doc(this.props.postID).get()
     
     this.state = {
-      like:'0', // In constructor we should read DB to see how many likes a post currently has
+      like:'',
       updated: false,
       hearto: false,
-
       //likesArray: [],
       //buttonTextColor: '#0065ff',
       //user: User.dummyUser 
 	  
     };
+    
 
   }
 
- 
   updateLikes = () => {
     likeRef = db.collection('posts').doc(this.props.postID);
     decrement = firebase.firestore.FieldValue.increment(-1);
@@ -75,17 +72,14 @@ class LikeButton extends React.Component {
     }
   }
 
-  
-
   render(){
 	  
     const { hearts, heart, updated, firez, fire } = this.state;
-    
-
+  
     return(
     <View style= { color= 'white'}>
 	   <Button transparent>
-     <Text>Like:{this.state.like}</Text>
+     <Text>Likes:{this.state.like}</Text>
      <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={updated ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes}/>
 	   </Button>
     </View>  
