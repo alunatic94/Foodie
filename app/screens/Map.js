@@ -12,6 +12,7 @@ import { MapPopUp } from '../components/MapPopUp.js'
 import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
+import { Linking } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -35,7 +36,9 @@ class Map extends Component {
       showPopUp: false,
       restaurantName: "",
       restaurantPhone: "",
-      restaurantRating: 0
+      restaurantRating: 0,
+      xCord: "",
+      yCord: ""
     };
   }
 
@@ -104,13 +107,16 @@ class Map extends Component {
     })
   }
 
-  togglePopUp = (name, phone, rating) => {
+  togglePopUp = (name, phone, rating, x, y) => {
     console.log("Setting to true")
-    console.log(this.state.nearbyRestaurants[1])
+    // console.log(this.state.nearbyRestaurants[1])
+    console.log(x + " " + y)
     this.setState({showPopUp: !this.state.showPopUp,
       restaurantName: name,
       restaurantPhone: phone,
-      restaurantRating: rating
+      restaurantRating: rating,
+      xCord: x,
+      yCord: y
     })
   }
 
@@ -176,7 +182,7 @@ class Map extends Component {
                     latitude: marker.coordinates.latitude,
                     longitude: marker.coordinates.longitude
                   }}                  
-                  onPress = {() => this.togglePopUp(marker.name, marker.display_phone, marker.rating)}
+                  onPress = {() => this.togglePopUp(marker.name, marker.display_phone, marker.rating, marker.coordinates.latitude, marker.coordinates.longitude)}
                   >                  
                   <View>
                     <Image
@@ -231,6 +237,7 @@ class Map extends Component {
                       <Right>
                         <Button
                         style={{backgroundColor: '#6fdedc'}}
+                        onPress={() => {Linking.openURL('maps:0,0?q=geo:' + this.state.xCord + this.state.yCord, 'geo:0,0?q=geo:37.35+-122.3')}}
                         >
                           {/* TODO: Link to maps app */}
                           <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
