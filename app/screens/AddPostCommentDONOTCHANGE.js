@@ -13,7 +13,6 @@ export default class AddPostComment extends Component {
 
   posts = db.collection("posts");
   users = db.collection("users");
-  rest = db.collection("restaurants")
   photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
@@ -42,23 +41,7 @@ export default class AddPostComment extends Component {
   async componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
-    // this.getUser();
-    
-    let id = this.state.searchedRestaurantID
-    let image = this.photos
-
-    this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").get().then((doc) => {
-      tempArr = doc.data().plate_posts
-      tempArr.push('FUCK')
-      this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").update({
-        plate_posts: tempArr
-      });
-    })
-
-    // let platePicRef = this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").update({
-    //   plate_posts: 'test'
-    // });
-
+    this.getUser();
   }
 
   getUser = () => {
@@ -92,12 +75,6 @@ export default class AddPostComment extends Component {
         users.doc(User.getCurrentUserID()).update({ plates: plates });
       })
     this.props.navigation.navigate('Main');
-  }
-
-  addRestaurantPlate() {
-    // 
-    //
-    //
   }
 
   onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled
@@ -260,7 +237,6 @@ export default class AddPostComment extends Component {
             onPress={() => {
               this.props.navigation.navigate('Main');
               this.addPost();
-              this.addRestaurantPlate()
             }}>
             <Text>Post your plate</Text>
           </Button>
