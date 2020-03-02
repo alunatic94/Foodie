@@ -194,7 +194,12 @@ export default class Profile extends Component {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail large source={{uri: this.state.currentProfile.profileImage}} />
+                                <Body style={{flex: 1.7}}>
+                                    <Thumbnail large source={{uri: this.state.currentProfile.profileImage}}/>
+                                    <Button rounded dark onPress={() => this.props.navigation.navigate('ProfileEditPhoto')}>
+                                        <Text>Upload</Text>
+                                    </Button>
+                                </Body>
                                 <Body style={{flex: 3}}>
                                     <H1 style={styles.headingLarge}>{this.state.currentProfile.first} {this.state.currentProfile.last}</H1>
                                     <Text note style={styles.subheadingLarge}>{this.state.currentProfile.age}</Text>
