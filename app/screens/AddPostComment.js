@@ -42,23 +42,7 @@ export default class AddPostComment extends Component {
   async componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
-    // this.getUser();
-    
-    let id = this.state.searchedRestaurantID
-    let image = this.photos
-
-    this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").get().then((doc) => {
-      tempArr = doc.data().plate_posts
-      tempArr.push('FUCK')
-      this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").update({
-        plate_posts: tempArr
-      });
-    })
-
-    // let platePicRef = this.rest.doc("BeXd9PscToLXf7Jz_bvLdA").update({
-    //   plate_posts: 'test'
-    // });
-
+    this.getUser();
   }
 
   getUser = () => {
@@ -90,14 +74,27 @@ export default class AddPostComment extends Component {
         plates = this.state.user.plates;
         plates.push(doc.id);
         users.doc(User.getCurrentUserID()).update({ plates: plates });
+
+        // Add post ID to restaurant collection
+        this.addRestaurantPlate(doc.id);
       })
     this.props.navigation.navigate('Main');
   }
 
-  addRestaurantPlate() {
-    // 
-    //
-    //
+  addRestaurantPlate(x) {
+    this.rest.doc(this.state.searchedRestaurantID).get().then((doc) => {
+      currentPlates = doc.data().plate_posts;
+      currentPlates.push(x); // Add post to end of array
+      this.rest.doc(this.state.searchedRestaurantID).update({ // Insert into database array
+        plate_posts: currentPlates
+      });
+    }).catch((err) => { // Error because restaurant does not exist
+      this.rest.doc(this.state.searchedRestaurantID).set({  // Create array with the restaurant ID as document name
+        restaurant_name: this.state.searchedRestaurantName,
+        plate_posts: [] 
+      }) // Initalize with restaurant name and empty array
+      this.addRestaurantPlate(x); // Call again to add plate to newly created document
+    })
   }
 
   onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled
@@ -260,7 +257,6 @@ export default class AddPostComment extends Component {
             onPress={() => {
               this.props.navigation.navigate('Main');
               this.addPost();
-              this.addRestaurantPlate()
             }}>
             <Text>Post your plate</Text>
           </Button>
