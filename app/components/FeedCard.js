@@ -41,7 +41,7 @@ export default class FeedCard extends Component {
         }
         else {
             return (
-            <View style={styles.roundCard, {height: 325}}>
+            <View style={styles.roundCard, {height: 425}}>
                 {this.state.isShowingRestaurant ? 
                 <RestaurantCard restaurantID={this.state.post.restaurantID} onLongPress={() => {this.setState({isShowingRestaurant: !this.state.isShowingRestaurant})}} /> : 
                 <PostCard postID={this.props.postID} post={this.state.post} onLongPress={() => {this.setState({isShowingRestaurant: !this.state.isShowingRestaurant})}} />}
