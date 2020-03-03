@@ -237,9 +237,8 @@ class Map extends Component {
                       <Right>
                         <Button
                         style={{backgroundColor: '#6fdedc'}}
-                        onPress={() => {Linking.openURL('maps:0,0?q=geo:' + this.state.xCord + this.state.yCord, 'geo:0,0?q=geo:37.35+-122.3')}}
-                        >
-                          {/* TODO: Link to maps app */}
+                        onPress={() => {Linking.openURL('maps:0,0?q=' + this.state.xCord + "," + this.state.yCord, 'geo:0,0?q=' + this.state.xCord + "," + this.state.yCord)}}
+                        >                          
                           <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
                         </Button>
                       </Right>
