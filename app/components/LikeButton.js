@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet} from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import { Icon, Button} from 'native-base';
+import { Icon, Button, Container} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database.js";
 import {User} from "../database/User.js";
@@ -9,6 +9,7 @@ import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunityIcons';
+import LikePage from '../screens/LikePage.js';
 //import { ref } from '@hapi/joi';
 
 
@@ -78,8 +79,12 @@ class LikeButton extends React.Component {
   
     return(
     <View style= { color= 'white'}>
+
+      <Button transparent onPress={() => this.props.navigation.navigate('LikePage')}>
+      <Text>Likes:{this.state.like}</Text>
+      </Button>
+
 	   <Button transparent>
-     <Text>Likes:{this.state.like}</Text>
      <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={updated ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes}/>
 	   </Button>
     </View>  
@@ -88,4 +93,4 @@ class LikeButton extends React.Component {
   }
 }
 
-export default LikeButton;
+export default withNavigation(LikeButton);
