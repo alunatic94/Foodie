@@ -13,6 +13,7 @@ export default class AddPostComment extends Component {
 
   posts = db.collection("posts");
   users = db.collection("users");
+  rest = db.collection("restaurants")
   photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
@@ -73,8 +74,27 @@ export default class AddPostComment extends Component {
         plates = this.state.user.plates;
         plates.push(doc.id);
         users.doc(User.getCurrentUserID()).update({ plates: plates });
+
+        // Add post ID to restaurant collection
+        this.addRestaurantPlate(doc.id);
       })
     this.props.navigation.navigate('Main');
+  }
+
+  addRestaurantPlate(x) {
+    this.rest.doc(this.state.searchedRestaurantID).get().then((doc) => {
+      currentPlates = doc.data().plate_posts;
+      currentPlates.push(x); // Add post to end of array
+      this.rest.doc(this.state.searchedRestaurantID).update({ // Insert into database array
+        plate_posts: currentPlates
+      });
+    }).catch((err) => { // Error because restaurant does not exist
+      this.rest.doc(this.state.searchedRestaurantID).set({  // Create array with the restaurant ID as document name
+        restaurant_name: this.state.searchedRestaurantName,
+        plate_posts: [] 
+      }) // Initalize with restaurant name and empty array
+      this.addRestaurantPlate(x); // Call again to add plate to newly created document
+    })
   }
 
   onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled

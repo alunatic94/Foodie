@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet} from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Icon, Button, Container} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database.js";
-import {User} from "../database/User.js";
+import { User } from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
@@ -31,7 +31,7 @@ class LikeButton extends React.Component {
   })
 }
 
-  constructor(props){
+  constructor(props) {
 
     super(props);
     
@@ -76,9 +76,9 @@ class LikeButton extends React.Component {
           liked:true
 	
         };
-        
+
       });
-      
+
     } else {
 
       this.setState((prevState, props) => {
