@@ -13,7 +13,7 @@ import LikeButton from '../components/LikeButton.js';
 //import { ref } from '@hapi/joi';
 
 class LikePage extends Component {
-  liketoinsert=db.collection('posts').doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')).collection('Likeby');
+  //liketoinsert=db.collection('posts').doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')).collection('Likeby');
 
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ class LikePage extends Component {
   }
 
   componentDidMount () {
-    this.getall();
+    //this.getall();
     
   }
 
@@ -42,6 +42,7 @@ class LikePage extends Component {
     
 
   };
+  
 
 
 
@@ -63,9 +64,7 @@ class LikePage extends Component {
               <Text> Users that Liked this Photo</Text>
             </Header>
             <ScrollView>
-            {this.state.commentsArray.map((item) => (
-              <Text>{item.Userid}</Text>
-            ))}
+            
             </ScrollView>
            
                         

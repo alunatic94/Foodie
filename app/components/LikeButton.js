@@ -24,6 +24,7 @@ class LikeButton extends React.Component {
           like: ref.likes,
           updated: false,
           hearto: false,
+          liked:false,
           user:User.dummyUser,
           likesArray:[]
       })
@@ -39,6 +40,7 @@ class LikeButton extends React.Component {
       updated: false,
       hearto: false,
       likesArray: [],
+      liked:false,
       //buttonTextColor: '#0065ff',
       user: User.dummyUser 
 	  
@@ -63,12 +65,15 @@ class LikeButton extends React.Component {
     
 
     if(!this.state.updated) {
+      this.setState({liked:true});
       this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
           like: prevState.like + 1,
-          updated: true
+          updated: true,
+          hearto:true,
+          liked:true
 	
         };
         
@@ -80,7 +85,9 @@ class LikeButton extends React.Component {
         likeRef.update({ likes: decrement });
         return {
           like: prevState.like - 1,
-          updated: false
+          updated: false,
+          hearto: false,
+          liked:false
         };
       });
 
@@ -89,7 +96,7 @@ class LikeButton extends React.Component {
 
   render(){
 	  
-    const { hearts, heart, updated, firez, fire } = this.state;
+    const { hearts, heart,updated, firez, fire } = this.state;
   
     return(
     <View style= { color= 'white'}>
@@ -99,7 +106,7 @@ class LikeButton extends React.Component {
       </Button>
 
 	   <Button transparent>
-     <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={updated ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes}/>
+     <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes}/>
 	   </Button>
     </View>  
     
