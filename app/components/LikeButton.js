@@ -15,6 +15,7 @@ import LikePage from '../screens/LikePage.js';
 
 class LikeButton extends React.Component {
   ref=db.collection('posts').doc(this.props.postID);
+  liketoinsert=db.collection('posts').doc(this.props.postID).collection('Likeby');
   componentDidMount() {
 
     this.ref.get().then((doc) => {
@@ -22,7 +23,9 @@ class LikeButton extends React.Component {
       this.setState({
           like: ref.likes,
           updated: false,
-          hearto: false
+          hearto: false,
+          user:User.dummyUser,
+          likesArray:[]
       })
   })
 }
@@ -35,21 +38,32 @@ class LikeButton extends React.Component {
       like:'',
       updated: false,
       hearto: false,
-      //likesArray: [],
+      likesArray: [],
       //buttonTextColor: '#0065ff',
-      //user: User.dummyUser 
+      user: User.dummyUser 
 	  
     };
     
 
   }
 
+  add =  () => {
+     
+    let likeData = {
+      userID: User.getCurrentUserID()
+
+    };
+    this.liketoinsert.doc().set(likeData)
+  };
+
   updateLikes = () => {
     likeRef = db.collection('posts').doc(this.props.postID);
     decrement = firebase.firestore.FieldValue.increment(-1);
      increment = firebase.firestore.FieldValue.increment(1);
+    
 
     if(!this.state.updated) {
+      this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
@@ -80,7 +94,7 @@ class LikeButton extends React.Component {
     return(
     <View style= { color= 'white'}>
 
-      <Button transparent onPress={() => this.props.navigation.navigate('LikePage')}>
+      <Button transparent onPress={() => this.props.navigation.navigate('LikePage',{postID: this.props.postID})}>
       <Text>Likes:{this.state.like}</Text>
       </Button>
 
