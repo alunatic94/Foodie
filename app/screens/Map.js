@@ -12,7 +12,7 @@ import { MapPopUp } from '../components/MapPopUp.js'
 import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -111,7 +111,13 @@ class Map extends Component {
     })
   }
 
-  render() {
+  render() {  
+
+    const url = Platform.select({
+      ios: "maps:0,0?q=" + this.state.xCord + "," + this.state.yCord, 
+      android: "geo:0,0?q=" + this.state.xCord + "," + this.state.yCord
+    });
+    
     if (!this.state.isLoaded) {
       return (
         <Container>
@@ -228,7 +234,7 @@ class Map extends Component {
                       <Right>
                         <Button
                         style={{backgroundColor: '#6fdedc'}}
-                        onPress={() => {Linking.openURL('maps:0,0?q=' + this.state.xCord + "," + this.state.yCord, 'geo:0,0?q=' + this.state.xCord + "," + this.state.yCord)}}
+                        onPress={() => {Linking.openURL((url))}}
                         >                          
                           <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
                         </Button>
