@@ -105,9 +105,13 @@ class LikePage extends Component {
                 <Icon name="arrow-back" />
               </Button>
             </Left>
-            <Text> Users that Liked this Photo</Text>
+            <Text style={{
+              color: "dark-grey",
+              fontFamily: "Raleway Bold",
+              fontSize: 15
+            }}> Users that Liked this Photo</Text>
           </Header>
-          <Content style={{marginTop: 10}}>
+          <Content style={{ marginTop: 10 }}>
             {
               this.state.likeUsername.map(name => {
                 return (
@@ -118,9 +122,9 @@ class LikePage extends Component {
                     marginLeft: 20
                   }}>
                     <Image
-                        style={{ width: 70, height: 70, borderRadius: 70 /2, borderWidth: 2, borderColor: "beige", left: 0 }}
-                        source={{ uri: name.profilePic }}
-                    />    
+                      style={{ width: 70, height: 70, borderRadius: 70 / 2, borderWidth: 2, borderColor: "beige", left: 0 }}
+                      source={{ uri: name.profilePic }}
+                    />
                     <Text style={{
                       color: "#000",
                       fontFamily: "Raleway Bold",
