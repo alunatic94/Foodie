@@ -59,7 +59,6 @@ class LikePage extends Component {
       users.doc(user).get().then(doc => {
         var data = doc.data()
         docArray.push({ name: data.username, profilePic: data.profileImage, first: data.first, last: data.last })
-        console.log(docArray)
         this.setState({
           likeUsername: docArray
         })
@@ -106,7 +105,7 @@ class LikePage extends Component {
               </Button>
             </Left>
             <Text style={{
-              color: "dark-grey",
+              color: "grey",
               fontFamily: "Raleway Bold",
               fontSize: 15
             }}> Users that Liked this Photo</Text>
@@ -120,7 +119,9 @@ class LikePage extends Component {
                     alignItems: "center",
                     justifyContent: "left",
                     marginLeft: 20
-                  }}>
+                  }}
+                    key={name.name}
+                  >
                     <Image
                       style={{ width: 70, height: 70, borderRadius: 70 / 2, borderWidth: 2, borderColor: "beige", left: 0 }}
                       source={{ uri: name.profilePic }}
