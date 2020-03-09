@@ -1,9 +1,10 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
+const process = require('dotenv').config();
 // Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyCNHeytbvzoP3cvbfFcIYV2VmGojOjNyp4",
+    apiKey: process.env.API_KEY,
     authDomain: "foodie-hotspots.firebaseapp.com",
     databaseURL: "https://foodie-hotspots.firebaseio.com",
     projectId: "foodie-hotspots",
