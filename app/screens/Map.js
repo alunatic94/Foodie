@@ -1,18 +1,14 @@
 import MapView, { Marker } from "react-native-maps";
 import React, { Component } from 'react';
 import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import Constants from 'expo-constants';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import YelpRequest from "../handlers/YelpRequestHandler.js";
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js'
-import { MapPopUp } from '../components/MapPopUp.js'
 import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
 import { Linking, Platform } from 'react-native';
+import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -78,7 +74,7 @@ class Map extends Component {
 
   updateRestaurants = () => {
     axios.get('https://api.yelp.com/v3/businesses/search', {
-      headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
+      headers: { 'Authorization': REACT_APP_MAP_AUTH },
       params: {
         // // latitude: 34.2383,
         // longitude: -118.5237,
