@@ -11,6 +11,7 @@ import AddPostComment from '../screens/AddPostComment.js';
 import SearchRestaurants from "../screens/SearchRestaurants.js"
 import Comments from '../screens/Comments.js'
 import ProfileEdit from '../screens/ProfileEdit.js'
+import ProfileOther from '../screens/ProfileOther.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 
@@ -76,6 +77,9 @@ const AppNavigator = createStackNavigator({
     },
     Profile: {
         screen: Profile
+    },
+    ProfileOther: {
+        screen: ProfileOther
     },
     SearchRestaurants: {
         screen: SearchRestaurants

@@ -4,12 +4,13 @@ import { Image, ScrollView, View } from 'react-native';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
-import LikeButton  from '../components/LikeButton.js';
+import LikeButton  from '../components/LikeButton.js'; 
 import { User } from "../database/User.js";
 import Moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
 
-const defaultImages = ['http://lorempixel.com/400/200/food/',
+const defaultImages = ['http://lorempixel.com/400/200/food/', 
     'http://lorempixel.com/400/200/food/', 
     'http://lorempixel.com/400/200/food/'];
 
@@ -55,15 +56,24 @@ class PostCard extends Component {
     }
 
     loadUser = () => {
-        User.getExisting(this.props.post.userID).then((loadedUser) => {
+        if (this.props.user != undefined) {
             this.setState({
                 user: loadedUser,
                 isLoaded: true
+            });
+        }
+        else {
+            User.getExisting(this.props.post.userID).then((loadedUser) => {
+                this.setState({
+                    user: loadedUser,
+                    isLoaded: true
+                })
             })
-        })
-        .catch((err) => {
-            console.log(err + ":" + "Could not load user [id = " + this.props.post.userID + "] for post");
-        })
+            .catch((err) => {
+                console.log(err + ":" + "Could not load user [id = " + this.props.post.userID + "] for post");
+            })
+        }
+        
     }
    returnRatingIcon(){
         if(this.props.post.rating == 'meh'){
@@ -91,31 +101,29 @@ class PostCard extends Component {
 
         if (!this.state.isLoaded) {
             return (
-                <Card>
-                </Card>
+                <PostCardPlaceholder style={this.props.style} />
                 );
         }
         else {
             return (
             <Card>
-                <CardItem>
+                 <CardItem button onPress={() => this.props.navigation.navigate('ProfileOther', {userID: this.props.post.userID})}>
                 <Left>
-                <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall} />
+                    <Thumbnail source={{uri: this.state.user.profileImage}} />
                     <Body>
-                    <Text style={styles.heading}>{this.state.user.username}</Text>
-                    <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-                    <Text style={styles.subheading}>{this.props.post.caption}</Text>
+                        <Text style={styles.heading}>{this.state.user.username}</Text>  
+                        <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                        <Text style={styles.subheading}>{this.props.post.caption}</Text> 
                     </Body>
                 </Left>
                 </CardItem>
+                
                 <CardItem cardBody> 
         
                 {<ImageSlider
                     style={styles.imageFeed}
                     images={this.props.post.images}
                 />}
-                
-                    {/* <Image source={{uri: 'https://i.imgur.com/Ht5l5n.png'}} style={styles.imageFeed}/> */}
                 </CardItem>
                 <CardItem>
                 <Left>                    

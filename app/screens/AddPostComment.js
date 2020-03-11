@@ -235,9 +235,6 @@ export default class AddPostComment extends Component {
         
             <Button
             block success 
-            /*  onPress = { () => {
-             this.submitButton();
-            } }  */
             onPress={() => { this.props.navigation.navigate('Main'); this.addPost() }}>
             <Text>Post your plate</Text>
           </Button>

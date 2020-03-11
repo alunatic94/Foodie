@@ -4,7 +4,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Image, ScrollView, ActivityIndicator, FlatList, Dimensions, StyleSheet } from "react-native"
 import {BadgesDB} from "../database/BadgesDB.js"
 import {ProfileDB} from "../database/ProfileDB.js"
-import {User} from "../database/User.js"
+import {User} from "../database/User.js";
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
@@ -16,7 +16,7 @@ import About  from '../components/Profile/About';
 import Badges  from '../components/Profile/Badges';
 import Plates  from '../components/Profile/Plates';
 import PlateModal  from '../components/Profile/PlateModal.js'; 
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native'; 
 
 posts = db.collection("posts");
 friends = db.collection("friends");
@@ -44,8 +44,8 @@ const plateStyles = StyleSheet.create({
   }
 });
 
-export default class Profile extends Component {
-    constructor(props) { 
+export default class ProfileOther extends Component {
+    constructor(props) {
         super(props);
         // Defaults
         this.state = {
@@ -53,13 +53,15 @@ export default class Profile extends Component {
             currentProfile: null,
             isProfileLoaded: false, 
             badges: [],
-            plates: []
+            plates: [],
+            modalData: null
         }
-
+    
         // Bind to Profile context so calls pop-up for plates tapped
         this.toggleModal = this.toggleModal.bind(this);
     }
     componentDidMount() {
+        this.getCurrentUser();
         this.loadProfileInformation();
         this.addListeners();
     }
@@ -69,6 +71,7 @@ export default class Profile extends Component {
     }
 
     addListeners() {
+        this.addNavigationListeners();
         this.addPostsListener();
     }
 
@@ -77,8 +80,26 @@ export default class Profile extends Component {
         this.removePostsListener();
     }
 
+    addNavigationListeners() {
+        this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+              this.setState({
+                  userID: this.props.navigation.getParam('userID', User.getCurrentUserID()),
+                  isProfileLoaded: false
+                }, this.loadProfileInformation);
+            }
+        );
+        this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+              this.setState({userID: User.getCurrentUserID(), isProfileLoaded: false});
+            }
+        );
+    }
+
     removePostsListener() {
-        this.posts.onSnapshot(() => {});
+        posts.onSnapshot(() => {});
     }
 
     addPostsListener() {
@@ -123,8 +144,19 @@ export default class Profile extends Component {
         });
     }
 
+    // async loadBadges() {
+    //     BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+    //         this.setState({badges: newBadges});
+    //     });
+    // }
+
+    // async loadPlates() {
+    //     profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
+    //         this.setState({plates: newPlates});
+    //     });
+    // }
+
     toggleModal(data=null) {
-        console.log(data);
         if (data) {
             this.setState({modalData: data}, 
                 this.setState({modalVisible: !this.state.modalVisible})
@@ -139,11 +171,28 @@ export default class Profile extends Component {
         friends.doc(User.getCurrentUserID()).update({userID: true});
     }
 
+    getCurrentUser = () => {
+        User.getCurrent().then(currentUser => {
+          this.setState({currentUser});
+        });
+    }
+
+    isCurrentUser() {
+        return this.state.userID == User.getCurrentUserID();
+    }
+
+    isFriendsWithCurrentUser() {
+        friends.doc(User.getCurrentUserID()).get()
+        .then((doc) => {
+            if (doc.get(this.state.userID) != null) return true;
+            else return false;
+        })
+    }
+
     render() {
-        // Render empty profile screen until data is finished being fetched
         if (!this.state.isProfileLoaded) {
             return (<Container>
-                <ScreenHeader navigation = {this.props.navigation}>
+                <ScreenHeader navigation = {this.props.navigation} back>
                 </ScreenHeader>
 
                 <Content styles={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -153,10 +202,10 @@ export default class Profile extends Component {
         }
         else return ( 
             <Container>
-            <ScreenHeader navigation = {this.props.navigation}>
+            <ScreenHeader navigation = {this.props.navigation} back>
             </ScreenHeader>
             <Content>
-                <Card transparent noShadow>
+            <Card transparent noShadow>
                     <ProfileHeader userID={this.state.userID} data={this.state.currentProfile} />
                     <About data={this.state.currentProfile.about} />
                     <Badges data={this.state.badges} />
@@ -169,6 +218,65 @@ export default class Profile extends Component {
 
             </Content>
         </Container>
+        
+                    /* <CardItem>
+                        <Left>
+                            <Thumbnail large source={{uri: this.state.currentProfile.profileImage}} />
+                            <Body style={{flex: 3}}>
+                                <H1 style={styles.headingLarge}>{this.state.currentProfile.first} {this.state.currentProfile.last}</H1>
+                                <Text note style={styles.subheadingLarge}>{this.state.currentProfile.age}</Text>
+                                <Text note style={styles.subheadingLarge}>{this.state.currentProfile.tagline}</Text>
+                            </Body>
+                            <Button
+                             rounded dark
+                             onPress={() => this.props.navigation.navigate('ProfileEdit')}>
+                                 <Text>Edit</Text>
+                            </Button>
+                        </Left>
+                    </CardItem>
+                    <CardItem>
+                        <Body>
+                            <H2 style={styles.heading}>About</H2>
+                            <Text style={styles.subheading}>
+                                {this.state.currentProfile.about}
+                            </Text>
+                        </Body>
+                    </CardItem>
+                    <CardItem>
+                        <Body>
+                            <H2 style={styles.heading}>Badges</H2>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                            <View style={{flexDirection: "row"}}>
+                                {this.renderBadges(this.state.badges)}
+                            </View>
+
+                            </ScrollView>
+                        </Body>
+                    </CardItem>
+                    <CardItem>
+                        <Body>
+                            <H2 style={styles.heading}>Plates Eaten</H2>
+                                {this.renderPlates(this.state.plates)}
+                                <Modal isVisible={this.state.modalVisible}>
+                                    {this.state.modalData ? 
+                                        <View style={styles.profileModal}>
+                                             <PostCard style={{width: '100%'}} postID={this.state.modalData.id} post={this.state.modalData} />
+                                             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                                                    <Button
+                                                    rounded dark
+                                                    onPress={() => this.toggleModal()}
+                                                    style={{width: '25%'}}>
+                                                        <Text>Close</Text>
+                                                    </Button>
+                                                </View>
+                                        </View>
+                                     :
+                                     ""
+                                     }
+                                </Modal>
+                        </Body>
+                    </CardItem> */
+               
         )
     }
 }

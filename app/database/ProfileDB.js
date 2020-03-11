@@ -37,7 +37,6 @@ export class ProfileDB {
         plates.unshift(plate); // add most recent plates to beginning
       })
       .catch((err) => {
-        console.log("Could not find plate from ID '" + ID);
       });
     }
     return plates;
