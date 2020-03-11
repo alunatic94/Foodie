@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
-import { Left, Right, Button, Header } from 'native-base';
+import { Left, Right, Button, Header, H2, View, Icon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../../screens/Login.js';
-import { View, Text } from 'native-base';
+import styles from '../../screens/styles.js';
 export default class ScreenHeader extends Component{
     render(){
         return(
             <Header>
               <Left>
+                {this.props.back ? 
+                <Button
+                  iconLeft
+                  light
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}
+                >
+                  <Icon name="arrow-back" />
+                </Button>
+                :
                 <Button 
                      transparent
                      onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
                      <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
                 </Button>
+              }
               </Left>
-              <View><Text>{this.props.title}</Text></View>
+              <View><H2 style={styles.heading}>{this.props.title}</H2></View>
               <Right>
                 <Button 
                   transparent
