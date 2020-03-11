@@ -10,8 +10,11 @@ import AddPostPhoto from '../screens/AddPostPhoto.js';
 import AddPostComment from '../screens/AddPostComment.js';
 import SearchRestaurants from "../screens/SearchRestaurants.js"
 import Comments from '../screens/Comments.js'
+import LikePage from '../screens/LikePage.js';
+import LikeButton from '../components/LikeButton.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
+import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 
@@ -96,8 +99,14 @@ const AppNavigator = createStackNavigator({
     ProfileEdit: {
         screen: ProfileEdit
     },
+    ProfileEditPhoto: {
+        screen: ProfileEditPhoto
+    },
     Map: {
         screen: Map
+    },
+    LikePage: {
+        screen: LikePage
     },
     Main: AppNavigatorTabs,
 },

@@ -36,7 +36,7 @@ export default class FeedCard extends Component {
     }
     render() {
         if (!this.state.isPostLoaded) {
-            return (<View style={styles.roundCard, {height: 325}}>
+            return (<View style={styles.roundCard}>
             </View>);
         }
         else {

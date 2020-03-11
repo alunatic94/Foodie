@@ -1,29 +1,19 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { logout } from '../screens/Login.js';
 import styles from './styles.js';
 import { db } from '../database/Database.js';
 import { User } from '../database/User.js';
-import { SearchBar } from 'react-native-elements';
-import axios from 'axios';
 
 export default class AddPostComment extends Component {
-
-  state = {
-    search: '',
-  };
-
-  updateSearch = search => {
-    this.setState({ search });
-    this.autocompleteRestaurants(search);
-  };
 
   time = new Date();
 
   posts = db.collection("posts");
   users = db.collection("users");
+  rest = db.collection("restaurants")
   photos = [this.props.navigation.getParam('imageURL')];
 
   constructor(props) {
@@ -33,18 +23,23 @@ export default class AddPostComment extends Component {
       mehButtonColor: '#a9a9a9',
       dislikeButtonColor: '#a9a9a9',
       rating: 'meh',
+      latitude: 0,
+      longitude: 0,
       caption: '',
       isLoading: true,
       isLoaded: false,
+      user: null,
+      error: null,
       userID: '',
       like: false,
       meh: false,
       dislike: false,
-      autocompleteResults: []
+      searchedRestaurantName: 'Search restaurants',
+      searchedRestaurantID: ''
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { like, meh, dislike } = this.props;
     this.setState({ like, meh, dislike });
     this.getUser();
@@ -52,7 +47,7 @@ export default class AddPostComment extends Component {
 
   getUser = () => {
     User.getCurrent().then(user => {
-      this.setState({user, isLoading: false});
+      this.setState({ user, isLoading: false });
     });
   }
 
@@ -62,6 +57,7 @@ export default class AddPostComment extends Component {
       likes: 0,
       rating: this.state.rating,
       caption: this.state.caption,
+      yelpID: this.state.searchedRestaurantID,
       userID: User.getCurrentUserID(),
       timestamp: new Date()
       // TODO:
@@ -71,15 +67,34 @@ export default class AddPostComment extends Component {
       // caption
     }
     this.posts.add(postData)
-    .then((doc) => {
-      this.posts.doc(doc.id).update({id: doc.id}); // Add auto-generated ID to existing doc
-      
-      // Add reference to new post ID in user doc
-      plates = this.state.user.plates;
-      plates.push(doc.id);
-      users.doc(User.getCurrentUserID()).update({plates: plates});
-    })
+      .then((doc) => {
+        this.posts.doc(doc.id).update({ id: doc.id }); // Add auto-generated ID to existing doc
+
+        // Add reference to new post ID in user doc
+        plates = this.state.user.plates;
+        plates.push(doc.id);
+        users.doc(User.getCurrentUserID()).update({ plates: plates });
+
+        // Add post ID to restaurant collection
+        this.addRestaurantPlate(doc.id);
+      })
     this.props.navigation.navigate('Main');
+  }
+
+  addRestaurantPlate(x) {
+    this.rest.doc(this.state.searchedRestaurantID).get().then((doc) => {
+      currentPlates = doc.data().plate_posts;
+      currentPlates.push(x); // Add post to end of array
+      this.rest.doc(this.state.searchedRestaurantID).update({ // Insert into database array
+        plate_posts: currentPlates
+      });
+    }).catch((err) => { // Error because restaurant does not exist
+      this.rest.doc(this.state.searchedRestaurantID).set({  // Create array with the restaurant ID as document name
+        restaurant_name: this.state.searchedRestaurantName,
+        plate_posts: [] 
+      }) // Initalize with restaurant name and empty array
+      this.addRestaurantPlate(x); // Call again to add plate to newly created document
+    })
   }
 
   onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled
@@ -114,26 +129,17 @@ export default class AddPostComment extends Component {
 
   }
 
-  autocompleteRestaurants = (search) => {
-    axios.get('https://api.yelp.com/v3/autocomplete', {
-      headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
-      params: {
-        text: search,
-        latitude: this.state.origLat,
-        longitude: this.state.origLong,
-        categories: "restaurants",
-        limit: 20,
-        radius: 40000
-      }
-    }).then((res) => {
-      this.setState({
-        autocompleteResults: res.data,
-        isLoaded: true
-      });
-      console.log(this.state.autocompleteResults);
-    }).catch((err) => {
-      console.log("Yelp request via Axios failed: " + err);
-      return err;
+  refresh = (data) => {
+    this.setState({
+      searchedRestaurantName: data.name,
+      searchedRestaurantID: data.id,
+    })
+  }
+
+  refreshLoc = (data) => {
+    this.setState({
+      latitude: data.latitude,
+      longitude: data.longitude
     })
   }
 
@@ -211,31 +217,47 @@ export default class AddPostComment extends Component {
                   onPress={() => this.onChangeDislike()} />
               </Button>
             </View>
-          </View> 
+          </View>
 
-            <Text style = {{fontSize:25,
-               fontWeight:"bold", 
-               paddingTop: 30,
-                paddingBottom: 15}}>Add a caption:</Text>
-          <View style={{borderWidth: 1}}>
-            <Input placeholder="Caption" onChangeText={(text) => this.setState({caption:text})}/>
-            </View>
+          <Text style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            paddingTop: 30,
+            paddingBottom: 15
+          }}>Add a caption:</Text>
+          <View style={{ borderWidth: 1 }}>
+            <Input placeholder="Caption" onChangeText={(text) => this.setState({ caption: text })} />
+          </View>
 
-          <Text style = {{fontSize:25,
-               fontWeight:"bold", 
-               paddingTop: 30,
-                paddingBottom: 15}}>Add location:</Text>
+          <Text style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            paddingTop: 30,
+            paddingBottom: 15
+          }}>Add location:</Text>
 
-            <SearchBar placeholder ="location"
-        onChangeText = {this.updateSearch}
-      lightTheme
-      round
-       placeholderTextColor = 'grey'
-        value= {search}/>
-        
-            <Button
-            block success 
-            onPress={() => { this.props.navigation.navigate('Main'); this.addPost() }}>
+          <Button
+            block
+            onPress={() => this.props.navigation.navigate('SearchRestaurants',
+              {
+                lat: this.state.latitude,
+                long: this.state.longitude,
+                onGoBack: this.refresh,
+                location: this.refreshLoc
+              }
+            )}>
+            <Text>{this.state.searchedRestaurantName}</Text>
+          </Button>
+
+          <Button
+            block success
+            /*  onPress = { () => {
+             this.submitButton();
+            } }  */
+            onPress={() => {
+              this.props.navigation.navigate('Main');
+              this.addPost();
+            }}>
             <Text>Post your plate</Text>
           </Button>
 

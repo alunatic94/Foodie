@@ -1,5 +1,4 @@
 import MapView, { Marker } from "react-native-maps";
-import { Container } from 'native-base';
 import React, { Component } from 'react';
 import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Constants from 'expo-constants';
@@ -10,9 +9,10 @@ import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js'
 import { MapPopUp } from '../components/MapPopUp.js'
-import { List, Card, CardItem, Body, Button, ListItem, Left, Thumbnail } from 'native-base';
+import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
+import { Linking, Platform } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -23,7 +23,6 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSearch: false,
       latitude: 0,
       longitude: 0,
       latitudeDelta: 0.0122,
@@ -33,17 +32,14 @@ class Map extends Component {
       searchedRestaurantID: '',
       isLoaded: false,
       zoomLevel: 16,
-      showPopUp: false
+      showPopUp: false,
+      restaurantName: "",
+      restaurantPhone: "",
+      restaurantRating: 0,
+      xCord: "",
+      yCord: ""
     };
   }
-
-  searchOn = () => {
-    this.setState({ showSearch: true });
-  };
-  searchOff = () => {
-    this.setState({ showSearch: false });
-  };
-
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -57,7 +53,7 @@ class Map extends Component {
       },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
-    );  
+    );
   }
 
   onRegionChangeComplete = (region) => {
@@ -102,12 +98,26 @@ class Map extends Component {
     })
   }
 
-  togglePopUp = () => {    
+  togglePopUp = (name, phone, rating, x, y) => {
     console.log("Setting to true")
-    this.setState({showPopUp: !this.state.showPopUp})
+    // console.log(this.state.nearbyRestaurants[1])
+    console.log(x + " " + y)
+    this.setState({showPopUp: !this.state.showPopUp,
+      restaurantName: name,
+      restaurantPhone: phone,
+      restaurantRating: rating,
+      xCord: x,
+      yCord: y
+    })
   }
 
-  render() {    
+  render() {  
+
+    const url = Platform.select({
+      ios: "maps:0,0?q=" + this.state.xCord + "," + this.state.yCord, 
+      android: "geo:0,0?q=" + this.state.xCord + "," + this.state.yCord
+    });
+    
     if (!this.state.isLoaded) {
       return (
         <Container>
@@ -168,8 +178,8 @@ class Map extends Component {
                   coordinate={{
                     latitude: marker.coordinates.latitude,
                     longitude: marker.coordinates.longitude
-                  }}
-                  onPress = {this.togglePopUp}
+                  }}                  
+                  onPress = {() => this.togglePopUp(marker.name, marker.display_phone, marker.rating, marker.coordinates.latitude, marker.coordinates.longitude)}
                   >                  
                   <View>
                     <Image
@@ -183,40 +193,56 @@ class Map extends Component {
             })
           } 
         </MapView>
+
         {this.state.showPopUp ? 
-      <View>
-      <Modal isVisible={this.state.showPopUp}>
-          <Card>
-              <CardItem header>
-                  <Text>name</Text>
-                  </CardItem>
-                  <CardItem>
-                  <Body>
-                      <Text>
-                        Description                                                               
-                      </Text>
-                      <List>
-                          <ListItem avatar>
-                              <Left>
-                                  <Thumbnail/>
-                              </Left>                                        
-                          </ListItem>                                    
-                      </List>                                
-                  </Body>
-                  </CardItem>                            
-                  <CardItem footer>
-                  <Text>Contact</Text>
-              </CardItem>
-          </Card>
-          <Text>Try this</Text>
-          <Button
-          onPress={() => {this.setState({showPopUp: false})}}
-          >
-          <Text>close</Text>
-          </Button>
-      </Modal>                
-  </View>
-      : null}
+            <View>
+              <Modal isVisible={this.state.showPopUp}>              
+                  <Card>
+                      <CardItem header>
+                          <Text>{this.state.restaurantName}</Text>
+                          </CardItem>
+                          <CardItem>
+                          <Body>
+                              <Text>
+                                Plates
+                              </Text>
+                              <List>
+                                  <ListItem avatar>
+                                      <Left>
+                                          <Thumbnail/>
+                                      </Left>                                        
+                                  </ListItem>                                    
+                              </List>                                
+                          </Body>
+                          </CardItem>                            
+                          <CardItem footer style={{flexDirection: 'row', flexWrap: 'wrap'}}>                            
+                              <FontAwesome name='mobile' style={{fontSize: 25, color: "#6fdedc", paddingRight: 5}}/>
+                              <Text style={{paddingRight: 20}}>{this.state.restaurantPhone}</Text>                            
+                              <FontAwesome name='star' style={{fontSize: 20, color: "#6fdedc", paddingRight: 5}}/>
+                              <Text>{this.state.restaurantRating}</Text>                            
+                        </CardItem>
+                  </Card>                  
+                    <CardItem style={{backgroundColor: 'transparent'}}>
+                      <Left>
+                        <Button
+                        onPress={() => {this.setState({showPopUp: false})}}
+                        style={{backgroundColor: '#6fdedc', margin: 0}}
+                        >
+                          <FontAwesome name='close' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
+                        </Button>
+                      </Left>
+                      <Right>
+                        <Button
+                        style={{backgroundColor: '#6fdedc'}}
+                        onPress={() => {Linking.openURL((url))}}
+                        >                          
+                          <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
+                        </Button>
+                      </Right>
+                    </CardItem>
+              </Modal>                
+          </View>
+              : null}
 
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
@@ -234,17 +260,17 @@ class Map extends Component {
               shadowColor: "#333",
               shadowOpacity: 1,
               shadowOffset:
-               {x: 2, y: 0},
+                { x: 2, y: 0 },
               shadowRadius: 2,
               borderRadius: 30,
               position: "absolute",
               bottom: 30,
               right: 20,
-              }}>   
-              <FontAwesome name='search' style={{fontSize: 25, color: "white"}}/> 
+            }}>
+              <FontAwesome name='search' style={{ fontSize: 25, color: "white" }} />
             </View>
           </TouchableWithoutFeedback>
-      </Container>
+        </Container>
       )
     }
   }

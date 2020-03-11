@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Button } from 'react-native';
-import { Container, Header, Left, Right, Body, Content, Text, Input, SafeAreaView, View, FlatList } from 'native-base';
+import { Container, Header, Left, Right, Body, Content, Text, Input, View } from 'native-base';
 import styles from './styles.js';
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
@@ -13,35 +13,39 @@ export default class SearchRestaurants extends React.Component {
             search: '',
             latitude: 0,
             longitude: 0,
+            neededLoc: false,
             isLoaded: false,
             isInitialized: false,
+            location: [],
             autocompleteResult: [],
         };
     }
 
     async componentDidMount() {
-        // navigator.geolocation.getCurrentPosition(
-        //     position => {
-        //         this.setState({
-        //             latitude: position.coords.latitude,
-        //             longitude: position.coords.longitude,
-        //             origLat: position.coords.latitude,
-        //             origLong: position.coords.longitude,
-        //             error: null
-        //         });
-        //         if (this.state.isInitialized == false) {
-        //             this.initializeAutocomplete();
-        //         } else {
-        //             this.autocompleteRestaurants(search);
-        //         }
-        //     },
-        //     error => this.setState({ error: error.message }),
-        //     { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
-        // );
-        this.setState({
-            latitude: this.props.navigation.state.params.lat,
-            longitude: this.props.navigation.state.params.long
-        });
+        if (this.props.navigation.state.params.lat == 0 && this.props.navigation.state.params.long == 0) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        origLat: position.coords.latitude,
+                        origLong: position.coords.longitude,
+                        location: position.coords,
+                        isInitialized: true,
+                        neededLoc: true,
+                        error: null
+                    }, console.log("Position completed"));
+                },
+                error => this.setState({ error: error.message }),
+                { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
+            );
+        } else {
+            this.setState({
+                latitude: this.props.navigation.state.params.lat,
+                longitude: this.props.navigation.state.params.long,
+                isInitialized: true
+            });
+        }
         this.refs.searchBar.focus();
     }
 
@@ -56,6 +60,10 @@ export default class SearchRestaurants extends React.Component {
             });
         }
     };
+
+    getLocation = () => {
+        return location = [latitude, longitude];
+    }
 
     autocompleteRestaurants = (search) => {
         axios.get('https://api.yelp.com/v3/autocomplete', {
@@ -80,39 +88,17 @@ export default class SearchRestaurants extends React.Component {
         })
     }
 
-    initializeAutocomplete = () => {
-        axios.get('https://api.yelp.com/v3/autocomplete', {
-            headers: { 'Authorization': 'Bearer 6wdE42fE4oWYKFvwpLn-FmGqaWQpmyjeAHQ2_jWwnuNqRB7-cSAkHcdOvxf4gK-3Xw3QDmGhHBv93U1e0yIsqjauRsKyW0fnbGE7VVBRbyLlSfSnbuSrbWP2karAXXYx' },
-            params: {
-                text: "c",
-                latitude: this.state.origLat,
-                longitude: this.state.origLong,
-                categories: "restaurants",
-                limit: 20,
-                //radius: 40000
-            }
-        }).then((res) => {
-            this.setState({
-                isInitialized: true
-            });
-        }).catch((err) => {
-            console.log("Yelp request via Axios failed: " + err);
-            return err;
-        })
-    }
-
-    _renderItem = ({ item, index }) => {
-        return (
-            <View style={styles.item}>
-                <Text>ITEM</Text>
-            </View>
-        )
-    }
-
     render() {
         let { autocompleteResult, isLoaded, isInitialized } = this.state;
         const { goBack } = this.props.navigation;
-        if (isLoaded) {
+        if (!isInitialized) {
+            return (
+                <View style={styles.centeredTest}>
+                    <Text>Loading...</Text>
+                </View>
+            )
+        }
+        else if (isLoaded) {
             return (
                 <Content>
                     <SearchBar placeholder="Search restaurants.."
@@ -122,12 +108,6 @@ export default class SearchRestaurants extends React.Component {
                         value={this.state.search}
                         autoCorrect={false}
                     />
-
-                    {/* <FlatList
-                        data={autocompleteResult}
-                        renderItem={this._renderItem}
-                        keyExtractor={(item, index) => index.toString()}
-                    /> */}
                     {
                         this.state.autocompleteResult.map(r => {
                             return <Button
@@ -136,11 +116,13 @@ export default class SearchRestaurants extends React.Component {
                                 color='#696969'
 
                                 onPress={() => {
-                                    this.props.navigation.state.params.onGoBack(r.id);
+                                    this.props.navigation.state.params.onGoBack(r);
+                                    temp = this.getLocation;
+                                    if (this.state.neededLoc) {
+                                        this.props.navigation.state.params.location(this.state.location);
+                                    }
                                     this.props.navigation.goBack();
                                 }}
-                            // text={b.text}
-                            // onPress={b.action}
                             />;
                         })
                     }
@@ -155,8 +137,6 @@ export default class SearchRestaurants extends React.Component {
                         lightTheme
                         placeholderTextColor='grey'
                         value={this.state.search} />
-
-
                 </Content>
             );
 
