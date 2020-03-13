@@ -143,7 +143,7 @@ class Comments extends Component {
               </Left>
             </ListItem>            
               <Content>            
-                <Item rounded >
+                <Item rounded>
                   <Input
                     placeholder="Comment"
                     onChangeText={comment => this.onChange(comment)}
@@ -157,7 +157,7 @@ class Comments extends Component {
                         <Text style={{color: this.state.buttonTextColor}}>Post</Text>
                     </Button>                 
                 </Item>            
-                </Content>            
+              </Content>            
             </Container>            
           </Footer>
         </KeyboardAvoidingView>

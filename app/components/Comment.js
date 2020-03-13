@@ -31,19 +31,21 @@ class Comment extends Component{
     render(){
         return(        
           <List>
-            <ListItem avatar>
+            <ListItem avatar style={{backgroundColor: ''}}>
               <Left>
                 <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall}  />
               </Left>
-              <Body>
-                {/* TODO: name props from posts component */}
+              <Body>              
                 <Text>{this.state.user.username}</Text>
-                <Text note>{this.props.body}</Text>
-              </Body>
-              <Right>                
+                <Text>{this.props.body}</Text>
+                <Text note
+                onPress={() => {console.log('Reply Comment')}}
+                >Reply</Text>
+              </Body>              
+              <Right>
                 <Text note>{this.props.time}</Text> 
-              </Right>
-            </ListItem>
+              </Right>              
+            </ListItem>            
           </List>
         );        
     }
