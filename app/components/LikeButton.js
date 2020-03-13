@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import { Icon, Button, Container } from 'native-base';
+import { Icon, Button, Container, Grid, Row, Col } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database.js";
 import { User } from "../database/User.js";
@@ -70,7 +70,7 @@ class LikeButton extends React.Component {
 
     if (!this.state.updated) {
       this.setState({ liked: true });
-      this.add();
+      // this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
@@ -103,19 +103,16 @@ class LikeButton extends React.Component {
     const { hearts, heart, updated, firez, fire } = this.state;
 
     return (
-      <View style={color = 'white'}>
+      <View style={{color: 'white', display: 'flex', flexDirection: 'row'}}>
 
-        <Button transparent onPress={() => this.props.navigation.navigate('LikePage', {
-          postID: this.props.postID
-        })}>
-          <Text>Likes:{this.state.like}</Text>
-        </Button>
-
-        <Button transparent>
-          <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={45} onPress={this.updateLikes} />
-        </Button>
+          <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={35} onPress={this.updateLikes} />          
+          
+          <Text style={{paddingTop: 10}}
+          onPress={() => this.props.navigation.navigate('LikePage', {
+          postID: this.props.postID})}
+          // style={styles.lightText}
+          >Likes:{this.state.like}</Text>        
       </View>
-
     );
   }
 }
