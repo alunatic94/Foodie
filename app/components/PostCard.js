@@ -9,6 +9,9 @@ import { User } from "../database/User.js";
 import Moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
+import {firebase, db} from '../database/Database'
+
+restaurants = db.collection("restaurants");
 
 const defaultImages = ['http://lorempixel.com/400/200/food/', 
     'http://lorempixel.com/400/200/food/', 
@@ -40,14 +43,13 @@ const dummyUser = {
 }
 
 class PostCard extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
             user: {},
             isLoaded: false,
-            images: defaultImages
+            images: defaultImages,
+            restaurantName: ''
         }
     }
 
@@ -98,7 +100,12 @@ class PostCard extends Component {
    }
     
     render() {
-
+        var restaurantRef = restaurants.doc(this.props.post.yelpID);
+        restaurantRef.get().then(doc => {
+            this.setState({
+                restaurantName: doc.get('restaurant_name')
+            });
+        })
         if (!this.state.isLoaded) {
             return (
                 <PostCardPlaceholder style={this.props.style} />
@@ -113,7 +120,6 @@ class PostCard extends Component {
                     <Body>
                         <Text style={styles.heading}>{this.state.user.username}</Text>  
                         <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-                        <Text style={styles.subheading}>{this.props.post.caption}</Text> 
                     </Body>
                 </Left>
                 </CardItem>
@@ -124,6 +130,12 @@ class PostCard extends Component {
                     style={styles.imageFeed}
                     images={this.props.post.images}
                 />}
+                </CardItem>
+                <CardItem>
+                    <Text style={styles.subheading}>{this.state.restaurantName}</Text> 
+                </CardItem>
+                <CardItem>
+                    <Text style={styles.subheading}>{this.props.post.caption}</Text> 
                 </CardItem>
                 <CardItem>
                 <Left>                    
