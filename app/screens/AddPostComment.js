@@ -6,6 +6,7 @@ import { logout } from '../screens/Login.js';
 import styles from './styles.js';
 import { db } from '../database/Database.js';
 import { User } from '../database/User.js';
+import Points from '../components/common/Points.js'
 
 export default class AddPostComment extends Component {
 
@@ -73,12 +74,17 @@ export default class AddPostComment extends Component {
         // Add reference to new post ID in user doc
         plates = this.state.user.plates;
         plates.push(doc.id);
+
         users.doc(User.getCurrentUserID()).update({ plates: plates });
 
         // Add post ID to restaurant collection
         this.addRestaurantPlate(doc.id);
+
+        // Add badge (if necessary) to user doc
+        // this.addBadge();
+
+        this.props.navigation.navigate('Main');
       })
-    this.props.navigation.navigate('Main');
   }
 
   addRestaurantPlate(x) {
@@ -95,6 +101,31 @@ export default class AddPostComment extends Component {
       }) // Initalize with restaurant name and empty array
       this.addRestaurantPlate(x); // Call again to add plate to newly created document
     })
+  }
+
+  addBadge() {
+    var badgeID = "";
+        var numPlates = this.state.user.plates.length;
+        // switch(numPosts) {
+        //   case 10:
+        //     badgeID = "ten-plates";
+        //     break;
+        //   case 25:
+        //     badgeID = "twenty-five-plates";
+        //     break;
+        //   case 100:
+        //     badgeID = "one-hundred-plates";
+        //     break;
+        //   default:
+        //     badgeID = null;
+        badgeID = "test";
+           // }
+    if (badgeID != null) {
+      badges = this.state.user.badges;
+      badges.push(badgeID);
+
+      users.doc(User.getCurrentUserID()).update({badges : badges});
+    }
   }
 
   onChangeLike = () => {  // Like button will be activated while meh and dislike button are disabled

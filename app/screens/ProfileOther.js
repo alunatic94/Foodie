@@ -19,6 +19,7 @@ import PlateModal  from '../components/Profile/PlateModal.js';
 import { useFocusEffect } from '@react-navigation/native'; 
 
 posts = db.collection("posts");
+users = db.collection("users");
 friends = db.collection("friends");
 
 const thumbnail = "";
@@ -71,13 +72,61 @@ export default class ProfileOther extends Component {
     }
 
     addListeners() {
-        this.addNavigationListeners();
         this.addPostsListener();
+        this.addProfileListener();
+        this.addNavigationListeners();
     }
 
     removeListeners() {
         // this.removeNavigationListener();
         this.removePostsListener();
+        this.removeProfileListener();
+    }
+
+    removePostsListener() {
+        posts.onSnapshot(() => {});
+    }
+    
+    removeProfileListener() {
+        users.onSnapshot(() => {});
+    }
+
+    addProfileListener() {
+        users.doc(this.state.userID).onSnapshot(doc => {         
+            modifiedProfile = doc.data();
+            this.setState({currentProfile: modifiedProfile}, () => {
+                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                    this.setState({badges: newBadges});
+                });
+            });
+        });
+    }
+
+    addPostsListener() {
+        // Listen for updates/removals/deletions in plates posted by user
+        // Grab changed post documents and update array of plates stored in state
+        users.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    plates = this.state.plates;
+                    addedPlate = change.doc.data();
+                    plates.unshift(addedPlate);
+                    this.setState({plates});
+                }
+                if (change.type === "modified") {
+                    modifiedPlate = change.doc.data();
+                    var i = this.state.plates.findIndex(x => x.id == modifiedPlate.id);
+                    plates[i] = modifiedPlate;
+                    this.setState({plates});
+                }
+                if (change.type === "removed") {
+                    removedPlate = change.doc.data();
+                    var i = this.state.plates.indexOf(removedPlate);
+                    plates.splice(i, 1);
+                    this.setState({plates});
+                }
+            });
+        });
     }
 
     addNavigationListeners() {
@@ -98,34 +147,6 @@ export default class ProfileOther extends Component {
         );
     }
 
-    removePostsListener() {
-        posts.onSnapshot(() => {});
-    }
-
-    addPostsListener() {
-        // Listen for updates/removals/deletions in plates posted by user
-        // Grab changed post documents and update array of plates stored in state
-        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
-            snapshot.docChanges().forEach(change => {
-                if (change.type === "added") {
-                    plates = this.state.plates;
-                    addedPlate = change.doc.data();
-                    plates.unshift(addedPlate);
-                    this.setState({plates});
-                }
-                if (change.type === "modified") {
-                    modifiedPlate = change.doc.data();
-                    var i = this.state.plates.findIndex(x => x.id == modifiedPlate.id);
-                    plates[i] = modifiedPlate;
-                }
-                if (change.type === "removed") {
-                    removedPlate = change.doc.data();
-                    var i = this.state.plates.indexOf(removedPlate);
-                    plates.splice(i, 1);
-                }
-            });
-        });
-    }
 
     async loadProfileInformation() {
         var profileDB = new ProfileDB(this.state.userID);
@@ -143,18 +164,6 @@ export default class ProfileOther extends Component {
             });
         });
     }
-
-    // async loadBadges() {
-    //     BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-    //         this.setState({badges: newBadges});
-    //     });
-    // }
-
-    // async loadPlates() {
-    //     profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-    //         this.setState({plates: newPlates});
-    //     });
-    // }
 
     toggleModal(data=null) {
         if (data) {

@@ -15,10 +15,12 @@ import ProfileHeader  from '../components/Profile/ProfileHeader.js';
 import About  from '../components/Profile/About';
 import Badges  from '../components/Profile/Badges';
 import Plates  from '../components/Profile/Plates';
+import FriendPlates  from '../components/Profile/FriendPlates';
 import PlateModal  from '../components/Profile/PlateModal.js'; 
 import { useFocusEffect } from '@react-navigation/native';
 
 posts = db.collection("posts");
+users = db.collection("users");
 friends = db.collection("friends");
 
 const thumbnail = "";
@@ -53,7 +55,8 @@ export default class Profile extends Component {
             currentProfile: null,
             isProfileLoaded: false, 
             badges: [],
-            plates: []
+            plates: [],
+            friends: []
         }
 
         // Bind to Profile context so calls pop-up for plates tapped
@@ -65,26 +68,43 @@ export default class Profile extends Component {
     }
 
     componentWillUnmount(){
-        this.removePostsListener();
+        this.removeListeners();
     }
 
     addListeners() {
         this.addPostsListener();
+        this.addProfileListener();
     }
 
     removeListeners() {
         // this.removeNavigationListener();
         this.removePostsListener();
+        this.removeProfileListener();
     }
 
     removePostsListener() {
         this.posts.onSnapshot(() => {});
     }
+    
+    removeProfileListener() {
+        this.users.onSnapshot(() => {});
+    }
+
+    addProfileListener() {
+        users.doc(this.state.userID).onSnapshot(doc => {         
+            modifiedProfile = doc.data();
+            this.setState({currentProfile: modifiedProfile}, () => {
+                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                    this.setState({badges: newBadges});
+                });
+            });
+        });
+    }
 
     addPostsListener() {
         // Listen for updates/removals/deletions in plates posted by user
         // Grab changed post documents and update array of plates stored in state
-        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+        users.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     plates = this.state.plates;
@@ -95,12 +115,16 @@ export default class Profile extends Component {
                 if (change.type === "modified") {
                     modifiedPlate = change.doc.data();
                     var i = this.state.plates.findIndex(x => x.id == modifiedPlate.id);
+                    plates = this.state.plates;
                     plates[i] = modifiedPlate;
+                    this.setState({plates});
                 }
                 if (change.type === "removed") {
                     removedPlate = change.doc.data();
                     var i = this.state.plates.indexOf(removedPlate);
+                    plates = this.state.plates;
                     plates.splice(i, 1);
+                    this.setState({plates});
                 }
             });
         });
@@ -115,7 +139,18 @@ export default class Profile extends Component {
                 BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
                     this.setState({badges: newBadges}, () => {
                         profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-                            this.setState({plates: newPlates, isProfileLoaded: true});
+                            this.setState({plates: newPlates}, () => {
+                               let friendIDs = [];
+                               friends.doc(this.state.userID).get().then((doc) => {
+                                   if (doc.exists) {
+                                       const userIDs = doc.data();
+                                       for (let id in userIDs) {
+                                           if (userIDs[id]) friendIDs.push(id);
+                                       }
+                                   }
+                                   this.setState({friends: friendIDs, isProfileLoaded: true});
+                               })
+                            });
                         });
                     });
                 });
@@ -124,7 +159,6 @@ export default class Profile extends Component {
     }
 
     toggleModal(data=null) {
-        console.log(data);
         if (data) {
             this.setState({modalData: data}, 
                 this.setState({modalVisible: !this.state.modalVisible})
@@ -161,6 +195,8 @@ export default class Profile extends Component {
                     <About data={this.state.currentProfile.about} />
                     <Badges data={this.state.badges} />
                     <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
+                    
+                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends}/> : ""}
                    
                 </Card>
                 <Modal isVisible={this.state.modalVisible}>

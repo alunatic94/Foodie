@@ -6,7 +6,8 @@ import PostCard from '../../components/PostCard.js';
 export default class PlateModal extends Component {                                     
     render() {
         return (
-        <View style={styles.profileModal}>
+        <View style={{backgroundColor: 'transparent'}}>
+            
             <PostCard style={{width: '100%'}} postID={this.props.data.id} post={this.props.data} user={this.props.user} />
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
                 <Button

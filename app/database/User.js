@@ -23,7 +23,8 @@ export class User {
     badges: [],
     tagline: 'Dummy',
     about: "I'm a dummy user.",
-    plates: []
+    plates: [],
+    points: 0
 };
 
   constructor(userData) {
@@ -52,6 +53,7 @@ export class User {
     userData.tagline = User.defaults.tagline;
     userData.about = `Hi, I'm ${first}!`;
     userData.plates = User.defaults.plates;
+    userData.points = User.defaults.points;
     userData.username = username;
     userData.first = first;
     userData.last = last;
@@ -110,5 +112,6 @@ export class User {
     this.plates = userData.plates;
     this.about = userData.about;
     this.tagline = userData.tagline;
+    this.points = userData.points;
   }
 }

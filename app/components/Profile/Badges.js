@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import {Body, CardItem, H2, Icon, Tooltip, View, Text} from 'native-base';
+import {Body, CardItem, H2, View} from 'native-base';
+import {Text} from 'react-native-elements';
+import CustomTooltip from '../../components/common/CustomTooltip';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView} from "react-native";
 import styles from '../../screens/styles.js';
  
@@ -12,9 +15,11 @@ export default class Badges extends Component {
         else {
             return(
                 badges.map((badge) => {
-                    <Tooltip popover={<Text>{badge.badgeID}</Text>}>
-                    <Icon name={badge.icon} style={styles.padding} withOverlay={false} />
-                </Tooltip>
+                    return (
+                        <CustomTooltip key={badge.badgeID} backgroundColor={"rgba(52, 52, 52, 0.8)"} withOverlay={false} popover={<Text style={{color: 'white'}}>{badge.description}</Text>}>
+                            <Icon key={badge.badgeID} name={badge.icon} style={styles.padding} size={30} />
+                        </CustomTooltip>
+                    );
                 })
             )
         }

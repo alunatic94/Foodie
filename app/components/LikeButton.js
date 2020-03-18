@@ -27,7 +27,7 @@ class LikeButton extends React.Component {
         liked: false,
         user: User.dummyUser,
         likesArray: [],
-        postID: this.props.ID
+        postID: this.props.postID
       })
     });
 

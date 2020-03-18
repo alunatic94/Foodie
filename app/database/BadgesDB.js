@@ -6,17 +6,17 @@ export class BadgesDB {
 
   // Return array of badge objects given array of ID name strings
   static async getBadgesFromIDs(IDarray) {
-    var badges = [];
+    var userBadges = [];
     for (let ID of IDarray) {
       await badges.doc(ID).get().then((doc) => {
         badge = doc.data();
-        badges.push(badge);
+        userBadges.push(badge);
       })
       .catch((err) => {
         console.log("Could not find badge from ID '" + ID);
       });
     }
-    return badges;
+    return userBadges;
   }
 
 }
