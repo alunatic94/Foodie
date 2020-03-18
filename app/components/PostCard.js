@@ -58,7 +58,7 @@ class PostCard extends Component {
     loadUser = () => {
         if (this.props.user != undefined) {
             this.setState({
-                user: loadedUser,
+                user: this.props.user,
                 isLoaded: true
             });
         }
