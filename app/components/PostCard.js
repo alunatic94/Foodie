@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Content, DeckSwiper, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
+import { Container, Content, DeckSwiper, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Grid, Row, Col } from 'native-base';
 import { Image, ScrollView, View } from 'react-native';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
@@ -12,6 +12,7 @@ import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder
 import {firebase, db} from '../database/Database'
 
 restaurants = db.collection("restaurants");
+import LikePage from '../screens/LikePage.js';
 
 const defaultImages = ['http://lorempixel.com/400/200/food/', 
     'http://lorempixel.com/400/200/food/', 
@@ -131,6 +132,7 @@ class PostCard extends Component {
                     images={this.props.post.images}
                 />}
                 </CardItem>
+
                 <CardItem>
                     <Text style={styles.subheading}>{this.state.restaurantName}</Text> 
                 </CardItem>
@@ -138,18 +140,27 @@ class PostCard extends Component {
                     <Text style={styles.subheading}>{this.props.post.caption}</Text> 
                 </CardItem>
                 <CardItem>
-                <Left>                    
-                    <LikeButton postID={this.props.postID}/>
-                </Left>
-                <Body>
-                    <Icon active name="chatbubbles" color="black" onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}/>
-                    <Text style={styles.lightText}>Comments</Text>
-                     
-                </Body>
-                <Right>
-                    {this.returnRatingIcon()}
-                </Right>
+                {/* <Left>                    
+                    <LikeButton postID={this.props.postID}/> */}
+                    <Left style={{paddingLeft: 0}}>
+                        <Grid>
+                            <Row>
+                                <Col>
+                                    {this.returnRatingIcon()}
+                                </Col>
+                                <Col>
+                                    <Icon active name="chatbubbles" color="black" onPress={() => this.props.navigation.navigate('Comments', {postID: this.props.postID})}/>        
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Left>
+                    <Body>
+                    </Body>
+                    <Right>
+                        <LikeButton postID={this.props.postID}/>
+                    </Right>
                 </CardItem>
+                
             </Card>
             );
         }  

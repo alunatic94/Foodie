@@ -16,7 +16,7 @@ import About  from '../components/Profile/About';
 import Badges  from '../components/Profile/Badges';
 import Plates  from '../components/Profile/Plates';
 import FriendPlates  from '../components/Profile/FriendPlates';
-import PlateModal  from '../components/Profile/PlateModal.js'; 
+import PlateModal  from '../components/Profile/PlateModal'; 
 import { useFocusEffect } from '@react-navigation/native';
 
 posts = db.collection("posts");
@@ -139,7 +139,7 @@ export default class Profile extends Component {
                 BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
                     this.setState({badges: newBadges}, () => {
                         profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-                            this.setState({plates: newPlates}, () => {
+                            this.setState({plates: newPlates, isProfileLoaded: true}, () => {
                                let friendIDs = [];
                                friends.doc(this.state.userID).get().then((doc) => {
                                    if (doc.exists) {
@@ -148,7 +148,7 @@ export default class Profile extends Component {
                                            if (userIDs[id]) friendIDs.push(id);
                                        }
                                    }
-                                   this.setState({friends: friendIDs, isProfileLoaded: true});
+                                   this.setState({friends: friendIDs});
                                })
                             });
                         });
@@ -196,7 +196,7 @@ export default class Profile extends Component {
                     <Badges data={this.state.badges} />
                     <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
                     
-                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends}/> : ""}
+                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends}/> : <View />}
                    
                 </Card>
                 <Modal isVisible={this.state.modalVisible}>

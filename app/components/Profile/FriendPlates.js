@@ -22,7 +22,7 @@ import {ProfileDB} from "../../database/ProfileDB.js";
 //     )
 // }
 
-export default class Plates extends Component {
+export default class FriendPlates extends Component {
     
     renderFriendPlates(friendIDs) {
 
