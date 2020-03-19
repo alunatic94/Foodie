@@ -4,7 +4,6 @@ import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
 import ScreenHeader from '../components/common/ScreenHeader.js'
-
 export default class Feed extends Component {
 
   posts = db.collection('posts');
@@ -23,7 +22,7 @@ export default class Feed extends Component {
       this.getAll();
     }, err => {
       console.log("Encountered error: ${err}");
-    });
+    });    
   }
 
   componentWillUnmount(){
