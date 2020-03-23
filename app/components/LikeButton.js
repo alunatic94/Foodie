@@ -31,8 +31,6 @@ class LikeButton extends React.Component {
       })
     });
 
-    
-
   }
 
   constructor(props) {
@@ -45,6 +43,7 @@ class LikeButton extends React.Component {
       hearto: false,
       likesArray: [],
       liked: false,
+      postID: '',
       //buttonTextColor: '#0065ff',
       user: User.dummyUser
 
@@ -70,7 +69,7 @@ class LikeButton extends React.Component {
 
     if (!this.state.updated) {
       this.setState({ liked: true });
-      // this.add();
+      this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
