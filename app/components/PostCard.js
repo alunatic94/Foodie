@@ -56,6 +56,12 @@ class PostCard extends Component {
 
     componentWillMount() {
        this.loadUser();
+       var restaurantRef = restaurants.doc(this.props.post.yelpID);
+       restaurantRef.get().then(doc => {
+           this.setState({
+               restaurantName: doc.get('restaurant_name')
+           });
+       })
     }
 
     loadUser = () => {
@@ -101,12 +107,6 @@ class PostCard extends Component {
    }
     
     render() {
-        var restaurantRef = restaurants.doc(this.props.post.yelpID);
-        restaurantRef.get().then(doc => {
-            this.setState({
-                restaurantName: doc.get('restaurant_name')
-            });
-        })
         if (!this.state.isLoaded) {
             return (
                 <PostCardPlaceholder style={this.props.style} />
