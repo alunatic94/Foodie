@@ -8,7 +8,7 @@ import ScreenHeader from '../components/common/ScreenHeader.js'
 import styles from './styles.js';
 import geohash from 'ngeohash'
 
-export default class Feed extends Component {
+export default class LocalFeed extends Component {
 
   posts = db.collection('posts');
 
