@@ -10,6 +10,7 @@ import {REACT_APP_API_KEY,
   REACT_APP_MEASUREMNEMENT_ID
 } from 'react-native-dotenv';
 
+console.log(REACT_APP_STORAGE_BUCKET)
 // Firebase configuration
 var firebaseConfig = {
     apiKey: REACT_APP_API_KEY,

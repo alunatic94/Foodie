@@ -16,25 +16,6 @@ import LikePage from '../screens/LikePage.js';
 class LikeButton extends React.Component {
   ref = db.collection('posts').doc(this.props.postID);
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
-  componentDidMount() {
-
-    this.ref.get().then((doc) => {
-      ref = doc.data();
-      this.setState({
-        like: ref.likes,
-        updated: false,
-        hearto: false,
-        liked: false,
-        user: User.dummyUser,
-        likesArray: [],
-        postID: this.props.postID
-      })
-    });
-
-    
-
-  }
-
   constructor(props) {
 
     super(props);
@@ -52,14 +33,39 @@ class LikeButton extends React.Component {
 
 
   }
+  componentDidMount() {
+
+    this.ref.get().then((doc) => {
+      ref = doc.data();
+      this.setState({
+        like: ref.likes,
+        updated: false,
+        hearto: false,
+        liked: false,
+        user: User.dummyUser,
+        likesArray: [],
+        postID: this.props.postID
+      })
+    });
+    this.liketoinsert.doc(User.getCurrentUserID()).get().then((doc) =>{
+      if(doc.exists){
+        this.setState({
+          updated: true, 
+          hearto: true, 
+          liked: true
+        })
+      }
+    })
+  }
 
   add = () => {
-
+    let id = User.getCurrentUserID();
     let likeData = {
       userID: User.getCurrentUserID()
 
     };
-    this.liketoinsert.doc().set(likeData)
+
+    this.liketoinsert.doc(id).set(likeData)
   };
 
   updateLikes = () => {
@@ -70,7 +76,7 @@ class LikeButton extends React.Component {
 
     if (!this.state.updated) {
       this.setState({ liked: true });
-      // this.add();
+      this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
