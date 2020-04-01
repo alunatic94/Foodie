@@ -130,6 +130,7 @@ export default class Profile extends Component {
         });
     }
 
+    // TODO: Optimize/unspaghettify
     async loadProfileInformation() {
         var profileDB = new ProfileDB(this.state.userID);
 
@@ -191,14 +192,23 @@ export default class Profile extends Component {
             </ScreenHeader>
             <Content>
                 <Card transparent noShadow>
+                    {/*Personal Information */}
                     <ProfileHeader userID={this.state.userID} data={this.state.currentProfile} />
                     <About data={this.state.currentProfile.about} />
                     <Badges data={this.state.badges} />
-                    <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
-                    
-                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends}/> : <View />}
+
+                    {/* Plates */}
+                    {/* <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} /> */}
+                    <Plates heading="Recent Plates" user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
+                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends} onPress={this.toggleModal}/> : <View />}
+                    <LikedPlates userID={this.state.userID} onPress={this.toggleModal} />
+
+                    {/* Restaurants */}
+                    <RecentRestaurants userID={this.state.userID} yelpIDs={() => {return this.state.plates.map(plate => plate.yelpID)}}/>
                    
                 </Card>
+
+                {/* Modal Popups */}
                 <Modal isVisible={this.state.modalVisible}>
                     {this.state.modalData ? <PlateModal data={this.state.modalData} user={this.state.modalData.user} onPress={this.toggleModal}/> : <View />}
                 </Modal>

@@ -60,6 +60,7 @@ export default class AddPostComment extends Component {
       caption: this.state.caption,
       yelpID: this.state.searchedRestaurantID,
       userID: User.getCurrentUserID(),
+      user: this.state.user,
       timestamp: new Date()
       // TODO:
       // this.state.user.userID

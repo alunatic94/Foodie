@@ -56,10 +56,11 @@ class LikeButton extends React.Component {
   add = () => {
 
     let likeData = {
-      userID: User.getCurrentUserID()
+      userID: User.getCurrentUserID(),
+      timestamp: new Date()
 
     };
-    this.liketoinsert.doc().set(likeData)
+    this.liketoinsert.doc(User.getCurrentUserID()).set(likeData)
   };
 
   updateLikes = () => {

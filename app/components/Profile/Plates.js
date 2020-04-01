@@ -6,27 +6,11 @@ import { Col, Grid } from 'react-native-easy-grid';
 import {User} from "../../database/User.js";
 import {ProfileDB} from "../../database/ProfileDB.js";
 
-// function PlateModal(modalData, userData) {
-//     return (
-//         <View style={styles.profileModal}>
-//             <PostCard style={{width: '100%'}} postID={modalData.id} post={modalData} user={userData} />
-//             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-//                 <Button
-//                 rounded dark
-//                 onPress={() => this.onPress()}
-//                 style={{width: '25%'}}>
-//                     <Text>Close</Text>
-//                 </Button>
-//             </View>
-//         </View>
-//     )
-// }
-
 export default class Plates extends Component {
     // Loop through user's plate IDs and add image component for each one                                       
     renderPlates = (plates) => {
 
-        if (plates.length == 0) {
+        if (!plates || plates.length == 0) {
             return <Text style={styles.subheading}>None so far!</Text>;
         }
 
@@ -44,11 +28,11 @@ export default class Plates extends Component {
                         <Grid key={`${rowItem[0].id}_grid`}>  
                             {
                                 rowItem.map((item) => {
-                                    if (item.userID == User.getCurrentUserID()) {
+                                    if (this.props.user) {
                                         item.user = this.props.user;
                                     }
                                     else {
-                                        var profileDB = new ProfileDB(this.props.userID);
+                                        var profileDB = new ProfileDB(item.userID);
                                         item.user = profileDB.getProfile();
                                     }
                                     return (
@@ -70,7 +54,7 @@ export default class Plates extends Component {
         return (
         <CardItem>
             <Body>
-                <H2 style={styles.heading}>Plates Eaten</H2>
+                <H2 style={styles.heading}>{this.props.heading}</H2>
                     {this.renderPlates(this.props.data)}
             </Body>
         </CardItem>
