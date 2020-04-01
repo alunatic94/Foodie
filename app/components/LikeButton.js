@@ -16,6 +16,23 @@ import LikePage from '../screens/LikePage.js';
 class LikeButton extends React.Component {
   ref = db.collection('posts').doc(this.props.postID);
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
+  componentDidMount() {
+
+    this.ref.get().then((doc) => {
+      ref = doc.data();
+      this.setState({
+        like: ref.likes,
+        updated: false,
+        hearto: false,
+        liked: false,
+        user: User.dummyUser,
+        likesArray: [],
+        postID: this.props.postID
+      })
+    });
+
+  }
+
   constructor(props) {
 
     super(props);
@@ -26,6 +43,7 @@ class LikeButton extends React.Component {
       hearto: false,
       likesArray: [],
       liked: false,
+      postID: '',
       //buttonTextColor: '#0065ff',
       user: User.dummyUser
 

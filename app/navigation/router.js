@@ -15,6 +15,7 @@ import LikeButton from '../components/LikeButton.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
 import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
+import LocalFeed from '../screens/LocalFeed.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 
@@ -77,6 +78,9 @@ const AppNavigator = createStackNavigator({
     },
     Feed: {
         screen: Feed
+    },
+    LocalFeed: {
+        screen: LocalFeed
     },
     Profile: {
         screen: Profile
