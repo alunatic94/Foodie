@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import Comment from './Comment.js';
 import {User} from '../../database/User.js'
+import { View } from 'native-base';
 
 class Parent extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            user: User.dummyUser
+            user: User.dummyUser,
+            comments: []
         }
     }
 
     componentWillMount(){
         this.loadUser();
-        console.log("Printing profileImage")
-        // console.log(this.state.user.profileImage)
+            
     }
 
     loadUser = () => {
@@ -33,8 +34,7 @@ class Parent extends Component{
             <Comment padding={0}
             body={this.props.body}
             time={this.props.time}
-            userID={this.state.user.userID}
-            profileImage={this.state.user.profileImage}
+            userID={this.props.userID}
             />
         )
     }

@@ -16,8 +16,6 @@ class Comment extends Component{
 
   componentWillMount() {
     this.loadUser();
-    console.log("Printing profile image")
-    // console.log(this.state.user.profileImage)
  }
 
  loadUser = () => {
@@ -31,9 +29,7 @@ class Comment extends Component{
      })
  }
 
-  handleReplyComment = () => {
-    // Prompt user for input
-    // Comment IDs?
+  handleReplyComment = () => {        
     console.log('Reply commment')
   }
 
@@ -42,7 +38,7 @@ class Comment extends Component{
           <List style={{paddingLeft: this.props.padding}}>
             <ListItem noBorder avatar>
               <Left>
-                {/* <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall}  /> */}
+                <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall}  />
               </Left>
               <Body style={{display: 'flex', flexDirection: 'row'}}>
                 <Text>{this.state.user.username}</Text>

@@ -14,12 +14,11 @@ import {
   Right
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/comments/Comment.js";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
 import { db } from "../database/Database.js";
 import {User} from "../database/User.js";
-import Parent from '../components/comments/Parent.js'
+import Parent from "../components/comments/Parent.js";
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -133,7 +132,7 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} profileImage={comment.profileImage}/>
+              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
             ))}
           </ScrollView>          
           <Footer>
