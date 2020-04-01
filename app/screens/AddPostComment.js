@@ -61,11 +61,6 @@ export default class AddPostComment extends Component {
       yelpID: this.state.searchedRestaurantID,
       userID: User.getCurrentUserID(),
       timestamp: new Date()
-      // TODO:
-      // this.state.user.userID
-      // user.getCurrentID()      
-      // likes_who
-      // caption
     }
     this.posts.add(postData)
       .then((doc) => {
@@ -288,6 +283,7 @@ export default class AddPostComment extends Component {
             onPress={() => {
               this.props.navigation.navigate('Main');
               this.addPost();
+              //this.addBadge(); 
             }}>
             <Text>Post your plate</Text>
           </Button>
