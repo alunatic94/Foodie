@@ -30,7 +30,8 @@ class Comment extends Component{
  }
 
   handleReplyComment = () => {        
-    console.log('Reply commment')
+    console.log('Reply comment')
+    this.props.handleReplyComment()
   }
 
     render(){

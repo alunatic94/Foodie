@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import Comment from './Comment.js';
 import {User} from '../../database/User.js'
-import { View } from 'native-base';
 
 class Parent extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            user: User.dummyUser,
-            comments: []
+            user: User.dummyUser
         }
     }
 
     componentWillMount(){
         this.loadUser();
-            
     }
 
     loadUser = () => {
@@ -29,12 +26,18 @@ class Parent extends Component{
         })
     }
 
+    replyParent = () => {
+        console.log("Reply Parent")
+        
+    }
+
     render(){
         return(            
             <Comment padding={0}
             body={this.props.body}
             time={this.props.time}
             userID={this.props.userID}
+            handleReplyComment={this.replyParent}
             />
         )
     }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, List, ListItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Footer, View } from 'native-base';
-import styles from '../screens/styles.js';
-import {User} from "../database/User.js"
+import {User} from "../database/User.js";
+import Comment from './Comment.js';
 
 
 const tempImage = require('../screens/assets/dog.png');
@@ -10,7 +9,7 @@ class Child extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      user: User.dummyUser,      
+      user: User.dummyUser
     }
   }
 
@@ -29,32 +28,17 @@ class Child extends Component{
      })
  }
 
-  handleReplyComment = () => {
-    // Handle input, send input
-    console.log('Reply commment')
+  replyChild = () => {    
+    console.log('Reply child')
   }
 
     render(){
         return(
-          <List style={{paddingLeft: this.props.padding}}>
-            <ListItem noBorder avatar>
-              <Left>
-                <Thumbnail source={{uri: this.state.user.profileImage}} style={styles.circleSmall}  />
-              </Left>
-              <Body style={{display: 'flex', flexDirection: 'row'}}>
-                <Text>{this.state.user.username}</Text>
-                <Text>{this.props.body}</Text>
-              </Body>              
-              <Right>
-                <Text note>{this.props.time}</Text>
-              </Right>              
-            </ListItem>
-            <Text note
-                style={{paddingLeft: 60}}
-                onPress={this.handleReplyComment}
-                >Reply</Text>
-          </List>          
-        );
-    }
+        <Comment padding={45}
+                body={this.props.body}
+                time={this.props.time}
+                userID={this.props.userID}
+        />
+        )}
 }
 export default Child;
