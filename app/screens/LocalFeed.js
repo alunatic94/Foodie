@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native'
-import { Container, Content } from 'native-base';
+/* import { Text } from 'react-native' */
+import { Container, Content, Segment, Button, Text, View} from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
 import ScreenHeader from '../components/common/ScreenHeader.js'
-import styles from './styles.js';
 import geohash from 'ngeohash'
 
 export default class LocalFeed extends Component {
@@ -74,6 +73,15 @@ export default class LocalFeed extends Component {
         <ScreenHeader navigation={this.props.navigation} title="Feed">
         </ScreenHeader>
 
+        <Segment>
+          <Button first active onPress = {() => this.props.navigation.navigate('LocalFeed')}> 
+            <Text>Local</Text>
+          </Button>
+          <Button last active onPress = {() => this.props.navigation.navigate('FriendsFeed')}> 
+            <Text>Friend</Text>
+          </Button>
+        </Segment>
+        
         <Content>
           {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
           {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>

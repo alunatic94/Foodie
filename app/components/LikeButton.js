@@ -16,22 +16,6 @@ import LikePage from '../screens/LikePage.js';
 class LikeButton extends React.Component {
   ref = db.collection('posts').doc(this.props.postID);
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
-  componentDidMount() {
-
-    this.ref.get().then((doc) => {
-      ref = doc.data();
-      this.setState({
-        like: ref.likes,
-        updated: false,
-        hearto: false,
-        liked: false,
-        user: User.dummyUser,
-        likesArray: [],
-        postID: this.props.postID
-      })
-    });
-
-  }
 
   constructor(props) {
 
@@ -51,14 +35,55 @@ class LikeButton extends React.Component {
 
 
   }
+  componentDidMount() {
+
+    this.ref.get().then((doc) => {
+      ref = doc.data();
+      this.setState({
+        like: ref.likes,
+        updated: false,
+        hearto: false,
+        liked: false,
+        user: User.dummyUser,
+        likesArray: [],
+        postID: this.props.postID
+      })
+    });
+    this.liketoinsert.doc(User.getCurrentUserID()).get().then((doc) =>{
+      if(doc.exists){
+        this.setState({
+          updated: true, 
+          hearto: true, 
+          liked: true
+        })
+      }
+    })
+  }
 
   add = () => {
-
+    let id = User.getCurrentUserID();
     let likeData = {
       userID: User.getCurrentUserID()
 
     };
-    this.liketoinsert.doc().set(likeData)
+
+    this.liketoinsert.doc(id).set(likeData)
+  };
+
+  remove=() => {
+    var docRef=db.collection('posts').doc(this.props.postID).collection('Likeby').doc(User.getCurrentUserID());
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        docRef.delete().then(function() {
+          console.log("Document successfully deleted!");
+      }).catch(function(error) {
+          console.error("Error removing document: ", error);
+      });
+      } else {
+          console.log("No such document!");
+      }
+  })
+
   };
 
   updateLikes = () => {
@@ -83,9 +108,10 @@ class LikeButton extends React.Component {
       });
 
     } else {
-
       this.setState((prevState, props) => {
         likeRef.update({ likes: decrement });
+        //Remove the user from likeby collection in DB
+        this.remove();
         return {
           like: prevState.like - 1,
           updated: false,
