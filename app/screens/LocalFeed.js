@@ -23,8 +23,7 @@ export default class LocalFeed extends Component {
 
   async componentDidMount() {
     await navigator.geolocation.getCurrentPosition(position => {
-      let { latitude, longitude } = position.coords
-      const range = this.getGeoRange(this.state.latitude, this.state.longitude, 15);
+      const range = this.getGeoRange(position.coords.latitude, position.coords.longitude, 5);
       this.posts
         .where("geohash", ">=", range.lower)
         .where("geohash", "<=", range.upper)
@@ -35,11 +34,14 @@ export default class LocalFeed extends Component {
               postID: doc.id,
               data: doc.data()
             }
+            console.log(post.data.geohash)
             existingPosts.push(post);
           });
           this.setState({ posts: existingPosts });
         })
-    })
+    },
+      error => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 })
   }
 
   componentWillUnmount() {
@@ -52,13 +54,11 @@ export default class LocalFeed extends Component {
 
     const lowerLat = latitude - lat * distance;
     const lowerLon = longitude - lon * distance;
-
     const upperLat = latitude + lat * distance;
     const upperLon = longitude + lon * distance;
 
-    const lower = geohash.encode(lowerLat, lowerLon);
-    const upper = geohash.encode(upperLat, upperLon);
-
+    const lower = geohash.encode(lowerLat, lowerLon, precision = 9);
+    const upper = geohash.encode(upperLat, upperLon, precision = 9);
 
     return {
       lower,
