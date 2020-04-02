@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content } from 'native-base';
+import { Container, Content, Segment, Button, Text } from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
@@ -56,6 +56,15 @@ export default class Feed extends Component {
     
         <ScreenHeader navigation = {this.props.navigation} title="Feed">
         </ScreenHeader>
+
+        <Segment>
+          <Button first active onPress = {() => this.props.navigation.navigate('LocalFeed')}>
+            <Text>Local</Text>
+          </Button>
+          <Button last active onPress = {() => this.props.navigation.navigate('Feed')}> 
+            <Text>Friend</Text>
+          </Button>
+        </Segment>
 
         <Content>
         {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
