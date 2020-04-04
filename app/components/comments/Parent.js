@@ -1,13 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import Comment from './Comment.js';
 import {User} from '../../database/User.js'
+import {db} from '../../database/Database.js'
+import Moment from 'moment';
+class Parent extends Component {
 
-class Parent extends Component{
+    time = Moment().format('LT');
+    comment = db
+        .collection("posts")
+        .doc(this.props.userID)
+        .collection("comments")
+        .where('body', '==', this.props.body)
+
 
     constructor(props){
         super(props)
         this.state = {
-            user: User.dummyUser
+            user: User.dummyUser,
+            child: "Testing child",
+            children: []
         }
     }
 
@@ -28,16 +39,24 @@ class Parent extends Component{
 
     replyParent = () => {
         console.log("Reply Parent")
-        
+        // console.log(this.comment)
+        // this.addChild()
+        console.log("added")
+    }
+
+    addChild = (comment) => {
+        let child = this.comment.update({
+            children: "THAT"
+        })
     }
 
     render(){
-        return(            
+        return(
             <Comment padding={0}
             body={this.props.body}
             time={this.props.time}
             userID={this.props.userID}
-            handleReplyComment={this.replyParent}
+            handleReply={()=> this.replyParent()}
             />
         )
     }

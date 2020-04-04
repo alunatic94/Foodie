@@ -1,16 +1,30 @@
 
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, List, ListItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Footer, View } from 'native-base';
+import { Container, Content, Card, CardItem, List, ListItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Footer, View, Input } from 'native-base';
 import styles from '../../screens/styles.js'
 import {User} from '../../database/User.js'
+import { TextInput } from 'react-native';
+import Moment from 'moment';
 
 const tempImage = require('../../screens/assets/dog.png');
+
+// interface Comment {
+//   userID: string;
+//   padding: number;  
+//   body: string;
+//   time: number;  
+//   handleReply: () => void;
+// }
+
+// interface CommentState {
+//   user: User;
+// }
 
 class Comment extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      user: User.dummyUser      
+      user: User.dummyUser
     }
   }
 
@@ -29,10 +43,9 @@ class Comment extends Component{
      })
  }
 
-  handleReplyComment = () => {        
-    console.log('Reply comment')
-    this.props.handleReplyComment()
-  }
+  // handleReply = () => {    
+  //   console.log('Reply comment')
+  // }
 
     render(){
         return(
@@ -49,12 +62,16 @@ class Comment extends Component{
                 <Text note>{this.props.time}</Text>
               </Right>
             </ListItem>
-            <Text note
+            <TextInput
+                onPress={this.props.handleReply}
+                maxLength={5}
+                selectionColor={"white"}
                 style={{paddingLeft: 60}}
-                onPress={this.handleReplyComment}
-                >Reply</Text>
+                defaultValue={"Reply"}
+                >
+            </TextInput>
           </List>          
         );
     }
 }
-export default Comment;
+export default Comment; 
