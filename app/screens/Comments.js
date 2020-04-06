@@ -133,7 +133,7 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
+              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.props.postID}/>
             ))}
           </ScrollView>          
           <Footer>

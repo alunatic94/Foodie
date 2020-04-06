@@ -6,11 +6,25 @@ import Moment from 'moment';
 class Parent extends Component {
 
     time = Moment().format('LT');
-    comment = db
-        .collection("posts")
-        .doc(this.props.userID)
-        .collection("comments")
-        .where('body', '==', this.props.body)
+
+    // comment = db
+    //     .collection("posts")
+    //     .doc(this.props.userID)
+    //     .collection("comments")
+    //     .where('body', '==', this.props.body)
+    //     .get()
+    //     .then(snapshot => {
+    //          if(snapshot.empty){
+    //              console.log("WTF")
+    //          }
+    //          snapshot.forEach(doc => {
+    //              console.log("Heres doc data")
+    //              console.log(doc.id)
+    //          });
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     });
 
 
     constructor(props){
@@ -24,6 +38,8 @@ class Parent extends Component {
 
     componentWillMount(){
         this.loadUser();
+        console.log(this.props.userID)
+        console.log(this.props.postID)
     }
 
     loadUser = () => {
@@ -37,15 +53,43 @@ class Parent extends Component {
         })
     }
 
-    replyParent = () => {
+    getComment = () => {
+        return new Promise(resolve => {
+            comment = db
+            .collection("posts")
+            .doc(this.props.navigation.getParam('postID')
+            .collection("comments")
+            .where('body', '==', this.props.body)
+            .get()
+            .then(snapshot => {
+                 if(snapshot.empty){
+                     console.log("WTF")
+                     return;
+                 }
+                 snapshot.query(doc => {
+                     console.log("Heres doc data")
+                     console.log(doc.id)
+                 });
+            })
+            .catch(err => {
+                console.log(err)
+            });
+        })
+    }
+    
+
+    replyParent = async => {
         console.log("Reply Parent")
-        // console.log(this.comment)
+        
+        c = this.getComment()
+        console.log(c)
         // this.addChild()
         console.log("added")
     }
 
-    addChild = (comment) => {
-        let child = this.comment.update({
+    addChild = (comment) => {        
+
+        let child = comment.update({
             children: "THAT"
         })
     }
@@ -56,7 +100,7 @@ class Parent extends Component {
             body={this.props.body}
             time={this.props.time}
             userID={this.props.userID}
-            handleReply={()=> this.replyParent()}
+            handleReply={this.replyParent}
             />
         )
     }

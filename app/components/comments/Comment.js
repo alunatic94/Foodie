@@ -43,9 +43,9 @@ class Comment extends Component{
      })
  }
 
-  // handleReply = () => {    
-  //   console.log('Reply comment')
-  // }
+  handleReply = () => {
+    console.log('Reply comment')
+  }
 
     render(){
         return(
@@ -62,14 +62,14 @@ class Comment extends Component{
                 <Text note>{this.props.time}</Text>
               </Right>
             </ListItem>
-            <TextInput
+            <Text
                 onPress={this.props.handleReply}
                 maxLength={5}
                 selectionColor={"white"}
                 style={{paddingLeft: 60}}
                 defaultValue={"Reply"}
-                >
-            </TextInput>
+                >Reply
+            </Text>
           </List>          
         );
     }
