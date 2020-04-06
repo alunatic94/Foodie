@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 /* import { Text } from 'react-native' */
-import { Container, Content, Segment, Button, Text, View} from 'native-base';
+import { Container, Content, Segment, Button, Text, View } from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
-import ScreenHeader from '../components/common/ScreenHeader.js'
 import geohash from 'ngeohash'
+import styles from './styles.js'
 
 export default class LocalFeed extends Component {
 
@@ -16,7 +16,8 @@ export default class LocalFeed extends Component {
     this.state = {
       posts: [],
       latitude: '',
-      longitude: ''
+      longitude: '',
+      isLoaded: false
     }
   }
 
@@ -33,10 +34,9 @@ export default class LocalFeed extends Component {
               postID: doc.id,
               data: doc.data()
             }
-            console.log(post.data.geohash)
             existingPosts.push(post);
           });
-          this.setState({ posts: existingPosts });
+          this.setState({ posts: existingPosts, isLoaded: true});
         })
     },
       error => this.setState({ error: error.message }),
@@ -67,21 +67,17 @@ export default class LocalFeed extends Component {
   }
 
   render() {
+    if (!this.state.isLoaded) {
+      return (
+        <Container>
+          <View style={styles.centeredTest}>
+            <Text>Loading!</Text>
+          </View>
+        </Container>
+      )
+    }
     return (
       <Container>
-
-        <ScreenHeader navigation={this.props.navigation} title="Feed">
-        </ScreenHeader>
-
-        <Segment>
-          <Button first active onPress = {() => this.props.navigation.navigate('LocalFeed')}> 
-            <Text>Local</Text>
-          </Button>
-          <Button last active onPress = {() => this.props.navigation.navigate('FriendsFeed')}> 
-            <Text>Friend</Text>
-          </Button>
-        </Segment>
-        
         <Content>
           {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
           {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>

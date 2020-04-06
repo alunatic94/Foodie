@@ -30,8 +30,8 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             )
         }   
     },
-    LocalFeed: {
-        screen: LocalFeed,
+    Feed: {
+        screen: Feed,
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
@@ -50,7 +50,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         }
     }
 },{
-    initialRouteName: 'LocalFeed',
+    initialRouteName: 'Feed',
     tabBarPosition: 'bottom',
     tabBarOptions:{
         indicatorStyle: {

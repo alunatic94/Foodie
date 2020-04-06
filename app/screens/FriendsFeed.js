@@ -3,10 +3,7 @@ import { Container, Content, Segment, Button, Text, View} from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
-import ScreenHeader from '../components/common/ScreenHeader.js'
-import { User } from "../database/User.js"
 import styles from './styles.js';
-import FriendPlates from '../components/Profile/FriendPlates.js';
 
 export default class FriendsFeed extends Component {
 
@@ -17,7 +14,7 @@ export default class FriendsFeed extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userID: this.props.navigation.getParam('userID', User.getCurrentUserID()),
+      userID: this.props.userID,
       isLoaded: false,
       plateID: [],
       posts: []
@@ -26,7 +23,6 @@ export default class FriendsFeed extends Component {
 
   async componentDidMount() {
     this.getAll();
-
   }
 
   async getPlateID(user) {
@@ -117,19 +113,6 @@ export default class FriendsFeed extends Component {
     }
     return (
       <Container>
-
-        <ScreenHeader navigation={this.props.navigation} title="Feed">
-        </ScreenHeader>
-
-        <Segment>
-          <Button first active onPress={() => this.props.navigation.navigate('LocalFeed')}>
-            <Text>Local</Text>
-          </Button>
-          <Button last active onPress={() => this.props.navigation.navigate('FriendsFeed')}>
-            <Text>Friend</Text>
-          </Button>
-        </Segment>
-
         <Content>
           {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
           {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>

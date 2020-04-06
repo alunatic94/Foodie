@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   heading: {
     color: "#000",
     fontFamily: "Raleway Bold",
-    fontSize: 20
+    fontSize: 20,
+    paddingTop: 10
   },
   headingLarge: {
     color: "#000",
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 10
   },
-  padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
+  padding: { paddingLeft: 10, paddingRight: 10, paddingTop: 10 },
   columnStyle: { height: 200, padding: 5 },
 
   commentsFooter: {
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     paddingRight: 10
-  },  
+  },
   profileModal: {
     borderRadius: 10,
     padding: 5,

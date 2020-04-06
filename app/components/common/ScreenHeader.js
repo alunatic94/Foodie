@@ -6,7 +6,7 @@ import styles from '../../screens/styles.js';
 export default class ScreenHeader extends Component{
     render(){
         return(
-            <Header>
+            <Header hasTabs>
               <Left>
                 {this.props.back ? 
                 <Button
