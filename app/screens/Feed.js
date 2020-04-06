@@ -129,16 +129,16 @@ export default class Feed extends Component {
                 <Button first active onPress = {() => this.props.navigation.navigate('LocalFeed')}>
                   <Text>Local</Text>
                 </Button>
-                <Button last active onPress = {() => this.props.navigation.navigate('Feed')}> 
+                <Button last active onPress = {() => this.props.navigation.navigate('FriendFeed')}> 
                   <Text>Friend</Text>
                 </Button>
               </Segment>
 
 
                 <Content>        
-                  <ScrollView/>
+                  <ScrollView>
                   {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} post={post.data}/>)}        
-                <ScrollView/>       
+                </ScrollView>       
                 </Content>
           </Container> 
         )

@@ -20,9 +20,40 @@ import FriendsFeed from '../screens/FriendsFeed.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 
+const stackOptions = {
+    headerMode: 'none'
+};
+const ProfileStack = createStackNavigator({
+    Profile: { screen: Profile },
+    ProfileEdit: { screen: ProfileEdit },
+    ProfileEditPhoto: { screen: ProfileEditPhoto },
+    Main: Profile,
+  }, stackOptions);
+  
+  const MapStack = createStackNavigator({
+      Map: { screen: Map },
+      SearchRestaurants: { screen: SearchRestaurants },
+      Main: Map
+  }, stackOptions);
+
+  const FeedInnerStack = createStackNavigator({
+      LocalFeed: { screen: LocalFeed },
+      FriendsFeed: { screen: FriendsFeed },
+      Main: LocalFeed
+  },
+  {
+      headerMode: 'none',
+      animationEnabled: false
+  });
+
+  const FeedStack = createStackNavigator({
+      Feed: FeedInnerStack,
+      Main: Feed
+  }, stackOptions);
+
 const AppNavigatorTabs = createMaterialTopTabNavigator({
-    Map: {
-        screen: Map,
+    MapTab: {
+        screen: MapStack,
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
@@ -30,8 +61,8 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             )
         }   
     },
-    LocalFeed: {
-        screen: LocalFeed,
+    FeedTab: {
+        screen: FeedStack,
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
@@ -40,8 +71,8 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         }
     },
 
-    Profile: {
-        screen: Profile,
+    ProfileTab: {
+        screen: ProfileStack,
         navigationOptions:{
             tabBarLabel: <View/>,            
             tabBarIcon: ({ tintColor }) => (
@@ -50,7 +81,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         }
     }
 },{
-    initialRouteName: 'LocalFeed',
+    initialRouteName: 'FeedTab',
     tabBarPosition: 'bottom',
     tabBarOptions:{
         indicatorStyle: {
@@ -62,11 +93,12 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         style: {
             backgroundColor: '#f2f2f2',
             borderTopWidth: 1,
-            borderTopColor: 'grey',
+            borderTopColor: 'lightgray',
             height: 'auto'
         }
     }
 });
+
 
 const AppNavigator = createStackNavigator({
     
