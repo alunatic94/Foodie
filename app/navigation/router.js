@@ -15,6 +15,8 @@ import LikePage from '../screens/LikePage.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
 import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
+import LocalFeed from '../screens/LocalFeed.js'
+import FriendsFeed from '../screens/FriendsFeed.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 
@@ -28,8 +30,8 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             )
         }   
     },
-    Feed: {
-        screen: Feed,
+    LocalFeed: {
+        screen: LocalFeed,
         navigationOptions:{
             tabBarLabel: <View/>,
             tabBarIcon: ({ tintColor }) => (
@@ -48,7 +50,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         }
     }
 },{
-    initialRouteName: 'Feed',
+    initialRouteName: 'LocalFeed',
     tabBarPosition: 'bottom',
     tabBarOptions:{
         indicatorStyle: {
@@ -79,6 +81,12 @@ const AppNavigator = createStackNavigator({
     },
     Feed: {
         screen: Feed
+    },
+    LocalFeed: {
+        screen: LocalFeed
+    },
+    FriendsFeed: {
+        screen: FriendsFeed
     },
     Profile: {
         screen: Profile

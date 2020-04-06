@@ -34,7 +34,7 @@ export default class SearchRestaurants extends React.Component {
                         isInitialized: true,
                         neededLoc: true,
                         error: null
-                    }, console.log("Position completed"));
+                    });
                 },
                 error => this.setState({ error: error.message }),
                 { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
@@ -46,7 +46,7 @@ export default class SearchRestaurants extends React.Component {
                 isInitialized: true
             });
         }
-        this.refs.searchBar.focus();
+        //this.refs.searchBar.focus();
     }
 
     updateSearch = search => {
