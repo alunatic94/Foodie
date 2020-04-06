@@ -38,8 +38,7 @@ class Parent extends Component {
 
     componentWillMount(){
         this.loadUser();
-        console.log(this.props.userID)
-        console.log(this.props.postID)
+        console.log(this.props.userID)        
     }
 
     loadUser = () => {
@@ -53,36 +52,51 @@ class Parent extends Component {
         })
     }
 
-    getComment = () => {
-        return new Promise(resolve => {
+    getComment = () => {        
             comment = db
             .collection("posts")
-            .doc(this.props.navigation.getParam('postID')
+            .doc("J9vjDNdTQkTnf2g8vgSc")
             .collection("comments")
             .where('body', '==', this.props.body)
             .get()
             .then(snapshot => {
                  if(snapshot.empty){
-                     console.log("WTF")
+                     console.log("Empty")
                      return;
                  }
                  snapshot.query(doc => {
                      console.log("Heres doc data")
-                     console.log(doc.id)
+                     console.log(doc.data())
                  });
             })
             .catch(err => {
                 console.log(err)
-            });
-        })
-    }
+            })
+        }
     
 
     replyParent = async => {
         console.log("Reply Parent")
-        
-        c = this.getComment()
-        console.log(c)
+        comment = db
+            .collection("posts")
+            .doc("J9vjDNdTQkTnf2g8vgSc")
+            .collection("comments")
+            .where('body', '==', this.props.body)
+            .get()
+            .then(snapshot => {
+                 if(snapshot.empty){
+                     console.log("Empty")
+                     return;
+                 }
+                 snapshot.forEach(doc => {
+                     console.log("Heres doc data")
+                     console.log(doc.data())
+                 });
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        console.log(comment)
         // this.addChild()
         console.log("added")
     }
