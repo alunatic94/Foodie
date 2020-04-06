@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
+import Loading from '../screens/Loading.js';
 import Login from '../screens/Login.js';
 import Register from '../screens/Register.js'; 
 import Map from '../screens/Map.js';
@@ -11,7 +12,6 @@ import AddPostComment from '../screens/AddPostComment.js';
 import SearchRestaurants from "../screens/SearchRestaurants.js"
 import Comments from '../screens/Comments.js'
 import LikePage from '../screens/LikePage.js';
-import LikeButton from '../components/LikeButton.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
 import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
@@ -61,14 +61,16 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             backgroundColor: '#f2f2f2',
             borderTopWidth: 1,
             borderTopColor: 'grey',
-            height: 70
+            height: 'auto'
         }
     }
 });
 
 const AppNavigator = createStackNavigator({
     
-
+    Loading: {
+        screen: Loading
+    },
     Login:{
         screen: Login
     },
