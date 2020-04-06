@@ -14,11 +14,12 @@ import {
   Right
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/Comment.js";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
 import { db } from "../database/Database.js";
 import {User} from "../database/User.js";
+import Parent from "../components/comments/Parent.js";
+import Moment from 'moment';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -32,7 +33,7 @@ class Comments extends Component {
     .doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')) //this.props.postsid -> Needs to be pasted from posts
     .collection("comments");
 
-  time = new Date();
+  time = Moment().format('LT');
 
   constructor(props) {
     super(props);
@@ -44,7 +45,7 @@ class Comments extends Component {
     };
   }
   
-  componentDidMount() {
+  componentDidMount() {  
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
@@ -79,7 +80,7 @@ class Comments extends Component {
   }  
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault();    
     this.add(this.state.comment);    
     this.setState({
       comment: "",
@@ -91,8 +92,8 @@ class Comments extends Component {
   add = comment => {
     let commentData = {
       body: comment,
-      time: this.time.getTime(),
-      userID: User.getCurrentUserID()      
+      time: this.time,
+      userID: User.getCurrentUserID()
     };
     this.comments.doc().set(commentData);
   };
@@ -132,7 +133,7 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Comment body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
+              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.props.postID}/>
             ))}
           </ScrollView>          
           <Footer>
@@ -143,7 +144,7 @@ class Comments extends Component {
               </Left>
             </ListItem>            
               <Content>            
-                <Item rounded >
+                <Item rounded>
                   <Input
                     placeholder="Comment"
                     onChangeText={comment => this.onChange(comment)}
@@ -157,7 +158,7 @@ class Comments extends Component {
                         <Text style={{color: this.state.buttonTextColor}}>Post</Text>
                     </Button>                 
                 </Item>            
-                </Content>            
+              </Content>            
             </Container>            
           </Footer>
         </KeyboardAvoidingView>

@@ -6,7 +6,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database.js";
 import { User } from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LikePage from '../screens/LikePage.js';
