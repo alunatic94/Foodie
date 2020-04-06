@@ -11,9 +11,9 @@ export default class PlateModal extends Component {
             <PostCard style={{width: '100%'}} postID={this.props.data.id} post={this.props.data} user={this.props.user} />
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
                 <Button
-                rounded dark
+                rounded
                 onPress={() => this.props.onPress()}
-                style={{width: '25%'}}>
+                style={{width: '25%', backgroundColor: '#6fdedc'}}>
                     <Text>Close</Text>
                 </Button>
             </View>

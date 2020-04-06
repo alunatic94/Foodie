@@ -51,7 +51,6 @@ export default class RestaurantCard extends Component {
                     <ScrollView horizontal style={{flex: 1}}>
                          <Image source = {images[0]} style={styles.imageFeedSmall} />
                          <Image source = {images[1]} style={styles.imageFeedSmall} />
-                         <Image source = {images[2]} style={styles.imageFeedSmall} />
                     </ScrollView>
                 </Body>
                 </CardItem>

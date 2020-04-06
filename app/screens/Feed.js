@@ -3,7 +3,10 @@ import { Container, Content } from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database.js';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
+import styles from './styles.js';
+
 export default class Feed extends Component {
 
   posts = db.collection('posts');
@@ -50,21 +53,32 @@ export default class Feed extends Component {
   }
 
     render() {
+      if (this.state.posts.length == 0) {
         return (
-	<Container>    
-    
-        <ScreenHeader navigation = {this.props.navigation} title="Feed">
-        </ScreenHeader>
+        <Container>
+          <ScreenHeader navigation = {this.props.navigation} title="Feed"/>
+          <Content>
+            <PostCardPlaceholder style={styles.roundCard} />
+            <PostCardPlaceholder style={styles.roundCard} />
+            <PostCardPlaceholder style={styles.roundCard}/>
+          </Content>
+        </Container>
+        )
+      }
+      else {
+        return (
+          <Container>    
+            
+                <ScreenHeader navigation = {this.props.navigation} title="Feed">
+                </ScreenHeader>
 
-        <Content>
-        {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
-         {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
-         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/> */}         
-          <ScrollView/>
-          {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID}/>)}        
-         <ScrollView/>       
-        </Content>
-      </Container> 
+                <Content>        
+                  <ScrollView/>
+                  {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} post={post.data}/>)}        
+                <ScrollView/>       
+                </Content>
+          </Container> 
         )
     }
+  }
 }

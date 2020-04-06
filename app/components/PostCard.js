@@ -54,7 +54,7 @@ class PostCard extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
        this.loadUser();
        var restaurantRef = restaurants.doc(this.props.post.yelpID);
        restaurantRef.get().then(doc => {
@@ -93,13 +93,13 @@ class PostCard extends Component {
             )
         }else if(this.props.post.rating == 'like'){
             return(
-                <AntDesign name={'like1'} color={'black'}
+                <AntDesign name={'like1'} color={'green'}
                 size={30}
                  />
             )
         }else if(this.props.post.rating == 'dislike'){
             return(
-                <AntDesign name={'dislike1'} color={'black'}
+                <AntDesign name={'dislike1'} color={'red'}
                 size={30}
                  />
             )
@@ -117,10 +117,10 @@ class PostCard extends Component {
             <Card>
                  <CardItem button onPress={() => this.props.navigation.navigate('ProfileOther', {userID: this.props.post.userID})}>
                 <Left>
-                    <Thumbnail source={{uri: this.state.user.profileImage}} />
+                    <Thumbnail style={{backgroundColor: 'lightgray'}} source={{uri: this.state.user.profileImage}} />
                     <Body>
                         <Text style={styles.heading}>{this.state.user.username}</Text>  
-                        <Text style={styles.subheading}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+                        <Text style={styles.lightText}>{Moment(this.props.post.timestamp.toDate()).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                     </Body>
                 </Left>
                 </CardItem>
@@ -134,10 +134,10 @@ class PostCard extends Component {
                 </CardItem>
 
                 <CardItem>
-                    <Text style={styles.subheading}>{this.state.restaurantName}</Text> 
-                </CardItem>
-                <CardItem>
-                    <Text style={styles.subheading}>{this.props.post.caption}</Text> 
+                    <Body>
+                        <Text style={[styles.lightText, {paddingBottom: 5}]}>{this.state.restaurantName}</Text>
+                        <Text style={styles.regularText}>{this.props.post.caption}</Text>
+                    </Body> 
                 </CardItem>
                 <CardItem>
                 {/* <Left>                    
@@ -157,7 +157,7 @@ class PostCard extends Component {
                     <Body>
                     </Body>
                     <Right>
-                        <LikeButton postID={this.props.postID}/>
+                        <LikeButton postID={this.props.postID} post={this.props.post}/>
                     </Right>
                 </CardItem>
                 

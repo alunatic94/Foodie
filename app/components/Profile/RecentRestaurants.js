@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import {Body, CardItem, H2, View} from 'native-base';
 import {Text} from 'react-native-elements';
 import CustomTooltip from '../common/CustomTooltip';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {ScrollView} from "react-native";
+import {Image, TouchableOpacity} from "react-native";
 import styles from '../../screens/styles.js';
+import { db } from '../../database/Database.js';
+import axios from 'axios';
+import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
+import TitleAndIconsPlaceholder  from '../placeholders/TitleAndIconsPlaceholder';
+import {ScrollView} from "react-native";
+
+posts = db.collection("posts");
  
 export default class RecentRestaurants extends Component {
 
@@ -21,18 +27,39 @@ export default class RecentRestaurants extends Component {
     }
 
 
-    async getRestaurant(yelpID) {
-        axios.get('https://api.yelp.com/v3/businesses/' + yelpID, {
+    getRestaurant(yelpID) {
+        // new Promise((resolve, reject) => {
+        return (
+            axios.get('https://api.yelp.com/v3/businesses/' + yelpID, {
             headers: { 'Authorization': REACT_APP_MAP_AUTH }
-        }).then((res) => {
-            return res;
-        }).catch((err) => {
-            console.log(`Can't load recently visited restaurant [yelp ID = ${yelpID}] for user ID ${this.props.userID}`);
-            return err;
-        })
+            })
+            .then((res) => {
+                // console.log("getRestSaurant: yelpID = " + yelpID);
+                return res;
+            })
+            .catch((err) => {
+                console.log(`Can't load recently visited restaurant [yelp ID = ${yelpID}] for user ID ${this.props.userID}: \n${err}`);
+                return getRestaurant(yelpID);
+            })
+        )
+        // });
     }
 
-    async getRecentRestaurants() {
+    async getRestaurantsFromIDs(yelpIDs) {
+        // console.log("getRestaurantsFromIDs: yelpIDs = " + yelpIDs);
+        let restaurants = [];
+        // Get restaurant objects from yelp IDs
+        for (let yelpID of yelpIDs) {
+            // console.log("getRestaurantsFromIDs for loop: yelpID = " + yelpID);
+            restaurant = await this.getRestaurant(yelpID);
+            if (restaurant != null) restaurants.push(restaurant);
+            // console.log("getRestaurantsFromIDs inside then: restaurant = " + JSON.stringify(restaurant));
+        }
+        // console.log("getRestaurantsFromIDs after: restaurants = " + JSON.stringify(restaurants));
+        return restaurants;
+    }
+
+    getRecentRestaurants() {
         // Get yelp IDs from user's most recent posts
         yelpIDs = [];
         posts.where("userID", "==", this.props.userID)
@@ -41,38 +68,41 @@ export default class RecentRestaurants extends Component {
             .get()
             .then(snapshot => {
                 snapshot.forEach(doc => {
-                    yelpIDs.push(doc.data().yelpID);
+                    if (!yelpIDs.includes(doc.data().yelpID)) yelpIDs.push(doc.data().yelpID);
+                    // console.log("getRecentRestaurants - grabbing snapshot: => " + doc.data().yelpID);
                 });
                 // this.setState(yelpIDs);
+            })
+            .then(() => {
+                this.getRestaurantsFromIDs(yelpIDs).then((restaurants) => {
+                    // console.log("getRecentRestaurants: restaurants = " + restaurants);
+                    this.setState({restaurants: restaurants, isLoaded: true});
+                })
             })
             .catch(err => {
                 console.log("Error getting user's posts [id = " + this.props.userID + "]: " + err);
             });
-
-        // Get restaurant objects from yelp IDs
-        for (let yelpID of yelpIDs) {
-            restaurant = await this.getRestaurant(yelpID);
-            this.state.restaurants.push(restaurant);
-        }
-        this.setState({isLoaded: true});
     }
 
     renderRestaurants = (restaurants) => {
-        iconSize = 15;
+        iconSize = 50;
         if (restaurants.length == 0) {
-            return <Text style={styles.subheading}>None so far!</Text>;
+            return <Text style={styles.lightText}>None so far!</Text>;
         }
         else {
             return(
                 restaurants.map((restaurant) => {
                     return (
-                        <CustomTooltip key={restaurant.id} backgroundColor={"rgba(52, 52, 52, 0.8)"} withOverlay={false} popover={<Text style={{color: 'white'}}>{restaurant.name}</Text>}>
+                        // <CustomTooltip key={`${restaurant.data.id}_tooltip`} backgroundColor={"rgba(52, 52, 52, 0.8)"} withOverlay={false} popover={<Text style={{color: 'white'}}>{restaurant.data.name}</Text>}>
+                        <TouchableOpacity 
+                            key={`${restaurant.data.id}_wrap`}
+                            onPress={() => this.props.onPress({type: 'restaurant', data: restaurant.data})}>
                             <Image
-                                style={styles.padding}
-                                style={{ width: iconSize, height: iconSize, borderRadius: iconSize /2, borderWidth: 0, left: 0 }}
-                                source={{ uri: restaurant.image_url }}
+                                key={`${restaurant.data.id}_img`}
+                                style={{ width: iconSize, height: iconSize, borderRadius: iconSize / 2, borderWidth: 0, backgroundColor: 'lightgray', margin: 5}}
+                                source={{ uri: restaurant.data.image_url }}
                             /> 
-                        </CustomTooltip>
+                        </TouchableOpacity>
                     );
                 })
             )
@@ -81,16 +111,16 @@ export default class RecentRestaurants extends Component {
 
     render() {
         if (!this.state.isLoaded) {
-            return <View />;
+            return <TitleAndIconsPlaceholder title="Recently Visited"/>;
         }
         else return (
             <CardItem>
             <Body>
-                <H2 style={styles.heading}>Recently Visited Restaurants</H2>
+                <H2 style={styles.heading}>Recently Visited</H2>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View style={{flexDirection: "row"}}>
-                    {this.renderRestauants(this.state.restaurants)}
-                </View>
+                    <View style={{flexDirection: "row"}}>
+                        {this.renderRestaurants(this.state.restaurants)}
+                    </View>
                 </ScrollView>
             </Body>
         </CardItem>

@@ -6,7 +6,8 @@ import { logout } from '../screens/Login.js';
 import styles from './styles.js';
 import { db } from '../database/Database.js';
 import { User } from '../database/User.js';
-import Points from '../components/common/Points.js'
+import Points from '../components/common/Points.js';
+import ScreenHeader from '../components/common/ScreenHeader.js';
 
 export default class AddPostComment extends Component {
 
@@ -62,11 +63,6 @@ export default class AddPostComment extends Component {
       userID: User.getCurrentUserID(),
       user: this.state.user,
       timestamp: new Date()
-      // TODO:
-      // this.state.user.userID
-      // user.getCurrentID()      
-      // likes_who
-      // caption
     }
     this.posts.add(postData)
       .then((doc) => {
@@ -188,27 +184,7 @@ export default class AddPostComment extends Component {
     return this.state.isLoading
       ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text>
       : (<Container>
-        <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
-              <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Left>
-
-          <Body>
-            <Text style={styles.heading}>Post a Plate</Text>
-          </Body>
-
-          <Right>
-            <Button
-              transparent
-              onPress={() => logout(this.props.navigation)}>
-              <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Right>
-        </Header>
+        <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
 
         <Content>
 

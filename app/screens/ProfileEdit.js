@@ -5,6 +5,7 @@ import styles from './styles.js';
 import {ProfileDB} from "../database/ProfileDB.js"
 import {User} from "../database/User.js"
 import {firebase, db} from '../database/Database';
+import ScreenHeader from '../components/common/ScreenHeader.js';
 import uuid from 'uuid';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -47,6 +48,7 @@ export default class ProfileEdit extends Component{
         else{ 
           return (
             <Container>
+            <ScreenHeader navigation = {this.props.navigation} back />
             <KeyboardAvoidingView style={{flex:1}} behavior="padding">
             <Text style={styles.heading}>
                  First Name:  
@@ -86,7 +88,7 @@ export default class ProfileEdit extends Component{
                                                      age: this.state.newAge, 
                                                      about: this.state.newAbout
                                                  }, {merge: true}) 
-                                                    && this.props.navigation.push('Main')
+                                                    && this.props.navigation.goBack()
                                                    }>
                 <Text>Save Changes</Text>
             </Button>

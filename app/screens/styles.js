@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
     fontFamily: "Raleway Bold",
     fontSize: 20
   },
+  headingSmall: {
+    color: "#000",
+    fontFamily: "Raleway Bold",
+    fontSize: 18
+  },
   headingLarge: {
     color: "#000",
     fontFamily: "Raleway Bold",
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
   subheading: {
     color: "gray",
     fontFamily: "Raleway",
-    fontSize: 16
+    fontSize: 18
   },
   subheadingLarge: {
     color: "gray",
@@ -54,13 +59,28 @@ const styles = StyleSheet.create({
   },
   regularText: {
     color: "#000",
-    fontFamily: "Nunito Sans Bold",
-    fontSize: 14
+    fontFamily: "Nunito Sans",
+    fontSize: 16
+  },
+  regularTextLarge: {
+    color: "#000",
+    fontFamily: "Nunito Sans",
+    fontSize: 18
+  },
+  regularTextSmall: {
+    color: "#000",
+    fontFamily: "Nunito Sans",
+    fontSize: 12
   },
   lightText: {
     color: "gray",
     fontFamily: "Nunito Sans",
-    fontSize: 14
+    fontSize: 16
+  },
+  lightTextLarge: {
+    color: "#000",
+    fontFamily: "Nunito Sans",
+    fontSize: 18
   },
   lightTextSmall: {
     color: "gray",
@@ -98,6 +118,7 @@ const styles = StyleSheet.create({
   },
   padding: {paddingLeft: 10, paddingRight: 10, paddingTop: 10},
   columnStyle: { height: 200, padding: 5 },
+  columnSmall: {height: 100, padding: 5},
 
   commentsFooter: {
     display: "flex",

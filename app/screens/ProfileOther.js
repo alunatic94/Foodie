@@ -8,15 +8,19 @@ import {User} from "../database/User.js";
 import styles from './styles.js';
 import {firebase, db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
-import PlatePopup from '../components/PlatePopup.js';
 import Modal from "react-native-modal";
-import PostCard  from '../components/PostCard.js'; 
 import ProfileHeader  from '../components/Profile/ProfileHeader.js'; 
 import About  from '../components/Profile/About';
 import Badges  from '../components/Profile/Badges';
 import Plates  from '../components/Profile/Plates';
-import PlateModal  from '../components/Profile/PlateModal.js'; 
-import { useFocusEffect } from '@react-navigation/native'; 
+import LikedPlates  from '../components/Profile/LikedPlates';
+import RecentRestaurants  from '../components/Profile/RecentRestaurants';
+import FriendPlates  from '../components/Profile/FriendPlates';
+import PlateModal  from '../components/Profile/PlateModal'; 
+import MapPopup  from '../components/MapPopup'; 
+import ProfilePlaceholder  from '../components/placeholders/ProfilePlaceholder'; 
+import TitleAndImagesPlaceholder  from '../components/placeholders/TitleAndImagesPlaceholder'; 
+import TitleAndIconsPlaceholder from '../components/placeholders/TitleAndIconsPlaceholder.js';
 
 posts = db.collection("posts");
 users = db.collection("users");
@@ -68,7 +72,7 @@ export default class ProfileOther extends Component {
     }
 
     componentWillUnmount(){
-        this.removePostsListener();
+        this.removeListeners();
     }
 
     addListeners() {
@@ -88,7 +92,7 @@ export default class ProfileOther extends Component {
     }
     
     removeProfileListener() {
-        users.onSnapshot(() => {});
+        users.doc(this.state.userID).onSnapshot(() => {});
     }
 
     addProfileListener() {
@@ -105,7 +109,7 @@ export default class ProfileOther extends Component {
     addPostsListener() {
         // Listen for updates/removals/deletions in plates posted by user
         // Grab changed post documents and update array of plates stored in state
-        users.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     plates = this.state.plates;
@@ -116,12 +120,14 @@ export default class ProfileOther extends Component {
                 if (change.type === "modified") {
                     modifiedPlate = change.doc.data();
                     var i = this.state.plates.findIndex(x => x.id == modifiedPlate.id);
+                    plates = this.state.plates;
                     plates[i] = modifiedPlate;
                     this.setState({plates});
                 }
                 if (change.type === "removed") {
                     removedPlate = change.doc.data();
                     var i = this.state.plates.indexOf(removedPlate);
+                    plates = this.state.plates;
                     plates.splice(i, 1);
                     this.setState({plates});
                 }
@@ -147,20 +153,29 @@ export default class ProfileOther extends Component {
         );
     }
 
-
     async loadProfileInformation() {
         var profileDB = new ProfileDB(this.state.userID);
 
-        // Fetch profile data after component instance created
-        await profileDB.getProfile().then((profile) => {
-            this.setState({currentProfile: profile}, () => {
-                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-                    this.setState({badges: newBadges}, () => {
-                        profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-                            this.setState({plates: newPlates, isProfileLoaded: true});
-                        });
-                    });
-                });
+        profileDB.getProfile().then((profile) => {
+            this.setState({currentProfile: profile, isProfileLoaded: true});
+
+            BadgesDB.getBadgesFromIDs(profile.badges).then((newBadges) => {
+                this.setState({badges: newBadges, areBadgesLoaded: true});
+            });
+
+            profileDB.getPlatesFromIDs(profile.plates).then((newPlates) => {
+                this.setState({plates: newPlates, arePlatesLoaded: true});
+            });
+            
+            let friendIDs = [];
+            friends.doc(this.state.userID).get().then((doc) => {
+                if (doc.exists) {
+                    const userIDs = doc.data();
+                    for (let id in userIDs) {
+                        if (userIDs[id]) friendIDs.push(id);
+                    }
+                }
+                this.setState({friends: friendIDs, areFriendsLoaded: true});
             });
         });
     }
@@ -199,93 +214,66 @@ export default class ProfileOther extends Component {
     }
 
     render() {
+        // Render empty profile screen until data is finished being fetched
         if (!this.state.isProfileLoaded) {
-            return (<Container>
-                <ScreenHeader navigation = {this.props.navigation} back>
-                </ScreenHeader>
-
-                <Content styles={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large" color="#ddd" />
-                </Content>
-            </Container>)
+            return <ProfilePlaceholder other />;
         }
         else return ( 
             <Container>
-            <ScreenHeader navigation = {this.props.navigation} back>
-            </ScreenHeader>
+            <ScreenHeader back navigation = {this.props.navigation} title={this.state.currentProfile.username}/>
             <Content>
-            <Card transparent noShadow>
+                <Card transparent noShadow>
+                    {/*Personal Information */}
                     <ProfileHeader userID={this.state.userID} data={this.state.currentProfile} />
                     <About data={this.state.currentProfile.about} />
                     <Badges data={this.state.badges} />
-                    <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
+
+                    {/* Plates */}
+                    {this.state.arePlatesLoaded ? 
+                        <Plates 
+                            heading="Their Recent Plates"
+                            user={this.state.currentProfile}
+                            data={this.state.plates}
+                            onPress={this.toggleModal}
+                        /> 
+                    : 
+                        <TitleAndImagesPlaceholder title="Their Recent Plates" /> 
+                    }
+
+                    <LikedPlates userID={this.state.userID} onPress={this.toggleModal} />
+
+                    {/* Friends' Plates */}
+                    {this.state.areFriendsLoaded ? 
+                        <FriendPlates
+                            userID={this.state.userID}
+                            friendIDs={this.state.friends}
+                            onPress={this.toggleModal}
+                        />
+                    :
+                        <TitleAndImagesPlaceholder small title="Friends' Recent Plates" />
+                    }
+
+                    {/* Restaurants */}
+                    <RecentRestaurants 
+                        userID={this.state.userID}
+                        yelpIDs={this.state.plates.map(plate => plate.yelpID)}
+                        onPress={this.toggleModal}
+                    />
                    
                 </Card>
-                <Modal isVisible={this.state.modalVisible}>
-                    {this.state.modalData ? <PlateModal data={this.state.modalData} user={this.state.modalData.user} onPress={this.toggleModal}/> : <View />}
-                </Modal>
+
+                {/* Modal Popups */}
+                {this.state.modalData ? 
+                    <Modal isVisible={this.state.modalVisible}>
+                        {this.state.modalData.type == 'plate' && <PlateModal data={this.state.modalData.data} user={this.state.modalData.data.user} onPress={this.toggleModal}/>}
+                        {this.state.modalData.type == 'restaurant' && <MapPopup data={this.state.modalData.data} onPress={this.toggleModal} />}
+                    </Modal>
+                    : 
+                    <View />
+                }
 
             </Content>
         </Container>
-        
-                    /* <CardItem>
-                        <Left>
-                            <Thumbnail large source={{uri: this.state.currentProfile.profileImage}} />
-                            <Body style={{flex: 3}}>
-                                <H1 style={styles.headingLarge}>{this.state.currentProfile.first} {this.state.currentProfile.last}</H1>
-                                <Text note style={styles.subheadingLarge}>{this.state.currentProfile.age}</Text>
-                                <Text note style={styles.subheadingLarge}>{this.state.currentProfile.tagline}</Text>
-                            </Body>
-                            <Button
-                             rounded dark
-                             onPress={() => this.props.navigation.navigate('ProfileEdit')}>
-                                 <Text>Edit</Text>
-                            </Button>
-                        </Left>
-                    </CardItem>
-                    <CardItem>
-                        <Body>
-                            <H2 style={styles.heading}>About</H2>
-                            <Text style={styles.subheading}>
-                                {this.state.currentProfile.about}
-                            </Text>
-                        </Body>
-                    </CardItem>
-                    <CardItem>
-                        <Body>
-                            <H2 style={styles.heading}>Badges</H2>
-                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            <View style={{flexDirection: "row"}}>
-                                {this.renderBadges(this.state.badges)}
-                            </View>
-
-                            </ScrollView>
-                        </Body>
-                    </CardItem>
-                    <CardItem>
-                        <Body>
-                            <H2 style={styles.heading}>Plates Eaten</H2>
-                                {this.renderPlates(this.state.plates)}
-                                <Modal isVisible={this.state.modalVisible}>
-                                    {this.state.modalData ? 
-                                        <View style={styles.profileModal}>
-                                             <PostCard style={{width: '100%'}} postID={this.state.modalData.id} post={this.state.modalData} />
-                                             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-                                                    <Button
-                                                    rounded dark
-                                                    onPress={() => this.toggleModal()}
-                                                    style={{width: '25%'}}>
-                                                        <Text>Close</Text>
-                                                    </Button>
-                                                </View>
-                                        </View>
-                                     :
-                                     ""
-                                     }
-                                </Modal>
-                        </Body>
-                    </CardItem> */
-               
         )
     }
 }

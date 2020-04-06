@@ -9,7 +9,7 @@ import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LikePage from '../screens/LikePage.js';
+// import LikePage from '../screens/LikePage.js';
 //import { ref } from '@hapi/joi';
 
 
@@ -18,39 +18,52 @@ class LikeButton extends React.Component {
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
   componentDidMount() {
 
-    this.ref.get().then((doc) => {
-      ref = doc.data();
-      this.setState({
-        like: ref.likes,
-        updated: false,
-        hearto: false,
-        liked: false,
-        user: User.dummyUser,
-        likesArray: [],
-        postID: this.props.postID
-      })
-    });
+    // this.ref.get().then((doc) => {
+    //   ref = doc.data();
+    //   this.setState({
+    //     like: ref.likes,
+    //     updated: false,
+    //     hearto: false,
+    //     liked: false,
+    //     user: User.dummyUser,
+    //     likesArray: [],
+    //     postID: this.props.postID
+    //   })
+    // });
 
-    
+    this.addLikedByListener();
 
   }
+
+  removeLikedByListener() {
+    this.liketoinsert.doc(User.getCurrentUserID()).onSnapshot(() => {});
+}
+
 
   constructor(props) {
 
     super(props);
 
     this.state = {
-      like: '',
-      updated: false,
-      hearto: false,
-      likesArray: [],
+      like: this.props.post.likes,
+      // updated: false,
       liked: false,
-      //buttonTextColor: '#0065ff',
-      user: User.dummyUser
+      user: User.dummyUser,
+      postID: this.props.postID
+    }
 
-    };
 
+  }
 
+  addLikedByListener() {
+    this.liketoinsert.doc(User.getCurrentUserID()).onSnapshot((doc) => {
+      if (doc.exists) {
+        this.setState({liked: true});
+      }
+      else {
+        this.setState({liked: false});
+      }
+    })
   }
 
   add = () => {
@@ -63,21 +76,25 @@ class LikeButton extends React.Component {
     this.liketoinsert.doc(User.getCurrentUserID()).set(likeData)
   };
 
+  remove = () => {
+    this.liketoinsert.doc(User.getCurrentUserID()).delete();
+  }
+
   updateLikes = () => {
     likeRef = db.collection('posts').doc(this.props.postID);
     decrement = firebase.firestore.FieldValue.increment(-1);
     increment = firebase.firestore.FieldValue.increment(1);
 
 
-    if (!this.state.updated) {
+    if (!this.state.liked) {
       this.setState({ liked: true });
-      // this.add();
+      this.add();
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
           like: prevState.like + 1,
-          updated: true,
-          hearto: true,
+          // updated: true,
+          // hearto: true,
           liked: true
 
         };
@@ -86,12 +103,13 @@ class LikeButton extends React.Component {
 
     } else {
 
+      this.remove();
       this.setState((prevState, props) => {
         likeRef.update({ likes: decrement });
         return {
           like: prevState.like - 1,
-          updated: false,
-          hearto: false,
+          // updated: false,
+          // hearto: false,
           liked: false
         };
       });
@@ -101,18 +119,16 @@ class LikeButton extends React.Component {
 
   render() {
 
-    const { hearts, heart, updated, firez, fire } = this.state;
-
     return (
       <View style={{color: 'white', display: 'flex', flexDirection: 'row'}}>
 
-          <MaterialCommunityIcons name={firez ? "fire" : "fire"} color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={35} onPress={this.updateLikes} />          
+          <MaterialCommunityIcons name="fire" color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={35} onPress={this.updateLikes} />          
           
           <Text style={{paddingTop: 10}}
           onPress={() => this.props.navigation.navigate('LikePage', {
           postID: this.props.postID})}
           // style={styles.lightText}
-          >Likes:{this.state.like}</Text>        
+          >{this.state.like} likes</Text>        
       </View>
     );
   }

@@ -31,13 +31,17 @@ export class ProfileDB {
   async getPlatesFromIDs(IDarray) {
     var plates = [];
     for (let ID of IDarray) {
-      await posts.doc(ID).get().then((doc) => {
-        plate = doc.data();
-        plate.id = ID;
-        plates.unshift(plate); // add most recent plates to beginning
-      })
-      .catch((err) => {
-      });
+      plateDoc = await posts.doc(ID).get();
+      plate = plateDoc.data();
+      plate.id = ID;
+      plates.unshift(plate);
+      // await posts.doc(ID).get().then((doc) => {
+      //   plate = doc.data();
+      //   plate.id = ID;
+      //   plates.unshift(plate); // add most recent plates to beginning
+      // })
+      // .catch((err) => {
+      // });
     }
     return plates;
   }
