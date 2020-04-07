@@ -8,7 +8,7 @@ import styles from '../screens/styles.js';
 
 // Temp Image
 const image = require('../screens/assets/howlin.png');
-export default class MapPopup extends Component{
+export default class MapPopUp extends Component{
 
     constructor(props){
         super(props);

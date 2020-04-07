@@ -4,7 +4,7 @@ import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'r
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js';
-import MapPopup  from '../components/MapPopup'; 
+import MapPopUp  from '../components/MapPopUp'; 
 import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
@@ -194,7 +194,7 @@ class Map extends Component {
 
         {this.state.showPopUp ? 
           <Modal isVisible={this.state.showPopUp}>
-            <MapPopup data={this.state.modalData} onPress={this.togglePopUp} />
+            <MapPopUp data={this.state.modalData} onPress={this.togglePopUp} />
           </Modal>
           : null }
 

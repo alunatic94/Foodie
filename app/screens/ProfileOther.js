@@ -17,7 +17,7 @@ import LikedPlates  from '../components/Profile/LikedPlates';
 import RecentRestaurants  from '../components/Profile/RecentRestaurants';
 import FriendPlates  from '../components/Profile/FriendPlates';
 import PlateModal  from '../components/Profile/PlateModal'; 
-import MapPopup  from '../components/MapPopup'; 
+import MapPopUp  from '../components/MapPopUp'; 
 import ProfilePlaceholder  from '../components/placeholders/ProfilePlaceholder'; 
 import TitleAndImagesPlaceholder  from '../components/placeholders/TitleAndImagesPlaceholder'; 
 import TitleAndIconsPlaceholder from '../components/placeholders/TitleAndIconsPlaceholder.js';
@@ -266,7 +266,7 @@ export default class ProfileOther extends Component {
                 {this.state.modalData ? 
                     <Modal isVisible={this.state.modalVisible}>
                         {this.state.modalData.type == 'plate' && <PlateModal data={this.state.modalData.data} user={this.state.modalData.data.user} onPress={this.toggleModal}/>}
-                        {this.state.modalData.type == 'restaurant' && <MapPopup data={this.state.modalData.data} onPress={this.toggleModal} />}
+                        {this.state.modalData.type == 'restaurant' && <MapPopUp data={this.state.modalData.data} onPress={this.toggleModal} />}
                     </Modal>
                     : 
                     <View />
