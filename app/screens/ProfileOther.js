@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail, Card, CardItem, H1, H2, Icon, View } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Image, ScrollView, ActivityIndicator, FlatList, Dimensions, StyleSheet } from "react-native"
-import {BadgesDB} from "../database/BadgesDB.js"
-import {ProfileDB} from "../database/ProfileDB.js"
+import {BadgeData} from "../database/BadgeData.js"
+import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js";
 import styles from './styles.js';
-import {firebase, db} from '../database/Database';
+import {db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import Modal from "react-native-modal";
 import ProfileHeader  from '../components/Profile/ProfileHeader.js'; 
@@ -99,7 +99,7 @@ export default class ProfileOther extends Component {
         users.doc(this.state.userID).onSnapshot(doc => {         
             modifiedProfile = doc.data();
             this.setState({currentProfile: modifiedProfile}, () => {
-                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                BadgeData.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
                     this.setState({badges: newBadges});
                 });
             });
@@ -154,16 +154,16 @@ export default class ProfileOther extends Component {
     }
 
     async loadProfileInformation() {
-        var profileDB = new ProfileDB(this.state.userID);
+        var profileData = new ProfileData(this.state.userID);
 
-        profileDB.getProfile().then((profile) => {
+        profileData.getProfile().then((profile) => {
             this.setState({currentProfile: profile, isProfileLoaded: true});
 
-            BadgesDB.getBadgesFromIDs(profile.badges).then((newBadges) => {
+            BadgeData.getBadgesFromIDs(profile.badges).then((newBadges) => {
                 this.setState({badges: newBadges, areBadgesLoaded: true});
             });
 
-            profileDB.getPlatesFromIDs(profile.plates).then((newPlates) => {
+            profileData.getPlatesFromIDs(profile.plates).then((newPlates) => {
                 this.setState({plates: newPlates, arePlatesLoaded: true});
             });
             

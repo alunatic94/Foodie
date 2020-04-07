@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import {firebase} from '../database/Database';
+import {auth} from '../database/Database';
 import {Image, View} from 'react-native';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 export default class Loading extends Component {
     componentWillMount() {
-        this.loginListener = firebase.auth().onAuthStateChanged(user => { 
+        this.loginListener = auth.onAuthStateChanged(user => { 
             if (user) { // logged in
                 this.props.navigation.dispatch(StackActions.reset({
                     index:0,

@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Icon, Button, Container, Header, Left, Footer, Right, ListItem, Thumbnail, Content, Item, Input, Body } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { db, firebase } from "../database/Database.js";
+import { db } from "../database/Database";
 import { User } from "../database/User.js";
-import { ProfileDB } from "../database/ProfileDB.js"
+import { ProfileData } from "../database/ProfileData.js"
 import { withNavigation, ScrollView } from "react-navigation";
 //import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
@@ -46,8 +46,8 @@ class LikePage extends Component {
     }).catch(err => {
       console.log("Error getting Likeby")
     })
-    var profileDB = new ProfileDB(this.state.userID);
-    await profileDB.getProfile().then((profile) => {
+    var profileData = new ProfileData(this.state.userID);
+    await profileData.getProfile().then((profile) => {
       this.setState({
         currentProfile: profile,
         profileLoaded: true

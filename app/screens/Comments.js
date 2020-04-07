@@ -17,7 +17,7 @@ import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
-import { db } from "../database/Database.js";
+import { db } from "../database/Database";
 import {User} from "../database/User.js";
 
 const tempImage = require('../screens/assets/dog.png');

@@ -4,7 +4,7 @@ import { Container, Header, Left, Right, Body, Content, Button, Text, Input, Vie
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { logout } from '../screens/Login.js';
 import styles from './styles.js';
-import { db } from '../database/Database.js';
+import { db } from '../database/Database';
 import { User } from '../database/User.js';
 import Points from '../components/common/Points.js';
 import ScreenHeader from '../components/common/ScreenHeader.js';
