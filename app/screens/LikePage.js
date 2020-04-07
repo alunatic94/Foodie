@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Icon, Button, Container, Header, Left, Footer, Right, ListItem, Thumbnail, Content, Item, Input, Body } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { db, firebase } from "../database/Database.js";
+import { db } from "../database/Database";
 import { User } from "../database/User.js";
-import { ProfileDB } from "../database/ProfileDB.js"
+import { ProfileData } from "../database/ProfileData.js"
 import { withNavigation, ScrollView } from "react-navigation";
 //import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
@@ -18,7 +18,6 @@ class LikePage extends Component {
 
   posts = db.collection("posts");
   users = db.collection("users");
-  docArray = []
 
   constructor(props) {
     super(props);
@@ -36,7 +35,7 @@ class LikePage extends Component {
 
   async componentDidMount() {
     var arr = [];
-    test = db.collection('posts').doc(this.props.navigation.state.params.postID).collection('Likeby').get().then(snapshot => {
+    test = await db.collection('posts').doc(this.props.navigation.state.params.postID).collection('Likeby').get().then(snapshot => {
       snapshot.forEach(doc => {
         arr.push(doc.data().userID)
       }),
@@ -47,8 +46,8 @@ class LikePage extends Component {
     }).catch(err => {
       console.log("Error getting Likeby")
     })
-    var profileDB = new ProfileDB(this.state.userID);
-    await profileDB.getProfile().then((profile) => {
+    var profileData = new ProfileData(this.state.userID);
+    await profileData.getProfile().then((profile) => {
       this.setState({
         currentProfile: profile,
         profileLoaded: true
@@ -58,7 +57,8 @@ class LikePage extends Component {
     await this.state.likeUserID.map(user => {
       users.doc(user).get().then(doc => {
         var data = doc.data()
-        docArray.push({ name: data.username, profilePic: data.profileImage, first: data.first, last: data.last })
+        console.log(data.userID)
+        docArray.push({ name: data.username, profilePic: data.profileImage, first: data.first, last: data.last, userID: data.userID })
         this.setState({
           likeUsername: docArray
         })
@@ -117,9 +117,11 @@ class LikePage extends Component {
                   <TouchableOpacity style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "left",
-                    marginLeft: 20
+                    //justifyContent: "left",
+                    marginLeft: 20,
                   }}
+                    onPress={() => this.props.navigation.navigate('ProfileOther',
+                      { userID: name.userID })}
                     key={name.name}
                   >
                     <Image

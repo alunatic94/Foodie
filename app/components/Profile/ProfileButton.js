@@ -47,7 +47,8 @@ class ProfileButton extends Component {
             if (this.props.userID == User.getCurrentUserID()) {
                 return(
                 <Button
-                rounded dark
+                rounded
+                style={{backgroundColor: '#6fdedc'}}
                 onPress={() => this.props.navigation.navigate('ProfileEdit')}>
                     <Text>Edit</Text>
                 </Button>

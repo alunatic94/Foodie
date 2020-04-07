@@ -8,7 +8,7 @@ export default class About extends Component {
         <CardItem>
             <Body>
                 <H2 style={styles.heading}>About</H2>
-                <Text style={styles.subheading}>
+                <Text style={styles.regularText}>
                     {this.props.data}
                 </Text>
             </Body>

@@ -1,70 +1,37 @@
 import React, { Component } from 'react';
-import { Container, Content } from 'native-base';
-import FeedCard from '../components/FeedCard.js';
-import { ScrollView } from 'react-native';
-import { db } from '../database/Database.js';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import { Container, Content, Segment, Button, Text, View, Tab, Tabs } from 'native-base';
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import { User } from "../database/User.js"
+import LocalFeed from './LocalFeed.js';
+import FriendsFeed from './FriendsFeed.js';
+
 export default class Feed extends Component {
 
-  posts = db.collection('posts');
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      userID: this.props.navigation.getParam('userID', User.getCurrentUserID())
     }
   }
 
-  componentDidMount(){
-    this.getAll();
-    const query = this.posts
-    const listener = query.onSnapshot(querySnapshot => {
-      this.getAll();
-    }, err => {
-      console.log("Encountered error: ${err}");
-    });    
-  }
+  render() {
+    return (
+      <Container>
 
-  componentWillUnmount(){
-    const unMountListener = this.posts.onSnapshot(() => {});
-  }
-
-  getAll(){
-    const allPosts = this.posts
-      .orderBy('timestamp', 'desc')
-      .get()
-      .then(snapshot => {
-        let existingPosts = [];
-        snapshot.forEach(doc => {
-          post = {
-            postID: doc.id,
-            data: doc.data()
-          }
-          existingPosts.push(post);
-        });
-        this.setState({posts: existingPosts});
-      })
-      .catch(err => {
-        console.log("Error getting existing posts " + err);
-      });
-  }
-
-    render() {
-        return (
-	<Container>    
-    
-        <ScreenHeader navigation = {this.props.navigation} title="Feed">
+        <ScreenHeader navigation={this.props.navigation} title="Feed">
         </ScreenHeader>
 
-        <Content>
-        {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
-         {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
-         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/> */}         
-          <ScrollView/>
-          {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID}/>)}        
-         <ScrollView/>       
-        </Content>
-      </Container> 
-        )
-    }
+        <Tabs tabBarUnderlineStyle={{backgroundColor: "#6fdedc"}}>
+          <Tab heading="Local" activeTextStyle={{color: "#6fdedc"}}>
+            <LocalFeed />
+          </Tab>
+          <Tab heading="Friends"activeTextStyle={{color: "#6fdedc"}}>
+            <FriendsFeed
+              userID={this.state.userID}
+            />
+          </Tab>
+        </Tabs>
+      </Container>
+    )
+  }
 }

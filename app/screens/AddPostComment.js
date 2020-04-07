@@ -4,9 +4,13 @@ import { Container, Header, Left, Right, Body, Content, Button, Text, Input, Vie
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { logout } from '../screens/Login.js';
 import styles from './styles.js';
-import { db } from '../database/Database.js';
+import { db } from '../database/Database';
 import { User } from '../database/User.js';
-import Points from '../components/common/Points.js'
+import Points from '../components/common/Points.js';
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import axios from 'axios';
+import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
+import geohash from 'ngeohash'
 
 export default class AddPostComment extends Component {
 
@@ -36,7 +40,8 @@ export default class AddPostComment extends Component {
       meh: false,
       dislike: false,
       searchedRestaurantName: 'Search restaurants',
-      searchedRestaurantID: ''
+      searchedRestaurantID: '',
+      searchedRestaurantCoordinates: []
     };
   }
 
@@ -52,7 +57,7 @@ export default class AddPostComment extends Component {
     });
   }
 
-  addPost() {
+  addSend(latlong, hash) {
     let postData = {
       images: this.photos,
       likes: 0,
@@ -60,7 +65,10 @@ export default class AddPostComment extends Component {
       caption: this.state.caption,
       yelpID: this.state.searchedRestaurantID,
       userID: User.getCurrentUserID(),
-      timestamp: new Date()
+      timestamp: new Date(),
+      latitude: latlong.latitude,
+      longitude: latlong.longitude,
+      geohash: hash
     }
     this.posts.add(postData)
       .then((doc) => {
@@ -82,6 +90,20 @@ export default class AddPostComment extends Component {
       })
   }
 
+  addPost() {
+    axios.get('https://api.yelp.com/v3/businesses/' + this.state.searchedRestaurantID, {
+      headers: { 'Authorization': REACT_APP_MAP_AUTH }
+    }).then((res) => {
+      let { latitude, longitude } = res.data.coordinates
+      let hash = geohash.encode(latitude, longitude)
+      this.addSend(res.data.coordinates, hash)
+    }).catch((err) => {
+      console.log("Yelp request via Axios failed: " + err);
+      console.log("error at getlatlong")
+      return err;
+    })
+  }
+
   addRestaurantPlate(x) {
     this.rest.doc(this.state.searchedRestaurantID).get().then((doc) => {
       currentPlates = doc.data().plate_posts;
@@ -92,7 +114,7 @@ export default class AddPostComment extends Component {
     }).catch((err) => { // Error because restaurant does not exist
       this.rest.doc(this.state.searchedRestaurantID).set({  // Create array with the restaurant ID as document name
         restaurant_name: this.state.searchedRestaurantName,
-        plate_posts: [] 
+        plate_posts: []
       }) // Initalize with restaurant name and empty array
       this.addRestaurantPlate(x); // Call again to add plate to newly created document
     })
@@ -100,26 +122,26 @@ export default class AddPostComment extends Component {
 
   addBadge() {
     var badgeID = "";
-        var numPlates = this.state.user.plates.length;
-        // switch(numPosts) {
-        //   case 10:
-        //     badgeID = "ten-plates";
-        //     break;
-        //   case 25:
-        //     badgeID = "twenty-five-plates";
-        //     break;
-        //   case 100:
-        //     badgeID = "one-hundred-plates";
-        //     break;
-        //   default:
-        //     badgeID = null;
-        badgeID = "test";
-           // }
+    var numPlates = this.state.user.plates.length;
+    // switch(numPosts) {
+    //   case 10:
+    //     badgeID = "ten-plates";
+    //     break;
+    //   case 25:
+    //     badgeID = "twenty-five-plates";
+    //     break;
+    //   case 100:
+    //     badgeID = "one-hundred-plates";
+    //     break;
+    //   default:
+    //     badgeID = null;
+    badgeID = "test";
+    // }
     if (badgeID != null) {
       badges = this.state.user.badges;
       badges.push(badgeID);
 
-      users.doc(User.getCurrentUserID()).update({badges : badges});
+      users.doc(User.getCurrentUserID()).update({ badges: badges });
     }
   }
 
@@ -158,7 +180,7 @@ export default class AddPostComment extends Component {
   refresh = (data) => {
     this.setState({
       searchedRestaurantName: data.name,
-      searchedRestaurantID: data.id,
+      searchedRestaurantID: data.id
     })
   }
 
@@ -182,27 +204,7 @@ export default class AddPostComment extends Component {
     return this.state.isLoading
       ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text>
       : (<Container>
-        <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate('AddPostPhoto')}>
-              <AntDesign name='pluscircle' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Left>
-
-          <Body>
-            <Text style={styles.heading}>Post a Plate</Text>
-          </Body>
-
-          <Right>
-            <Button
-              transparent
-              onPress={() => logout(this.props.navigation)}>
-              <AntDesign name='logout' style={{ fontSize: 30, color: 'black' }} />
-            </Button>
-          </Right>
-        </Header>
+        <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
 
         <Content>
 

@@ -1,4 +1,4 @@
-import {firebase, db} from '../database/Database';
+import {db, firebase} from '../database/Database';
 
 users = db.collection('users');
 

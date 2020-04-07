@@ -2,22 +2,24 @@ import React, { Component } from 'react';
 import { Container, Text, Left, Body, Right, Button, Header, Content, Thumbnail, Card, CardItem, H1, H2, Icon, View } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Image, ScrollView, ActivityIndicator, FlatList, Dimensions, StyleSheet } from "react-native"
-import {BadgesDB} from "../database/BadgesDB.js"
-import {ProfileDB} from "../database/ProfileDB.js"
+import {BadgeData} from "../database/BadgeData.js"
+import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js"
 import styles from './styles.js';
-import {firebase, db} from '../database/Database';
+import {db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
-import PlatePopup from '../components/PlatePopup.js';
 import Modal from "react-native-modal";
-import PostCard  from '../components/PostCard.js'; 
 import ProfileHeader  from '../components/Profile/ProfileHeader.js'; 
 import About  from '../components/Profile/About';
 import Badges  from '../components/Profile/Badges';
 import Plates  from '../components/Profile/Plates';
+import LikedPlates  from '../components/Profile/LikedPlates';
+import RecentRestaurants  from '../components/Profile/RecentRestaurants';
 import FriendPlates  from '../components/Profile/FriendPlates';
 import PlateModal  from '../components/Profile/PlateModal'; 
-import { useFocusEffect } from '@react-navigation/native';
+import MapPopUp  from '../components/MapPopUp'; 
+import ProfilePlaceholder  from '../components/placeholders/ProfilePlaceholder'; 
+import TitleAndImagesPlaceholder  from '../components/placeholders/TitleAndImagesPlaceholder'; 
 
 posts = db.collection("posts");
 users = db.collection("users");
@@ -83,18 +85,18 @@ export default class Profile extends Component {
     }
 
     removePostsListener() {
-        this.posts.onSnapshot(() => {});
+        posts.onSnapshot(() => {});
     }
     
     removeProfileListener() {
-        this.users.onSnapshot(() => {});
+        users.doc(this.state.userID).onSnapshot(() => {});
     }
 
     addProfileListener() {
         users.doc(this.state.userID).onSnapshot(doc => {         
             modifiedProfile = doc.data();
             this.setState({currentProfile: modifiedProfile}, () => {
-                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
+                BadgeData.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
                     this.setState({badges: newBadges});
                 });
             });
@@ -104,7 +106,7 @@ export default class Profile extends Component {
     addPostsListener() {
         // Listen for updates/removals/deletions in plates posted by user
         // Grab changed post documents and update array of plates stored in state
-        users.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     plates = this.state.plates;
@@ -131,29 +133,28 @@ export default class Profile extends Component {
     }
 
     async loadProfileInformation() {
-        var profileDB = new ProfileDB(this.state.userID);
+        var profileData = new ProfileData(this.state.userID);
 
-        // Fetch profile data after component instance created
-        await profileDB.getProfile().then((profile) => {
-            this.setState({currentProfile: profile}, () => {
-                BadgesDB.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
-                    this.setState({badges: newBadges}, () => {
-                        profileDB.getPlatesFromIDs(this.state.currentProfile.plates).then((newPlates) => {
-                            this.setState({plates: newPlates, isProfileLoaded: true}, () => {
-                               let friendIDs = [];
-                               friends.doc(this.state.userID).get().then((doc) => {
-                                   if (doc.exists) {
-                                       const userIDs = doc.data();
-                                       for (let id in userIDs) {
-                                           if (userIDs[id]) friendIDs.push(id);
-                                       }
-                                   }
-                                   this.setState({friends: friendIDs});
-                               })
-                            });
-                        });
-                    });
-                });
+        profileData.getProfile().then((profile) => {
+            this.setState({currentProfile: profile, isProfileLoaded: true});
+
+            BadgeData.getBadgesFromIDs(profile.badges).then((newBadges) => {
+                this.setState({badges: newBadges, areBadgesLoaded: true});
+            });
+
+            profileData.getPlatesFromIDs(profile.plates).then((newPlates) => {
+                this.setState({plates: newPlates, arePlatesLoaded: true});
+            });
+            
+            let friendIDs = [];
+            friends.doc(this.state.userID).get().then((doc) => {
+                if (doc.exists) {
+                    const userIDs = doc.data();
+                    for (let id in userIDs) {
+                        if (userIDs[id]) friendIDs.push(id);
+                    }
+                }
+                this.setState({friends: friendIDs, areFriendsLoaded: true});
             });
         });
     }
@@ -173,35 +174,65 @@ export default class Profile extends Component {
         friends.doc(User.getCurrentUserID()).update({userID: true});
     }
 
+
     render() {
         // Render empty profile screen until data is finished being fetched
         if (!this.state.isProfileLoaded) {
-            return (<Container>
-                <ScreenHeader navigation = {this.props.navigation}>
-                </ScreenHeader>
-
-                <Content styles={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large" color="#ddd" />
-                </Content>
-            </Container>)
+            return <ProfilePlaceholder />;
         }
         else return ( 
             <Container>
-            <ScreenHeader navigation = {this.props.navigation}>
-            </ScreenHeader>
+            <ScreenHeader navigation = {this.props.navigation} title="Profile"/>
             <Content>
                 <Card transparent noShadow>
+                    {/*Personal Information */}
                     <ProfileHeader userID={this.state.userID} data={this.state.currentProfile} />
                     <About data={this.state.currentProfile.about} />
                     <Badges data={this.state.badges} />
-                    <Plates userID={this.state.userID} user={this.state.currentProfile} data={this.state.plates} onPress={this.toggleModal} />
-                    
-                    {this.state.friends.length > 0 ? <FriendPlates friendIDs={this.state.friends}/> : <View />}
+
+                    {/* Plates */}
+                    {this.state.arePlatesLoaded ? 
+                        <Plates 
+                            heading="Recent Plates"
+                            user={this.state.currentProfile}
+                            data={this.state.plates}
+                            onPress={this.toggleModal}
+                        /> 
+                    : 
+                        <TitleAndImagesPlaceholder title="Recent Plates" /> 
+                    }
+
+                    <LikedPlates userID={this.state.userID} onPress={this.toggleModal} />
+
+                    {/* Friends' Plates */}
+                    {this.state.friends.length > 0 ? 
+                        <FriendPlates
+                            userID={this.state.userID}
+                            friendIDs={this.state.friends}
+                            onPress={this.toggleModal}
+                        />
+                    :
+                        <TitleAndImagesPlaceholder small title="Friends' Recent Plates" />
+                    }
+
+                    {/* Restaurants */}
+                    <RecentRestaurants 
+                        userID={this.state.userID}
+                        yelpIDs={this.state.plates.map(plate => plate.yelpID)}
+                        onPress={this.toggleModal}
+                    />
                    
                 </Card>
-                <Modal isVisible={this.state.modalVisible}>
-                    {this.state.modalData ? <PlateModal data={this.state.modalData} user={this.state.modalData.user} onPress={this.toggleModal}/> : <View />}
-                </Modal>
+
+                {/* Modal Popups */}
+                {this.state.modalData ? 
+                    <Modal isVisible={this.state.modalVisible}>
+                        {this.state.modalData.type == 'plate' && <PlateModal data={this.state.modalData.data} user={this.state.modalData.data.user} onPress={this.toggleModal}/>}
+                        {this.state.modalData.type == 'restaurant' && <MapPopUp data={this.state.modalData.data} onPress={this.toggleModal} />}
+                    </Modal>
+                    : 
+                    <View />
+                }
 
             </Content>
         </Container>

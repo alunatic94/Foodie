@@ -1,92 +1,79 @@
 import React, { Component } from 'react';
-import { Text, Body, CardItem, H2 } from 'native-base';
-import { Image } from "react-native"
-import styles from '../../screens/styles.js';
-import { Col, Grid } from 'react-native-easy-grid';
-import {User} from "../../database/User.js";
-import {ProfileDB} from "../../database/ProfileDB.js";
+import { db } from '../../database/Database';
+import Plates  from './Plates';
+import {View} from 'native-base';
+import TitleAndImagesPlaceholder  from '../placeholders/TitleAndImagesPlaceholder';
 
-// function PlateModal(modalData, userData) {
-//     return (
-//         <View style={styles.profileModal}>
-//             <PostCard style={{width: '100%'}} postID={modalData.id} post={modalData} user={userData} />
-//             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-//                 <Button
-//                 rounded dark
-//                 onPress={() => this.onPress()}
-//                 style={{width: '25%'}}>
-//                     <Text>Close</Text>
-//                 </Button>
-//             </View>
-//         </View>
-//     )
-// }
+posts = db.collection("posts");
+friends = db.collection("friends");
 
 export default class FriendPlates extends Component {
-    
-    renderFriendPlates(friendIDs) {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            plates: [],
+            friendIDs: this.props.friendIDs,
+            isLoaded: false
+        }
+    }
+
+    componentDidMount() {
+        this.getPlatesFromFriendIDs(this.state.friendIDs);
+        this.addFriendsListener();
+    }
+    
+    componentWillUnmount(){
+        this.removeFriendsListener();
+    }
+
+    removeFriendsListener() {
+        friends.doc(this.props.userID).onSnapshot(() => {});
+    }
+
+    addFriendsListener() {
+        friends.doc(this.props.userID).onSnapshot(doc => {
+            let modifiedFriendIDs = [];       
+            if (doc.exists) {
+                const userIDs = doc.data();
+                for (let id in userIDs) {
+                    if (userIDs[id]) modifiedFriendIDs.push(id);
+                }
+            }
+            this.getPlatesFromFriendIDs(modifiedFriendIDs);
+            this.setState({friendIDs: modifiedFriendIDs});
+        });
+    }
+
+    getPlatesFromFriendIDs(friendIDs) {
         // Combine all friend's plate posts for rendering
         let plates = [];
         friendIDs.map((friendID) => {
             posts.where("userID", "==", friendID)
-                .limit(2) 
                 .orderBy('timestamp', 'desc')
+                .limit(2)
                 .get()
                 .then(snapshot => {
-                    snapshot.forEach(doc => {
-                      plates.push(doc.data());
+                    snapshot.forEach(doc => {    
+                        plates.push(doc.data());
                     });
-                  })
+                    this.setState({plates: plates, isLoaded: true});
+                })
                 .catch(err => {
                 console.log("Error getting friend's posts [id = " + friendID + "]: " + err);
                 });
         });
-
-        if (plates.length == 0) {
-            return <Text style={styles.subheading}>None so far!</Text>;
-        }
-
-        else {
-            let gridItems = [];
-            for (let i = 0; i < plates.length; i += 2) {
-                let rowItem = [];
-                rowItem.push(plates[i]);
-                if (plates[i + 1]) rowItem.push(plates[i + 1]);
-                gridItems.push(rowItem);
-              }
-            return (
-                gridItems.map((rowItem) => {
-                    return(
-                        <Grid key={`${rowItem[0].id}_grid`}>  
-                            {
-                                rowItem.map((item) => {
-                                   var profileDB = new ProfileDB(this.props.userID);
-                                    item.user = profileDB.getProfile();
-                                    return (
-                                        <Col onPress={() => {this.props.onPress(item)}} key={item.id} style={styles.columnStyle}>
-                                                <Image style={{flex: 1, borderRadius: 20, backgroundColor: 'gray'}} source={{ uri: item.images[0] }}/>
-                                           
-                                            {/* <PlatePopup id={item.id} data={item}/>  */}
-                                        </Col>
-                                )})
-                            }
-                        </Grid>
-                    )
-                })
-            );
-        }
     }
 
-
     render() {
-        return (
-        <CardItem>
-            <Body>
-                <H2 style={styles.heading}>Friends' Recent Plates</H2>
-                    {this.renderFriendPlates(this.props.friendIDs)}
-            </Body>
-        </CardItem>
+        if (!this.state.isLoaded) {
+            return <TitleAndImagesPlaceholder small title="Friends' Recent Plates"/>;
+        }
+        else if (!this.state.plates || this.state.plates.length == 0) {
+            return <View />;
+        }
+        else return (
+            <Plates small heading="Friends' Recent Plates" data={this.state.plates} onPress={this.props.onPress} /> 
         )
     }
 }

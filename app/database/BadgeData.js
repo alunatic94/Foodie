@@ -1,8 +1,8 @@
-import {firebase, db} from '../database/Database';
+import {db} from '../database/Database';
 
 badges = db.collection('badges');
 
-export class BadgesDB {
+export class BadgeData {
 
   // Return array of badge objects given array of ID name strings
   static async getBadgesFromIDs(IDarray) {

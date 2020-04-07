@@ -10,7 +10,7 @@ export default class Badges extends Component {
     // Loop through badges list and add Icon component for each one                                       
     renderBadges = (badges) => {
         if (badges.length == 0) {
-            return <Text style={styles.subheading}>None so far!</Text>;
+            return <Text style={styles.lightText}>None so far!</Text>;
         }
         else {
             return(

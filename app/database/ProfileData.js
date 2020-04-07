@@ -1,11 +1,11 @@
-import {firebase, db} from '../database/Database';
+import {db} from '../database/Database';
 import {User} from '../database/User';
 
 users = db.collection('users');
 
-export class ProfileDB {
+export class ProfileData {
   // Create new Profile instance from:
-  // ProfileDB(userID) - can get current user ID with User.getCurrentUserID()
+  // ProfileData(userID) - can get current user ID with User.getCurrentUserID()
   constructor(userID) {
     this.userID = userID;
   }
@@ -31,13 +31,17 @@ export class ProfileDB {
   async getPlatesFromIDs(IDarray) {
     var plates = [];
     for (let ID of IDarray) {
-      await posts.doc(ID).get().then((doc) => {
-        plate = doc.data();
-        plate.id = ID;
-        plates.unshift(plate); // add most recent plates to beginning
-      })
-      .catch((err) => {
-      });
+      plateDoc = await posts.doc(ID).get();
+      plate = plateDoc.data();
+      plate.id = ID;
+      plates.unshift(plate);
+      // await posts.doc(ID).get().then((doc) => {
+      //   plate = doc.data();
+      //   plate.id = ID;
+      //   plates.unshift(plate); // add most recent plates to beginning
+      // })
+      // .catch((err) => {
+      // });
     }
     return plates;
   }
