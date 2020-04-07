@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import "../app/database/initFirebase.js"
 import { StatusBar, YellowBox } from 'react-native';
 import { Container, Text } from 'native-base';
 import { createAppContainer } from 'react-navigation';

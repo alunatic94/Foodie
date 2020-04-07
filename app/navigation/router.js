@@ -37,9 +37,10 @@ const ProfileStack = createStackNavigator({
   }, stackOptions);
 
   const FeedInnerStack = createStackNavigator({
+      Feed: { screen: Feed },
       LocalFeed: { screen: LocalFeed },
       FriendsFeed: { screen: FriendsFeed },
-      Main: LocalFeed
+      Main: Feed
   },
   {
       headerMode: 'none',
@@ -93,7 +94,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         style: {
             backgroundColor: '#f2f2f2',
             borderTopWidth: 1,
-            borderTopColor: 'lightgray',
+            borderTopColor: 'gray',
             height: 'auto'
         }
     }

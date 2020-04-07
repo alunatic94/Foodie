@@ -4,7 +4,7 @@ import { Image } from "react-native"
 import styles from '../../screens/styles.js';
 import { Col, Grid } from 'react-native-easy-grid';
 import {User} from "../../database/User.js";
-import {ProfileDB} from "../../database/ProfileDB.js";
+import {ProfileData} from "../../database/ProfileData.js";
 import TitleAndImagesPlaceholder from '../placeholders/TitleAndImagesPlaceholder.js';
 
 export default class Plates extends Component {

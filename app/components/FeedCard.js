@@ -7,7 +7,7 @@ import ImageSlider from 'react-native-image-slider';
 import PostCard from '../components/PostCard.js';
 import RestaurantCard from './RestaurantCard.js';
 import { withNavigation } from 'react-navigation';
-import {db} from '../database/Database.js'
+import {db} from '../database/Database'
 import PostCardPlaceholder  from './placeholders/PostCardPlaceholder.js';
 
 export default class FeedCard extends Component {

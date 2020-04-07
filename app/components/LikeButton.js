@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Icon, Button, Container, Grid, Row, Col } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { db, firebase } from "../database/Database.js";
+import { db } from "../database/Database";
 import { User } from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Container, Content, DeckSwiper, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Grid, Row, Col } from 'native-base';
-import { Image, ScrollView, View } from 'react-native';
+import { Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Grid, Row, Col } from 'native-base';
 import styles from '../screens/styles.js';
 import ImageSlider from 'react-native-image-slider';
 import { withNavigation } from 'react-navigation';
@@ -9,7 +8,7 @@ import { User } from "../database/User.js";
 import Moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
-import {firebase, db} from '../database/Database'
+import { db} from '../database/Database'
 
 restaurants = db.collection("restaurants");
 import LikePage from '../screens/LikePage.js';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { db } from '../../database/Database.js';
+import { db } from '../../database/Database';
 import Plates  from './Plates';
 import {View} from 'native-base';
 import TitleAndImagesPlaceholder  from '../placeholders/TitleAndImagesPlaceholder';

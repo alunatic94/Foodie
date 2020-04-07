@@ -4,7 +4,7 @@ import {Text} from 'react-native-elements';
 import CustomTooltip from '../common/CustomTooltip';
 import {Image, TouchableOpacity} from "react-native";
 import styles from '../../screens/styles.js';
-import { db } from '../../database/Database.js';
+import { db } from '../../database/Database';
 import axios from 'axios';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
 import TitleAndIconsPlaceholder  from '../placeholders/TitleAndIconsPlaceholder';
