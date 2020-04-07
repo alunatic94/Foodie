@@ -94,7 +94,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         style: {
             backgroundColor: '#f2f2f2',
             borderTopWidth: 1,
-            borderTopColor: 'gray',
+            borderTopColor: 'lightgray',
             height: 'auto'
         }
     }

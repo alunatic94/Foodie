@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Constants from 'expo-constants';
 const styles = StyleSheet.create({
+  screenHeader: {
+      borderBottomWidth: 1,
+      borderBottomColor: 'lightgray'
+  },
   centered: {
     backgroundColor: '#fff',
     alignItems: 'center',

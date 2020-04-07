@@ -11,9 +11,7 @@ export default class ProfilePlaceholder extends Component {
     render() {
         return (
             <Container>
-                    {this.props.other ? <ScreenHeader navigation = {this.props.navigation} />
-                    : <ScreenHeader navigation = {this.props.navigation} back />
-                    }
+                    <ScreenHeader navigation = {this.props.navigation} back={this.props.other}/>
                     <Content>
                         <ImageAndTextPlaceholder />
                         <TitleAndTextPlaceholder />
