@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from '
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
-import {auth} from '../database/Database.js';
+import {firebase} from '../database/Database.js';
 
 class Login extends React.Component{
   constructor(props) {
@@ -16,7 +16,7 @@ class Login extends React.Component{
 }
 
 componentWillMount() {
-  this.loginListener = auth.onAuthStateChanged(user => { 
+  this.loginListener = firebase.auth().onAuthStateChanged(user => { 
     if (user) { // logged in
       this.navigateToFeed();
     } else { // not logged in (e.g. logged out)
@@ -25,7 +25,7 @@ componentWillMount() {
   })
 }
 loginWithEmail = (email, password) => {
-    auth.signInWithEmailAndPassword(email, password)
+    firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
           console.log("Logged in user: " + res.user.email);
     });

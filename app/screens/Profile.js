@@ -142,7 +142,7 @@ export default class Profile extends Component {
                 this.setState({badges: newBadges, areBadgesLoaded: true});
             });
 
-            ProfileData.getPlatesFromIDs(profile.plates).then((newPlates) => {
+            profileData.getPlatesFromIDs(profile.plates).then((newPlates) => {
                 this.setState({plates: newPlates, arePlatesLoaded: true});
             });
             
