@@ -1,4 +1,4 @@
-import {db, auth} from '../database/Database';
+import {db, firebase} from '../database/Database';
 
 users = db.collection('users');
 
@@ -86,7 +86,7 @@ export class User {
     } 
   */
   static async getCurrent(userID=null) {
-    if (auth.currentUser !== null) { // logged in
+    if (firebase.auth().currentUser !== null) { // logged in
       user = await User.getExisting(User.getCurrentUserID());
       return user;
     }
@@ -94,8 +94,8 @@ export class User {
 
   // User.getCurrentUserID() - Get only userID (as string) for current logged in user
   static getCurrentUserID() {
-    if (auth.currentUser !== null) { // logged in
-        return auth.currentUser.uid;
+    if (firebase.auth().currentUser !== null) { // logged in
+        return firebase.auth().currentUser.uid;
     }
     return null; // no current user found
   }

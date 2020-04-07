@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
 import {User} from '../database/User.js';
-import {auth} from '../database/Database.js';
+import {firebase} from '../database/Database.js';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 class Register extends React.Component{
@@ -24,7 +24,7 @@ class Register extends React.Component{
 
    registerUser = () => {
       // Firebase Auth User creation
-      auth.createUserWithEmailAndPassword(this.state.email.trim(), this.state.password)
+      firebase.auth().createUserWithEmailAndPassword(this.state.email.trim(), this.state.password)
       .then((userCreds) => { // firebase returns UserCredentials object
         this.setState({userID: userCreds.user.uid});
 
