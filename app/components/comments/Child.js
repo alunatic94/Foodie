@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {User} from "../database/User.js";
+import {User} from '../../database/User.js'
 import Comment from './Comment.js';
 
 
-const tempImage = require('../screens/assets/dog.png');
+// const tempImage = require('../screens/assets/dog.png');
 
 class Child extends Component{
   constructor(props) {
@@ -38,6 +38,7 @@ class Child extends Component{
                 body={this.props.body}
                 time={this.props.time}
                 userID={this.props.userID}
+                handleReply={this.props.replyParent}
         />
         )}
 }

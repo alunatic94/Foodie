@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, List, ListItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Footer, View, Input } from 'native-base';
+import { List, ListItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, Footer, View, Input, Content, Item } from 'native-base';
 import styles from '../../screens/styles.js'
 import {User} from '../../database/User.js'
 import { TextInput } from 'react-native';
@@ -24,7 +24,10 @@ class Comment extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      user: User.dummyUser
+      user: User.dummyUser,
+      comment: "",
+      buttonTextColor: '#0065ff',
+      show: false
     }
   }
 
@@ -43,9 +46,21 @@ class Comment extends Component{
      })
  }
 
-  handleReply = () => {
-    console.log('Reply comment')
+  onChange = (comment) => {  
+    
   }
+
+  handleReply = (comment) => {
+    console.log('Reply comment')
+    this.setState({
+      show: true,
+      comment: comment,
+      buttonTextColor: '#0fd90d'
+    });
+    this.props.handleReply()
+       
+  }
+
 
     render(){
         return(
@@ -62,15 +77,22 @@ class Comment extends Component{
                 <Text note>{this.props.time}</Text>
               </Right>
             </ListItem>
-            <Text
-                onPress={this.props.handleReply}
-                maxLength={5}
+            <ListItem noBorder>
+            <TextInput                
+                onChangeText={(comment)=>this.handleReply(comment)}
                 selectionColor={"white"}
                 style={{paddingLeft: 60}}
-                defaultValue={"Reply"}
-                >Reply
-            </Text>
-          </List>          
+                placeholder={"Reply"}
+                >                    
+            </TextInput>
+            {this.state.show ? (<Button transparent rounded
+                        style={styles.postButton}
+                        disabled={!this.state.comment}
+                    >
+                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                    </Button>) : null}            
+            </ListItem>
+          </List>
         );
     }
 }

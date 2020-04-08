@@ -30,10 +30,14 @@ const tempImage = require('../screens/assets/dog.png');
 class Comments extends Component {
   comments = db
     .collection("posts")
-    .doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')) //this.props.postsid -> Needs to be pasted from posts
+    .doc(this.props.navigation.getParam('postID'))
     .collection("comments");
 
   time = Moment().format('LT');
+  currentPost = db
+  .collection("posts")
+  .doc(this.props.navigation.getParam('postID')).id
+  
 
   constructor(props) {
     super(props);
@@ -77,7 +81,7 @@ class Comments extends Component {
         comment: comment,
         buttonTextColor: '#0fd90d'
       });   
-  }  
+  }
 
   handleSubmit = event => {
     event.preventDefault();    
@@ -133,7 +137,7 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.props.postID}/>
+              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.currentPost}/>
             ))}
           </ScrollView>          
           <Footer>
@@ -156,8 +160,8 @@ class Comments extends Component {
                         style={styles.postButton}
                     >
                         <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>                 
-                </Item>            
+                    </Button>
+                </Item>
               </Content>            
             </Container>            
           </Footer>
