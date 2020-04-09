@@ -5,7 +5,7 @@ import {db} from '../../database/Database.js'
 import Moment from 'moment';
 import Child from './Child.js';
 import { CheckBox, View } from 'native-base';
-class Parent extends Comment {
+class Parent extends Component {
 
     time = Moment().format('LT');
 
@@ -66,7 +66,7 @@ class Parent extends Comment {
 
     replyParent = async (event) => {        
         console.log("Reply Parent")
-        
+        this.props.reply()
         // let com = await this.getComment()
         // console.log(com)
         // console.log("added")

@@ -27,7 +27,7 @@ class Comment extends Component{
       user: User.dummyUser,
       comment: "",
       buttonTextColor: '#0065ff',
-      show: false
+      showPostButton: false
     }
   }
 
@@ -53,7 +53,7 @@ class Comment extends Component{
   handleReply = (comment) => {
     console.log('Reply comment')
     this.setState({
-      show: true,
+      showPostButton: true,
       comment: comment,
       buttonTextColor: '#0fd90d'
     });
@@ -79,18 +79,19 @@ class Comment extends Component{
             </ListItem>
             <ListItem noBorder>
             <TextInput                
-                onChangeText={(comment)=>this.handleReply(comment)}
+                onFocus={(comment)=>this.handleReply(comment)}
                 selectionColor={"white"}
                 style={{paddingLeft: 60}}
                 placeholder={"Reply"}
-                >                    
+                >
             </TextInput>
-            {this.state.show ? (<Button transparent rounded
+            {this.state.showPostButton && (
+                        <Button transparent rounded
                         style={styles.postButton}
                         disabled={!this.state.comment}
                     >
                         <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>) : null}            
+                    </Button>)}
             </ListItem>
           </List>
         );

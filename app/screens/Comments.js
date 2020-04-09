@@ -45,7 +45,8 @@ class Comments extends Component {
       comment: "",
       commentsArray: [],
       buttonTextColor: '#0065ff',
-      user: User.dummyUser     
+      user: User.dummyUser,
+      showFooter: true
     };
   }
   
@@ -118,6 +119,12 @@ class Comments extends Component {
       });
   };
 
+  handleParentReply = () => {
+    this.setState({
+      showFooter: false
+    })
+  }
+
   render() {
     return (
       <Container>        
@@ -137,34 +144,36 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.currentPost}/>
+              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.currentPost} reply={this.handleParentReply}/>
             ))}
-          </ScrollView>          
-          <Footer>
-          <Container style={styles.commentsFooter}>
-            <ListItem avatar >
-              <Left>
-                <Thumbnail small source={{uri: this.state.user.profileImage}} />
-              </Left>
-            </ListItem>            
-              <Content>            
-                <Item rounded>
-                  <Input
-                    placeholder="Comment"
-                    onChangeText={comment => this.onChange(comment)}
-                    value={this.state.comment}                    
-                  />
-                    <Button transparent rounded
-                        onPress={this.handleSubmit}
-                        disabled={!this.state.comment}
-                        style={styles.postButton}
-                    >
-                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>
-                </Item>
-              </Content>            
-            </Container>            
-          </Footer>
+          </ScrollView>
+          {this.state.showFooter && (
+            <Footer>
+            <Container style={styles.commentsFooter}>
+              <ListItem avatar >
+                <Left>
+                  <Thumbnail small source={{uri: this.state.user.profileImage}} />
+                </Left>
+              </ListItem>            
+                <Content>            
+                  <Item rounded>
+                    <Input
+                      placeholder="Comment"
+                      onChangeText={comment => this.onChange(comment)}
+                      value={this.state.comment}                    
+                    />
+                      <Button transparent rounded
+                          onPress={this.handleSubmit}
+                          disabled={!this.state.comment}
+                          style={styles.postButton}
+                      >
+                          <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                      </Button>
+                  </Item>
+                </Content>
+              </Container>
+            </Footer>
+          )}
         </KeyboardAvoidingView>
       </Container>
     );
