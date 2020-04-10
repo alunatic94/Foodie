@@ -66,10 +66,14 @@ class Parent extends Component {
 
     replyParent = async (event) => {        
         console.log("Reply Parent")
-        this.props.reply()
+        this.props.reply()        
         // let com = await this.getComment()
         // console.log(com)
         // console.log("added")
+    }
+
+    exitReply = () => {
+        this.props.exit()
     }
 
     render(){
@@ -80,6 +84,7 @@ class Parent extends Component {
             time={this.props.time}
             userID={this.props.userID}            
             handleReply={this.replyParent}
+            showFooter={this.exitReply}
             />
             {/* <Child/> */}
             </View>

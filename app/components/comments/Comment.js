@@ -27,8 +27,8 @@ class Comment extends Component{
       user: User.dummyUser,
       comment: "",
       buttonTextColor: '#0065ff',
-      showPostButton: false
-    }
+      showReplyMenu: false,      
+    }    
   }
 
   componentWillMount() {
@@ -46,19 +46,35 @@ class Comment extends Component{
      })
  }
 
-  onChange = (comment) => {  
-    
-  }
-
-  handleReply = (comment) => {
+  handleChange = (comment) => {
     console.log('Reply comment')
+    console.log("changing comment: " + comment)
     this.setState({
-      showPostButton: true,
       comment: comment,
       buttonTextColor: '#0fd90d'
     });
+    console.log("Comment after setting state in change: " +  comment)
+    console.log("this.state.comment: " +  this.state.comment)
+  }  
+
+  displayReplyMenu = () => {
+    console.log("Displaying buttons")
+    this.setState({
+      showReplyMenu: true
+    })
     this.props.handleReply()
-       
+  }
+
+  handleReplyExit = () => {
+    console.log("Pressed exit button")
+    this.setState({      
+      showReplyMenu: false,
+      buttonTextColor: '#0065ff'    
+    })
+    this.handleChange("")
+    console.log("After calling handlechange")
+    this.props.showFooter()
+    console.log(this.state.comment)
   }
 
 
@@ -77,22 +93,30 @@ class Comment extends Component{
                 <Text note>{this.props.time}</Text>
               </Right>
             </ListItem>
-            <ListItem noBorder>
-            <TextInput                
-                onFocus={(comment)=>this.handleReply(comment)}
-                selectionColor={"white"}
+            <TextInput              
+                onFocus={this.displayReplyMenu}
+                onChangeText={(comment)=>this.handleChange(comment)}
+                selectionColor={'#0065ff'}
                 style={{paddingLeft: 60}}
                 placeholder={"Reply"}
                 >
             </TextInput>
-            {this.state.showPostButton && (
-                        <Button transparent rounded
-                        style={styles.postButton}
-                        disabled={!this.state.comment}
-                    >
-                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>)}
-            </ListItem>
+            {this.state.showReplyMenu && (
+                        <ListItem>
+                            <Button small rounded danger
+                              onPress={this.handleReplyExit}
+                            >
+                              <Text>x</Text>
+                            </Button>                            
+                            <Button transparent rounded
+                              style={styles.postButton}
+                              disabled={!this.state.comment}
+                            >
+                              <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                            </Button>
+                        </ListItem>
+                        )
+                    }
           </List>
         );
     }

@@ -11,7 +11,8 @@ import {
   Footer,
   Content,
   ListItem,
-  Right
+  Right,
+  TabHeading
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
@@ -125,6 +126,12 @@ class Comments extends Component {
     })
   }
 
+  handleReplyExit = () => {
+    this.setState({
+      showFooter: true
+    })
+  }
+
   render() {
     return (
       <Container>        
@@ -144,7 +151,15 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Parent body={comment.body} time={comment.time} key={index} userID={comment.userID} postID={this.currentPost} reply={this.handleParentReply}/>
+              <Parent 
+                body={comment.body}
+                time={comment.time}
+                key={index}
+                userID={comment.userID}
+                postID={this.currentPost}
+                reply={this.handleParentReply}
+                exit={this.handleReplyExit}
+              />
             ))}
           </ScrollView>
           {this.state.showFooter && (
