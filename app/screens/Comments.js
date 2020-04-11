@@ -120,7 +120,7 @@ class Comments extends Component {
       });
   };
 
-  handleParentReply = () => {
+  mainInputBox = () => {
     this.setState({
       showFooter: false
     })
@@ -157,7 +157,7 @@ class Comments extends Component {
                 key={index}
                 userID={comment.userID}
                 postID={this.currentPost}
-                reply={this.handleParentReply}
+                hideInput={this.mainInputBox}
                 exit={this.handleReplyExit}
               />
             ))}

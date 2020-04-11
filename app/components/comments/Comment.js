@@ -7,19 +7,6 @@ import { TextInput } from 'react-native';
 import Moment from 'moment';
 
 const tempImage = require('../../screens/assets/dog.png');
-
-// interface Comment {
-//   userID: string;
-//   padding: number;  
-//   body: string;
-//   time: number;  
-//   handleReply: () => void;
-// }
-
-// interface CommentState {
-//   user: User;
-// }
-
 class Comment extends Component{
   constructor(props) {
     super(props);
@@ -47,14 +34,11 @@ class Comment extends Component{
  }
 
   handleChange = (comment) => {
-    console.log('Reply comment')
-    console.log("changing comment: " + comment)
+    console.log('Reply comment')    
     this.setState({
       comment: comment,
       buttonTextColor: '#0fd90d'
-    });
-    console.log("Comment after setting state in change: " +  comment)
-    console.log("this.state.comment: " +  this.state.comment)
+    });    
   }  
 
   displayReplyMenu = () => {
@@ -62,19 +46,21 @@ class Comment extends Component{
     this.setState({
       showReplyMenu: true
     })
-    this.props.handleReply()
+    this.props.inputBox()
   }
 
   handleReplyExit = () => {
     console.log("Pressed exit button")
+    this.textInput.clear()
     this.setState({      
-      showReplyMenu: false,
-      buttonTextColor: '#0065ff'    
-    })
-    this.handleChange("")
-    console.log("After calling handlechange")
+      buttonTextColor: '#0065ff',
+      showReplyMenu: false
+    })    
     this.props.showFooter()
-    console.log(this.state.comment)
+  }
+
+  parentReplied = () => {
+
   }
 
 
@@ -93,7 +79,8 @@ class Comment extends Component{
                 <Text note>{this.props.time}</Text>
               </Right>
             </ListItem>
-            <TextInput              
+            <TextInput
+                ref={ref =>{this.textInput = ref}}
                 onFocus={this.displayReplyMenu}
                 onChangeText={(comment)=>this.handleChange(comment)}
                 selectionColor={'#0065ff'}
