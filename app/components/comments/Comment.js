@@ -60,7 +60,8 @@ class Comment extends Component{
   }
 
   parentReplied = () => {
-
+    console.log("parentReplied called in comment")
+    this.props.handleReply()
   }
 
 
@@ -98,6 +99,7 @@ class Comment extends Component{
                             <Button transparent rounded
                               style={styles.postButton}
                               disabled={!this.state.comment}
+                              onPress={this.parentReplied}
                             >
                               <Text style={{color: this.state.buttonTextColor}}>Post</Text>
                             </Button>

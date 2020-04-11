@@ -30,16 +30,18 @@ class Child extends Component{
 
   replyChild = () => {    
     console.log('Reply child')
-  }
+  }  
 
     render(){
         return(
-        <Comment padding={45}
-                body={this.props.body}
-                time={this.props.time}
-                userID={this.props.userID}
-                handleReply={this.props.replyParent}
-        />
+          <Comment padding={45}
+                  body={this.props.body}
+                  time={this.props.time}
+                  userID={this.props.userID}
+                  postID={this.props.postID}
+                  inputBox={this.props.inputBox}
+                  showFooter={this.props.showFooter}
+          />
         )}
 }
 export default Child;

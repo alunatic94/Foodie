@@ -5,7 +5,6 @@ import {db} from '../../database/Database.js'
 import Moment from 'moment';
 import Child from './Child.js';
 import { CheckBox, View } from 'native-base';
-import { TouchableHighlightBase } from 'react-native';
 class Parent extends Component {
 
     time = Moment().format('LT');
@@ -66,8 +65,8 @@ class Parent extends Component {
 
     replyParent = async (event) => {        
         console.log("Reply Parent")
-        // let com = await this.getComment()
-        // console.log(com)
+        let com = await this.getComment()
+        console.log(com)
         // console.log("added")
     }
 
@@ -90,7 +89,16 @@ class Parent extends Component {
                     showFooter={this.exitReply}
                     handleReply={this.replyParent}
                 />
-                {/* <Child/> */}
+                {this.state.children.map((comment, index)=>
+                (<Child
+                    key={index}
+                    body={comment.body}
+                    time={comment.time}
+                    userID={comment.userID}
+                    postID={comment.postID}
+                    inputBox={this.handleInputBox}
+                    showFooter={this.exitReply}
+                />))}
             </View>
         )
     }
