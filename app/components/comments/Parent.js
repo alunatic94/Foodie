@@ -33,8 +33,7 @@ class Parent extends Component {
         })
     }
 
-    getComment = async () => {
-        return new Promise(resolve => {
+    getComment = async () => {        
             comment = db
             .collection("posts")
             .doc(this.props.postID)
@@ -48,25 +47,22 @@ class Parent extends Component {
                 }
                 snapshot.forEach(doc => {
                     console.log("Heres doc data")
-                    console.log(doc.data())
-                });
+                    // console.log(doc.data())
+                    return doc.data();
+                });                
             })
             .catch(err => {
                 console.log(err)
-            })
-        })        
-    }
-    
-    addChild = (comment)  => {
-        let child = comment.update({
-            children: "THAT"
         })
-    }        
+    }         
 
-    replyParent = async (event) => {        
+    replyParent = (event) => {        
         console.log("Reply Parent")
-        let com = await this.getComment()
-        console.log(com)
+        let parentComment =  this.getComment()        
+        console.log(parentComment)
+        // let data = parentComment.set({
+        //     children: "Testing update"
+        // }, {merge: true});
         // console.log("added")
     }
 
@@ -90,15 +86,15 @@ class Parent extends Component {
                     handleReply={this.replyParent}
                 />
                 {this.state.children.map((comment, index)=>
-                (<Child
-                    key={index}
-                    body={comment.body}
-                    time={comment.time}
-                    userID={comment.userID}
-                    postID={comment.postID}
-                    inputBox={this.handleInputBox}
-                    showFooter={this.exitReply}
-                />))}
+                    (<Child
+                        key={index}
+                        body={comment.body}
+                        time={comment.time}
+                        userID={comment.userID}
+                        postID={comment.postID}
+                        inputBox={this.handleInputBox}
+                        showFooter={this.exitReply}
+                    />))}
             </View>
         )
     }
