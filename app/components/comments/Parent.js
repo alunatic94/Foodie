@@ -1,10 +1,10 @@
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import Comment from './Comment.js';
 import {User} from '../../database/User.js'
 import {db} from '../../database/Database.js'
 import Moment from 'moment';
 import Child from './Child.js';
-import { CheckBox, View } from 'native-base';
+import { View } from 'native-base';
 class Parent extends Component {
 
     time = Moment().format('LT');
@@ -33,8 +33,9 @@ class Parent extends Component {
         })
     }
 
-    getComment = async () => {        
-            comment = db
+    getComment = async () => {
+        parentComment =  {}
+        let getComment =   await db
             .collection("posts")
             .doc(this.props.postID)
             .collection("comments")
@@ -45,21 +46,22 @@ class Parent extends Component {
                     console.log("Empty")
                     return;
                 }
-                snapshot.forEach(doc => {
-                    console.log("Heres doc data")
-                    // console.log(doc.data())
-                    return doc.data();
-                });                
+                snapshot.forEach(doc => {                
+                    console.log("Data passed")
+                    parentComment = doc.data();                
+                });
             })
             .catch(err => {
                 console.log(err)
         })
+        return parentComment
     }         
 
-    replyParent = (event) => {        
+    replyParent = async (event) => {        
         console.log("Reply Parent")
-        let parentComment =  this.getComment()        
-        console.log(parentComment)
+        parent = await this.getComment()
+        console.log("Printing parent")
+        console.log(parent)
         // let data = parentComment.set({
         //     children: "Testing update"
         // }, {merge: true});

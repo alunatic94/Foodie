@@ -10,12 +10,10 @@ import {
   Header,
   Footer,
   Content,
-  ListItem,
-  Right,
-  TabHeading
+  ListItem
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import { KeyboardAvoidingView, Text, AppState } from "react-native";
+import { KeyboardAvoidingView, Text} from "react-native";
 import styles from './styles.js';
 import { db } from "../database/Database.js";
 import {User} from "../database/User.js";
