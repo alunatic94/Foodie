@@ -38,8 +38,8 @@ class Comment extends Component{
     this.setState({
       comment: comment,
       buttonTextColor: '#0fd90d'
-    });    
-  }  
+    });
+  }
 
   displayReplyMenu = () => {
     console.log("Displaying buttons")
@@ -61,7 +61,7 @@ class Comment extends Component{
 
   parentReplied = () => {
     console.log("parentReplied called in comment")
-    this.props.handleReply()
+    this.props.handleReply(this.state.comment)
   }
 
 

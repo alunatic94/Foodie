@@ -49,7 +49,7 @@ class Comments extends Component {
     };
   }
   
-  componentDidMount() {  
+  componentDidMount() {    
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {

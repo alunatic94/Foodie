@@ -31,11 +31,14 @@ class Parent extends Component {
         .catch((err) => {
             console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
         })
-    }
+    }    
 
-    getComment = async () => {
-        parentComment =  {}
-        let getComment =   await db
+    replyParent = async (childComment) => {
+        // comment = childComment
+        this.state.children.push(childComment)
+        // console.log("child comment: " + comment)
+        console.log("Reply Parent")        
+        let parentComment =   await db
             .collection("posts")
             .doc(this.props.postID)
             .collection("comments")
@@ -43,29 +46,22 @@ class Parent extends Component {
             .get()
             .then(snapshot => {
                 if(snapshot.empty){
-                    console.log("Empty")
+                    console.log("Empty")                    
                     return;
                 }
-                snapshot.forEach(doc => {                
-                    console.log("Data passed")
-                    parentComment = doc.data();                
+                snapshot.forEach((document) => {
+                    db.collection("posts")
+                    .doc(this.props.postID)
+                    .collection("comments")
+                    .doc(document.id).set({
+                        children: this.state.children                        
+                    }, {merge: true})
+                    console.log("Data passed")                    
                 });
             })
             .catch(err => {
                 console.log(err)
         })
-        return parentComment
-    }         
-
-    replyParent = async (event) => {        
-        console.log("Reply Parent")
-        parent = await this.getComment()
-        console.log("Printing parent")
-        console.log(parent)
-        // let data = parentComment.set({
-        //     children: "Testing update"
-        // }, {merge: true});
-        // console.log("added")
     }
 
     handleInputBox = () => {
@@ -85,7 +81,7 @@ class Parent extends Component {
                     userID={this.props.userID}            
                     inputBox={this.handleInputBox}
                     showFooter={this.exitReply}
-                    handleReply={this.replyParent}
+                    handleReply={this.replyParent}                    
                 />
                 {this.state.children.map((comment, index)=>
                     (<Child
