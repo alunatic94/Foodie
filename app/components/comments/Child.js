@@ -23,8 +23,8 @@ class Child extends Component{
              user: loadedUser
          })
      })
-     .catch((err) => {
-         console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
+     .catch((err) => {        
+        console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");         
      })
  }
 

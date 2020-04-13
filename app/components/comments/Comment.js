@@ -55,13 +55,14 @@ class Comment extends Component{
     this.setState({      
       buttonTextColor: '#0065ff',
       showReplyMenu: false
-    })    
+    })
     this.props.showFooter()
   }
 
   parentReplied = () => {
     console.log("parentReplied called in comment")
-    this.props.handleReply(this.state.comment)
+    this.props.handleReply(this.state.comment)    
+    this.handleReplyExit()
   }
 
 

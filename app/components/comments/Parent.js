@@ -33,10 +33,8 @@ class Parent extends Component {
         })
     }    
 
-    replyParent = async (childComment) => {
-        // comment = childComment
+    replyParent = async (childComment) => {        
         this.state.children.push(childComment)
-        // console.log("child comment: " + comment)
         console.log("Reply Parent")        
         let parentComment =   await db
             .collection("posts")
@@ -46,7 +44,7 @@ class Parent extends Component {
             .get()
             .then(snapshot => {
                 if(snapshot.empty){
-                    console.log("Empty")                    
+                    console.log("Empty")
                     return;
                 }
                 snapshot.forEach((document) => {
@@ -56,13 +54,13 @@ class Parent extends Component {
                     .doc(document.id).set({
                         children: this.state.children                        
                     }, {merge: true})
-                    console.log("Data passed")                    
+                    console.log("Uploaded to FireStore")
                 });
             })
             .catch(err => {
                 console.log(err)
         })
-    }
+    }    
 
     handleInputBox = () => {
         this.props.hideInput()
@@ -78,18 +76,19 @@ class Parent extends Component {
                 <Comment padding={0}
                     body={this.props.body}
                     time={this.props.time}
-                    userID={this.props.userID}            
+                    userID={this.props.userID}
+                    postID={this.props.postID}
                     inputBox={this.handleInputBox}
                     showFooter={this.exitReply}
                     handleReply={this.replyParent}                    
                 />
-                {this.state.children.map((comment, index)=>
+                {this.state.children.map((comment, index) =>                    
                     (<Child
                         key={index}
                         body={comment.body}
-                        time={comment.time}
-                        userID={comment.userID}
-                        postID={comment.postID}
+                        time={this.props.time} //TODO: get time from library - refer to comments screen
+                        userID={this.props.userID}
+                        postID={this.props.postID}
                         inputBox={this.handleInputBox}
                         showFooter={this.exitReply}
                     />))}
