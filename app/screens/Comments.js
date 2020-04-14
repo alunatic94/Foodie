@@ -10,15 +10,15 @@ import {
   Header,
   Footer,
   Content,
-  ListItem,
-  Right
+  ListItem
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/Comment.js";
-import { KeyboardAvoidingView, Text, AppState } from "react-native";
+import { KeyboardAvoidingView, Text} from "react-native";
 import styles from './styles.js';
 import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
+import Parent from "../components/comments/Parent.js";
+import Moment from 'moment';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -29,11 +29,14 @@ const tempImage = require('../screens/assets/dog.png');
 class Comments extends Component {
   comments = db
     .collection("posts")
-    .doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')) //this.props.postsid -> Needs to be pasted from posts
+    .doc(this.props.navigation.getParam('postID'))
     .collection("comments");
 
-  time = new Date();
-  users = db.collection("users");
+  time = Moment().format('LT');
+  currentPost = db
+  .collection("posts")
+  .doc(this.props.navigation.getParam('postID')).id
+  
 
   constructor(props) {
     super(props);
@@ -41,11 +44,12 @@ class Comments extends Component {
       comment: "",
       commentsArray: [],
       buttonTextColor: '#0065ff',
-      user: User.dummyUser     
+      user: User.dummyUser,
+      showFooter: true
     };
   }
   
-  componentDidMount() {
+  componentDidMount() {    
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
@@ -77,10 +81,10 @@ class Comments extends Component {
         comment: comment,
         buttonTextColor: '#0fd90d'
       });   
-  }  
+  }
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault();    
     this.add(this.state.comment);    
     this.setState({
       comment: "",
@@ -125,8 +129,8 @@ class Comments extends Component {
   add = comment => {
     let commentData = {
       body: comment,
-      time: this.time.getTime(),
-      userID: User.getCurrentUserID()      
+      time: this.time,
+      userID: User.getCurrentUserID()
     };
     this.comments.doc().set(commentData);
   };
@@ -147,6 +151,18 @@ class Comments extends Component {
       });
   };
 
+  mainInputBox = () => {
+    this.setState({
+      showFooter: false
+    })
+  }
+
+  handleReplyExit = () => {
+    this.setState({
+      showFooter: true
+    })
+  }
+
   render() {
     return (
       <Container>        
@@ -166,34 +182,44 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Comment body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
+              <Parent 
+                body={comment.body}
+                time={comment.time}
+                key={index}
+                userID={comment.userID}
+                postID={this.currentPost}
+                hideInput={this.mainInputBox}
+                exit={this.handleReplyExit}
+              />
             ))}
-          </ScrollView>          
-          <Footer>
-          <Container style={styles.commentsFooter}>
-            <ListItem avatar >
-              <Left>
-                <Thumbnail small source={{uri: this.state.user.profileImage}} />
-              </Left>
-            </ListItem>            
-              <Content>            
-                <Item rounded >
-                  <Input
-                    placeholder="Comment"
-                    onChangeText={comment => this.onChange(comment)}
-                    value={this.state.comment}                    
-                  />
-                    <Button transparent rounded
-                        onPress={this.handleSubmit}
-                        disabled={!this.state.comment}
-                        style={styles.postButton}
-                    >
-                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>                 
-                </Item>            
-                </Content>            
-            </Container>            
-          </Footer>
+          </ScrollView>
+          {this.state.showFooter && (
+            <Footer>
+            <Container style={styles.commentsFooter}>
+              <ListItem avatar >
+                <Left>
+                  <Thumbnail small source={{uri: this.state.user.profileImage}} />
+                </Left>
+              </ListItem>            
+                <Content>            
+                  <Item rounded>
+                    <Input
+                      placeholder="Comment"
+                      onChangeText={comment => this.onChange(comment)}
+                      value={this.state.comment}                    
+                    />
+                      <Button transparent rounded
+                          onPress={this.handleSubmit}
+                          disabled={!this.state.comment}
+                          style={styles.postButton}
+                      >
+                          <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                      </Button>
+                  </Item>
+                </Content>
+              </Container>
+            </Footer>
+          )}
         </KeyboardAvoidingView>
       </Container>
     );
