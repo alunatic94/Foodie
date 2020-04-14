@@ -57,7 +57,6 @@ class LikePage extends Component {
     await this.state.likeUserID.map(user => {
       users.doc(user).get().then(doc => {
         var data = doc.data()
-        console.log(data.userID)
         docArray.push({ name: data.username, profilePic: data.profileImage, first: data.first, last: data.last, userID: data.userID })
         this.setState({
           likeUsername: docArray

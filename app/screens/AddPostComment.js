@@ -283,7 +283,7 @@ export default class AddPostComment extends Component {
              this.submitButton();
             } }  */
             onPress={() => {
-              this.props.navigation.navigate('Main');
+              this.props.navigation.navigate('Feed');
               this.addPost();
             }}>
             <Text>Post your plate</Text>

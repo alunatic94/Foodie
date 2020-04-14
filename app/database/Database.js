@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import 'firebase/firestore';
+import firestore from 'firebase/firestore';
 import {REACT_APP_API_KEY,
   REACT_APP_AUTH_DOMAIN,
   REACT_APP_DATABASE_URL,

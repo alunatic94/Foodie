@@ -23,35 +23,39 @@ import { View } from 'native-base';
 const stackOptions = {
     headerMode: 'none'
 };
+
+const AddPostStack = createStackNavigator({
+    AddPostPhoto: {
+        screen: AddPostPhoto
+    },
+    AddPostComment: {
+        screen: AddPostComment
+    },
+    Main: AddPostPhoto
+}, stackOptions)
+ 
 const ProfileStack = createStackNavigator({
     Profile: { screen: Profile },
     ProfileEdit: { screen: ProfileEdit },
     ProfileEditPhoto: { screen: ProfileEditPhoto },
+    AddPost: AddPostStack,
     Main: Profile,
   }, stackOptions);
   
   const MapStack = createStackNavigator({
       Map: { screen: Map },
-      SearchRestaurants: { screen: SearchRestaurants },
+      AddPost: AddPostStack,
       Main: Map
   }, stackOptions);
 
-  const FeedInnerStack = createStackNavigator({
-      Feed: { screen: Feed },
-      LocalFeed: { screen: LocalFeed },
-      FriendsFeed: { screen: FriendsFeed },
-      Main: Feed
-  },
-  {
-      headerMode: 'none',
-      animationEnabled: false
-  });
-
   const FeedStack = createStackNavigator({
-      Feed: FeedInnerStack,
-      Main: Feed
+    Feed: { screen: Feed },
+    Comments: { screen: Comments },
+    LikePage: { screen: LikePage },
+    AddPost: AddPostStack,
+    Main: Feed
   }, stackOptions);
-
+  
 const AppNavigatorTabs = createMaterialTopTabNavigator({
     MapTab: {
         screen: MapStack,
@@ -112,44 +116,8 @@ const AppNavigator = createStackNavigator({
     Register:{
         screen: Register
     },
-    Feed: {
-        screen: Feed
-    },
-    LocalFeed: {
-        screen: LocalFeed
-    },
-    FriendsFeed: {
-        screen: FriendsFeed
-    },
-    Profile: {
-        screen: Profile
-    },
-    ProfileOther: {
-        screen: ProfileOther
-    },
     SearchRestaurants: {
         screen: SearchRestaurants
-    },
-    AddPostPhoto: {
-        screen: AddPostPhoto
-    },
-    AddPostComment: {
-        screen: AddPostComment
-    },
-    Comments: {
-        screen: Comments
-    },
-    ProfileEdit: {
-        screen: ProfileEdit
-    },
-    ProfileEditPhoto: {
-        screen: ProfileEditPhoto
-    },
-    Map: {
-        screen: Map
-    },
-    LikePage: {
-        screen: LikePage
     },
     Main: AppNavigatorTabs,
 },
