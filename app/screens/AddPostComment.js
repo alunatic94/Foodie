@@ -120,27 +120,38 @@ export default class AddPostComment extends Component {
     })
   }
 
-  addBadge() {
+  async addBadge() {
     var badgeID = "";
-    var numPlates = this.state.user.plates.length;
-    // switch(numPosts) {
-    //   case 10:
-    //     badgeID = "ten-plates";
-    //     break;
-    //   case 25:
-    //     badgeID = "twenty-five-plates";
-    //     break;
-    //   case 100:
-    //     badgeID = "one-hundred-plates";
-    //     break;
-    //   default:
-    //     badgeID = null;
-    badgeID = "test";
-    // }
+    var numPlates; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numPlates = doc.data().postCount;
+      }
+    })
+    switch(numPlates){
+      case 1: 
+        badgeID = "first-plate"; 
+        break;
+      case 10: 
+        badgeID = "ten-plates"; 
+        break; 
+      case 20: 
+        badgeID = "twenty-plates";
+        break; 
+      case 100: 
+        badgeID = "hundred-plates"; 
+        break; 
+      default: 
+        badgeID = null; 
+    }
     if (badgeID != null) {
-      badges = this.state.user.badges;
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
       badges.push(badgeID);
-
       users.doc(User.getCurrentUserID()).update({ badges: badges });
     }
   }
@@ -285,6 +296,9 @@ export default class AddPostComment extends Component {
             onPress={() => {
               this.props.navigation.navigate('Feed');
               this.addPost();
+              const increment = firebase.firestore.FieldValue.increment(1);
+              this.users.doc(User.getCurrentUserID()).update({postCount: increment})
+              this.addBadge(); 
             }}>
             <Text>Post your plate</Text>
           </Button>

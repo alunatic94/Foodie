@@ -17,7 +17,7 @@ import { withNavigation, ScrollView } from "react-navigation";
 import Comment from "../components/Comment.js";
 import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
-import { db } from "../database/Database";
+import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 
 const tempImage = require('../screens/assets/dog.png');
@@ -33,6 +33,7 @@ class Comments extends Component {
     .collection("comments");
 
   time = new Date();
+  users = db.collection("users");
 
   constructor(props) {
     super(props);
@@ -85,8 +86,41 @@ class Comments extends Component {
       comment: "",
       buttonTextColor: '#0065ff',
     });    
+    const increment = firebase.firestore.FieldValue.increment(1);
+    this.users.doc(User.getCurrentUserID()).update({commentCount: increment})
+    this.addBadge(); 
   };
 
+  async addBadge() {
+    var badgeID = "";
+    var numComments; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numComments = doc.data().commentCount;
+      }
+    })
+    switch(numComments){
+      case 1: 
+        badgeID = "first-comment"; 
+        break;
+      case 20: 
+        badgeID = "twenty-comments";
+        break; 
+      default: 
+        badgeID = null; 
+    }
+    if (badgeID != null) {
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
+      badges.push(badgeID);
+
+      users.doc(User.getCurrentUserID()).update({ badges: badges });
+    }
+  }
 
   add = comment => {
     let commentData = {
