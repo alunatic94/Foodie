@@ -19,6 +19,7 @@ import { KeyboardAvoidingView, Text, AppState } from "react-native";
 import styles from './styles.js';
 import { db } from "../database/Database.js";
 import {User} from "../database/User.js";
+import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -39,12 +40,16 @@ class Comments extends Component {
     this.state = {
       comment: "",
       commentsArray: [],
+      isLoaded: false,
       buttonTextColor: '#0065ff',
       user: User.dummyUser     
     };
   }
   
   componentDidMount() {
+    this.setState({
+      isLoaded:true,
+  })
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
@@ -57,7 +62,7 @@ class Comments extends Component {
   loadUser = () => {
     User.getCurrent().then((loadedUser) => {
         this.setState({
-            user: loadedUser
+            user: loadedUser,
         })
     })
     .catch((err) => {
@@ -114,6 +119,7 @@ class Comments extends Component {
   };
 
   render() {
+    if(this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -163,6 +169,12 @@ class Comments extends Component {
         </KeyboardAvoidingView>
       </Container>
     );
+    }
+    else
+    return (
+      <CommentPagePlaceHolder style={this.props.style}/>
+    );
+
   }
 }
 

@@ -26,6 +26,7 @@ export default class AddPostComment extends Component {
       likeButtonColor: '#a9a9a9',
       mehButtonColor: '#a9a9a9',
       dislikeButtonColor: '#a9a9a9',
+      veganButtonColor:'#a9a9a9',
       rating: 'meh',
       latitude: 0,
       longitude: 0,
@@ -38,6 +39,7 @@ export default class AddPostComment extends Component {
       like: false,
       meh: false,
       dislike: false,
+      isvegan:false,
       searchedRestaurantName: 'Search restaurants',
       searchedRestaurantID: '',
       searchedRestaurantCoordinates: []
@@ -176,6 +178,28 @@ export default class AddPostComment extends Component {
     });
   }
 
+  onChangeVegan = () => { 
+    if(!this.state.isvegan)
+    {
+      this.setState({
+        dislikeButtonColor:'#a9a9a9',
+        likeButtonColor: '#a9a9a9',
+        mehButtonColor: '#a9a9a9',
+        veganButtonColor:'green',
+        isvegan:true
+      });
+    }
+    else{
+      this.setState({
+        dislikeButtonColor:'#a9a9a9',
+        likeButtonColor: '#a9a9a9',
+        mehButtonColor: '#a9a9a9',
+        veganButtonColor:'#a9a9a9',
+        isvegan:false
+      });
+    }
+  }
+
   submitButton = () => {
     // this.state.image, this.state.caption, this.state.rating 
 
@@ -268,6 +292,39 @@ export default class AddPostComment extends Component {
                   size={30} style={{ padding: 30 }}
                   onPress={() => this.onChangeDislike()} />
               </Button>
+            </View>
+          </View>
+          <Text style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            paddingTop: 18,
+            paddingBottom: 25
+          }}>Category:</Text>
+
+          <View style={{
+            borderWidth: 1,
+            height: 100,
+            alignItems: 'left',
+            justifyContent: 'center',
+            justifyContent: 'space-between',
+            paddingTop: 15, paddingBottom: 20
+          }}>
+            
+            <View style={{ flexDirection: "row" }}>
+            <Text style={{
+            fontSize: 14,
+            fontWeight: "bold",
+            paddingTop: 15,
+            paddingBottom: 12,
+            paddingRight:3
+          }}>Vegan:</Text>
+              <Button
+                transparent>
+                <AntDesign name={'downcircle'} color={this.state.veganButtonColor}
+                  size={30} style={{ padding: 40,height:25,width:35 }}
+                  onPress={() => this.onChangeVegan()} />
+              </Button>
+              
             </View>
           </View>
 
