@@ -19,6 +19,7 @@ import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
+import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -43,13 +44,17 @@ class Comments extends Component {
     this.state = {
       comment: "",
       commentsArray: [],
+      isLoaded: false,
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
       showFooter: true
     };
   }
   
-  componentDidMount() {    
+  componentDidMount() {  
+    this.setState({
+      isLoaded:true,
+    });
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
@@ -62,7 +67,7 @@ class Comments extends Component {
   loadUser = () => {
     User.getCurrent().then((loadedUser) => {
         this.setState({
-            user: loadedUser
+            user: loadedUser,
         })
     })
     .catch((err) => {
@@ -164,6 +169,7 @@ class Comments extends Component {
   }
 
   render() {
+    if(this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -223,6 +229,12 @@ class Comments extends Component {
         </KeyboardAvoidingView>
       </Container>
     );
+    }
+    else
+    return (
+      <CommentPagePlaceHolder style={this.props.style}/>
+    );
+
   }
 }
 

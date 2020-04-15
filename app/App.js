@@ -5,6 +5,11 @@ import { createAppContainer } from 'react-navigation';
 import AppNavigator from './navigation/router.js';
 import * as Font from 'expo-font';
 import _ from 'lodash';
+import {decode, encode} from 'base-64'
+
+if (!global.btoa) {  global.btoa = encode }
+
+if (!global.atob) { global.atob = decode }
 
 /*Temp fix for yellow setting a timer warning */
 YellowBox.ignoreWarnings(['Setting a timer']);

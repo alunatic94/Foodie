@@ -7,6 +7,7 @@ import { db } from "../database/Database";
 import { User } from "../database/User.js";
 import { ProfileData } from "../database/ProfileData.js"
 import { withNavigation, ScrollView } from "react-navigation";
+import LikePagePlaceholder  from '../components/placeholders/LikePagePlaceholder.js';
 //import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -157,9 +158,7 @@ class LikePage extends Component {
       );
     } else {
       return (
-        <Container>
-          <Text>Loading...</Text>
-        </Container>
+        <LikePagePlaceholder style={this.props.style}/>
       );
     }
 
