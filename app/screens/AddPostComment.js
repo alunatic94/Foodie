@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
+import { Container,Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { logout } from '../screens/Login.js';
-import styles from './styles.js';
-import { db } from '../database/Database';
+import { db, firebase } from '../database/Database';
 import { User } from '../database/User.js';
-import Points from '../components/common/Points.js';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import axios from 'axios';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
