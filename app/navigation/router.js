@@ -53,6 +53,7 @@ const ProfileStack = createStackNavigator({
     Comments: { screen: Comments },
     LikePage: { screen: LikePage },
     AddPost: AddPostStack,
+    ProfileOther: {screen: ProfileOther},
     Main: Feed
   }, stackOptions);
   
