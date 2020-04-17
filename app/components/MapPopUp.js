@@ -5,6 +5,7 @@ import { FontAwesome } from 'react-native-vector-icons';
 import {ScrollView} from "react-native";
 import TitleAndIconsPlaceholder from './placeholders/TitleAndIconsPlaceholder';
 import styles from '../screens/styles.js';
+import {AquaMain} from '../styles/global.js';
 
 // Temp Image
 const image = require('../screens/assets/howlin.png');
@@ -81,9 +82,9 @@ export default class MapPopUp extends Component{
             }
                                            
                 <CardItem footer style={{flexDirection: 'row', flexWrap: 'wrap'}}>                            
-                    <FontAwesome name='mobile' style={{fontSize: 25, color: "#6fdedc", paddingRight: 5}}/>
+                    <FontAwesome name='mobile' style={{fontSize: 25, color: AquaMain, paddingRight: 5}}/>
                     <Text style={{paddingRight: 20}}>{this.props.data.phone}</Text>                            
-                    <FontAwesome name='star' style={{fontSize: 20, color: "#6fdedc", paddingRight: 5, paddingLeft: 5}}/>
+                    <FontAwesome name='star' style={{fontSize: 20, color: AquaMain, paddingRight: 5, paddingLeft: 5}}/>
                     <Text>{this.props.data.rating}</Text>                            
             </CardItem> 
         </Card>
@@ -92,14 +93,14 @@ export default class MapPopUp extends Component{
                 <Left>
                 <Button
                 onPress={() => this.props.onPress()}
-                style={{backgroundColor: '#6fdedc', margin: 0}}
+                style={{backgroundColor: AquaMain, margin: 0}}
                 >
                     <FontAwesome name='close' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
                 </Button>
                 </Left>
                 <Right>
                 <Button
-                style={{backgroundColor: '#6fdedc'}}
+                style={{backgroundColor: AquaMain}}
                 onPress={() => {Linking.openURL((this.props.data.url))}}
                 >                          
                     <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>

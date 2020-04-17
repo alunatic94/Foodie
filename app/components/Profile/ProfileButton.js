@@ -4,6 +4,7 @@ import {Button, Text, View} from "native-base";
 import {firebase, db} from '../../database/Database';
 import { withNavigation } from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AquaMain} from '../../styles/global.js'
 
 class ProfileButton extends Component {
     
@@ -48,7 +49,7 @@ class ProfileButton extends Component {
                 return(
                 <Button
                 rounded
-                style={{backgroundColor: '#6fdedc'}}
+                style={{backgroundColor: AquaMain}}
                 onPress={() => this.props.navigation.navigate('ProfileEdit')}>
                     <Text>Edit</Text>
                 </Button>

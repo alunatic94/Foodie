@@ -4,6 +4,7 @@ import ScreenHeader from '../components/common/ScreenHeader.js';
 import { User } from "../database/User.js"
 import LocalFeed from './LocalFeed.js';
 import FriendsFeed from './FriendsFeed.js';
+import {AquaMain} from '../styles/global.js'
 
 export default class Feed extends Component {
 
@@ -21,11 +22,11 @@ export default class Feed extends Component {
         <ScreenHeader navigation={this.props.navigation} title="Feed">
         </ScreenHeader>
 
-        <Tabs tabBarUnderlineStyle={{backgroundColor: "#6fdedc"}}>
-          <Tab heading="Local" activeTextStyle={{color: "#6fdedc"}}>
+        <Tabs tabBarUnderlineStyle={{backgroundColor: AquaMain}}>
+          <Tab heading="Local" activeTextStyle={{color: AquaMain}}>
             <LocalFeed />
           </Tab>
-          <Tab heading="Friends"activeTextStyle={{color: "#6fdedc"}}>
+          <Tab heading="Friends"activeTextStyle={{color: AquaMain}}>
             <FriendsFeed
               userID={this.state.userID}
             />

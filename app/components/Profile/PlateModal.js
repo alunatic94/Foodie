@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Text, Button, View } from 'native-base';
 import styles from '../../screens/styles.js';
 import PostCard from '../../components/PostCard.js';
+import {AquaMain} from '../../styles/global.js';
 
 export default class PlateModal extends Component {                                     
     render() {
@@ -13,7 +14,7 @@ export default class PlateModal extends Component {
                 <Button
                 rounded
                 onPress={() => this.props.onPress()}
-                style={{width: '25%', backgroundColor: '#6fdedc'}}>
+                style={{width: '25%', backgroundColor: AquaMain}}>
                     <Text>Close</Text>
                 </Button>
             </View>
