@@ -42,12 +42,12 @@ class Parent extends Component {
         }else{
             console.log("currentChildren in else: " , currentChildren)
             let addChild = {childComment, userThatReplied}
-            sendToFireStore = currentChildren.reverse()
+            sendToFireStore = currentChildren
             sendToFireStore.push(addChild)
             console.log("got to else")
         }        
         
-        console.log("Reply Parent")        
+        console.log("Reply Parent")
         let parentComment =   await db
             .collection("posts")
             .doc(this.props.postID)
@@ -97,11 +97,13 @@ class Parent extends Component {
                     (<Child
                         key={index}
                         body={comment.childComment}
+                        parentBody={this.props.body}
                         time={this.props.time} //TODO: Structure time
                         userID={comment.userThatReplied}
                         postID={this.props.postID}
                         inputBox={this.handleInputBox}
                         showFooter={this.exitReply}
+                        handleForMeBig={this.replyParent}
                     />))}
             </View>
         )

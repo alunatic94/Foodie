@@ -56,8 +56,8 @@ class Comment extends Component{
     this.props.showFooter()
   }
 
-  parentReplied = () => {
-    this.props.handleReply(this.state.comment, this.state.user.userID)    
+  handleReplies = () => {
+    this.props.handleReply(this.state.comment, this.state.user.userID)
     this.handleReplyExit()
   }
 
@@ -96,7 +96,7 @@ class Comment extends Component{
                             <Button transparent rounded
                               style={styles.postButton}
                               disabled={!this.state.comment}
-                              onPress={this.parentReplied}
+                              onPress={this.handleReplies}
                             >
                               <Text style={{color: this.state.buttonTextColor}}>Post</Text>
                             </Button>
