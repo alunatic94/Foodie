@@ -23,40 +23,45 @@ import Moment from 'moment';
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
 // 1. change buttonTextColor when input is empty
-// 2. update with user info
-// 3. structure time
-// 4. Disable footer scroll
+// 2. structure time
 class Comments extends Component {
-  comments = db
+  query = db
     .collection("posts")
     .doc(this.props.navigation.getParam('postID'))
-    .collection("comments");
+    .collection("comments")
+    .orderBy('time', 'asc')
 
-  time = Moment().format('LT');
   currentPost = db
   .collection("posts")
   .doc(this.props.navigation.getParam('postID')).id
   
+  time = new Date().getTime()
 
   constructor(props) {
     super(props);
     this.state = {
       comment: "",
-      commentsArray: [],
+      comments: [],
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
       showFooter: true
     };
   }
   
-  componentDidMount() {    
-    this.getAll();
-    const query = this.comments
-    const listener = query.onSnapshot(querySnapshot => {
-      this.getAll();
+  componentDidMount() {
+    const listener = this.query.onSnapshot(querySnapshot => {
+      this.setState({
+        comments: querySnapshot.docs.map((snapshot) => snapshot.data())
+      })
     }, err => {
       console.log('There was an error');
-    });    
+    });
+  }
+
+  componentWillUnmount() {
+    // remove database listener
+    const unMountListener = this.query.onSnapshot(() => {
+    });
   }
   
   loadUser = () => {
@@ -66,14 +71,9 @@ class Comments extends Component {
         })
     })
     .catch((err) => {
+      console.log("Getting to here in Comments")
         console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
     })
-}
-
-  componentWillUnmount() {
-    // remove database listener
-    const unMountListener = this.comments.onSnapshot(() => {
-    });
   }
 
   onChange = (comment) => {  
@@ -99,23 +99,12 @@ class Comments extends Component {
       time: this.time,
       userID: User.getCurrentUserID()
     };
-    this.comments.doc().set(commentData);
-  };
-
-  getAll = () => {
-    const allComments = this.comments
-      .orderBy('time', 'asc')
-      .get()
-      .then(snapshot => {
-        let existingComments = [];
-        snapshot.forEach(doc => {
-          existingComments.push(doc.data());
-        });
-        this.setState({commentsArray: existingComments});
-      })
-      .catch(err => {
-        console.log("Error getting comments ", err);
-      });
+    db
+    .collection("posts")
+    .doc(this.props.navigation.getParam('postID'))
+    .collection("comments")
+    .doc()
+    .set(commentData);
   };
 
   mainInputBox = () => {
@@ -148,7 +137,7 @@ class Comments extends Component {
         </Header>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
-            {this.state.commentsArray.map((comment, index) => (
+            {this.state.comments.map((comment, index) => (
               <Parent 
                 body={comment.body}
                 time={comment.time}
@@ -157,6 +146,7 @@ class Comments extends Component {
                 postID={this.currentPost}
                 hideInput={this.mainInputBox}
                 exit={this.handleReplyExit}
+                children={comment.children}
               />
             ))}
           </ScrollView>

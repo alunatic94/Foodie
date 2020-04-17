@@ -19,7 +19,7 @@ class Comment extends Component{
   }
 
   componentWillMount() {
-    this.loadUser();
+    this.loadUser();    
  }
 
  loadUser = () => {
@@ -29,12 +29,11 @@ class Comment extends Component{
          })
      })
      .catch((err) => {
-         console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
+       console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
      })
  }
 
   handleChange = (comment) => {
-    console.log('Reply comment')    
     this.setState({
       comment: comment,
       buttonTextColor: '#0fd90d'
@@ -42,7 +41,6 @@ class Comment extends Component{
   }
 
   displayReplyMenu = () => {
-    console.log("Displaying buttons")
     this.setState({
       showReplyMenu: true
     })
@@ -50,7 +48,6 @@ class Comment extends Component{
   }
 
   handleReplyExit = () => {
-    console.log("Pressed exit button")
     this.textInput.clear()
     this.setState({      
       buttonTextColor: '#0065ff',
@@ -60,8 +57,7 @@ class Comment extends Component{
   }
 
   parentReplied = () => {
-    console.log("parentReplied called in comment")
-    this.props.handleReply(this.state.comment)    
+    this.props.handleReply(this.state.comment, this.state.user.userID)    
     this.handleReplyExit()
   }
 
