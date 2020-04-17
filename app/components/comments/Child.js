@@ -2,7 +2,6 @@ import React, { Component, Children } from 'react';
 import {User} from '../../database/User.js'
 import Comment from './Comment.js';
 import { db } from '../../database/Database.js'
-// const tempImage = require('../screens/assets/dog.png');
 class Child extends Component{
   constructor(props) {
     super(props);
@@ -33,7 +32,7 @@ class Child extends Component{
             .doc(this.props.postID)
             .collection("comments")
             .where("hasChildren", "==", true)
-            .where("body", "==", this.props.parentBody) //Potential bugs with same comment emojis
+            .where("body", "==", this.props.parentBody) //Potential bugs with same comment body
             .get()
             .then((snapShot) => {
               snapShot.forEach(()=> {

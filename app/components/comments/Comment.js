@@ -5,8 +5,6 @@ import styles from '../../screens/styles.js'
 import {User} from '../../database/User.js'
 import { TextInput } from 'react-native';
 import Moment from 'moment';
-
-const tempImage = require('../../screens/assets/dog.png');
 class Comment extends Component{
   constructor(props) {
     super(props);
