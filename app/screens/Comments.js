@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   Container,
   Input,
@@ -10,18 +10,17 @@ import {
   Header,
   Footer,
   Content,
-  ListItem
+  ListItem,
+  View
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import { KeyboardAvoidingView, Text} from "react-native";
+import { KeyboardAvoidingView, Text, Image } from "react-native";
 import styles from './styles.js';
 import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
 import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
-
-const tempImage = require('../screens/assets/dog.png');
 // TODO:
 // 1. change buttonTextColor when input is empty
 // 2. update with user info
@@ -37,7 +36,6 @@ class Comments extends Component {
   currentPost = db
   .collection("posts")
   .doc(this.props.navigation.getParam('postID')).id
-  
 
   constructor(props) {
     super(props);
@@ -47,11 +45,12 @@ class Comments extends Component {
       isLoaded: false,
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
-      showFooter: true
+      showFooter: true      
     };
+
   }
-  
-  componentDidMount() {  
+
+  componentDidMount() {
     this.setState({
       isLoaded:true,
     });
@@ -169,7 +168,7 @@ class Comments extends Component {
   }
 
   render() {
-    if(this.state.isLoaded){
+    if(!this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -230,9 +229,13 @@ class Comments extends Component {
       </Container>
     );
     }
-    else
+    else    
     return (
-      <CommentPagePlaceHolder style={this.props.style}/>
+      <Content contentContainerStyle={{justifyContent: "center", flex: 1}} >
+        <View style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+          <Image source={require("../styles/assets/loading.gif")}/>            
+      </View>
+     </Content>
     );
 
   }
