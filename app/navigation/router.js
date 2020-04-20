@@ -38,6 +38,8 @@ const ProfileStack = createStackNavigator({
     Profile: { screen: Profile },
     ProfileEdit: { screen: ProfileEdit },
     ProfileEditPhoto: { screen: ProfileEditPhoto },
+    Comments: {screen: Comments},
+    LikePage: {screen: LikePage},
     AddPost: AddPostStack,
     Main: Profile,
   }, stackOptions);

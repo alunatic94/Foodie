@@ -35,6 +35,8 @@ class Comments extends Component {
   currentPost = db
   .collection("posts")
   .doc(this.props.navigation.getParam('postID')).id
+
+  users = db.collection("users")
   
   time = new Date().getTime()
 
@@ -42,34 +44,18 @@ class Comments extends Component {
     super(props);
     this.state = {
       comment: "",
-<<<<<<< HEAD
       comments: [],
-=======
-      commentsArray: [],
-      isLoaded: false,
->>>>>>> dev
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
       showFooter: true
     };
   }
   
-<<<<<<< HEAD
   componentDidMount() {
     const listener = this.query.onSnapshot(querySnapshot => {
       this.setState({
         comments: querySnapshot.docs.map((snapshot) => snapshot.data())
       })
-=======
-  componentDidMount() {  
-    this.setState({
-      isLoaded:true,
-    });
-    this.getAll();
-    const query = this.comments
-    const listener = query.onSnapshot(querySnapshot => {
-      this.getAll();
->>>>>>> dev
     }, err => {
       console.log('There was an error');
     });
@@ -169,8 +155,7 @@ class Comments extends Component {
     })
   }
 
-  render() {
-    if(this.state.isLoaded){
+  render() {    
     return (
       <Container>        
         <Header>
@@ -230,11 +215,6 @@ class Comments extends Component {
           )}
         </KeyboardAvoidingView>
       </Container>
-    );
-    }
-    else
-    return (
-      <CommentPagePlaceHolder style={this.props.style}/>
     );
 
   }
