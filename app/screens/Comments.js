@@ -15,10 +15,11 @@ import {
 import { withNavigation, ScrollView } from "react-navigation";
 import { KeyboardAvoidingView, Text} from "react-native";
 import styles from './styles.js';
-import { db } from "../database/Database.js";
+import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
+import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -41,18 +42,34 @@ class Comments extends Component {
     super(props);
     this.state = {
       comment: "",
+<<<<<<< HEAD
       comments: [],
+=======
+      commentsArray: [],
+      isLoaded: false,
+>>>>>>> dev
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
       showFooter: true
     };
   }
   
+<<<<<<< HEAD
   componentDidMount() {
     const listener = this.query.onSnapshot(querySnapshot => {
       this.setState({
         comments: querySnapshot.docs.map((snapshot) => snapshot.data())
       })
+=======
+  componentDidMount() {  
+    this.setState({
+      isLoaded:true,
+    });
+    this.getAll();
+    const query = this.comments
+    const listener = query.onSnapshot(querySnapshot => {
+      this.getAll();
+>>>>>>> dev
     }, err => {
       console.log('There was an error');
     });
@@ -67,7 +84,7 @@ class Comments extends Component {
   loadUser = () => {
     User.getCurrent().then((loadedUser) => {
         this.setState({
-            user: loadedUser
+            user: loadedUser,
         })
     })
     .catch((err) => {
@@ -90,8 +107,41 @@ class Comments extends Component {
       comment: "",
       buttonTextColor: '#0065ff',
     });    
+    const increment = firebase.firestore.FieldValue.increment(1);
+    this.users.doc(User.getCurrentUserID()).update({commentCount: increment})
+    this.addBadge(); 
   };
 
+  async addBadge() {
+    var badgeID = "";
+    var numComments; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numComments = doc.data().commentCount;
+      }
+    })
+    switch(numComments){
+      case 1: 
+        badgeID = "first-comment"; 
+        break;
+      case 20: 
+        badgeID = "twenty-comments";
+        break; 
+      default: 
+        badgeID = null; 
+    }
+    if (badgeID != null) {
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
+      badges.push(badgeID);
+
+      users.doc(User.getCurrentUserID()).update({ badges: badges });
+    }
+  }
 
   add = comment => {
     let commentData = {
@@ -120,6 +170,7 @@ class Comments extends Component {
   }
 
   render() {
+    if(this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -180,6 +231,12 @@ class Comments extends Component {
         </KeyboardAvoidingView>
       </Container>
     );
+    }
+    else
+    return (
+      <CommentPagePlaceHolder style={this.props.style}/>
+    );
+
   }
 }
 

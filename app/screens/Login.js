@@ -25,8 +25,7 @@ componentWillMount() {
   })
 }
 loginWithEmail = (email, password) => {
-    firebase.auth()
-      .signInWithEmailAndPassword(email, password)
+    firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
           console.log("Logged in user: " + res.user.email);
     });

@@ -8,6 +8,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './styles.js';
 import {firebase} from '../database/Database';
 import uuid from 'uuid';
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import {User} from '../database/User';
 
 export default class AddPostPhoto extends React.Component {
   state = {
@@ -20,27 +22,8 @@ export default class AddPostPhoto extends React.Component {
 
     return (
       <Container>
-      <Header>
-         <Left>
-             <Button 
-                  transparent
-                  onPress={() => this.props.navigation.navigate('AddPostPhoto')}> 
-                  <AntDesign name='pluscircle' style={{fontSize: 30, color: 'black'}} />
-             </Button>
-         </Left>
-
-         <Body>
-           <Text style={styles.heading}>Post a Plate</Text>
-         </Body>
-
-         <Right>
-           <Button 
-             transparent
-             onPress={() => logout(this.props.navigation)}>
-             <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
-           </Button>
-         </Right>
-     </Header>
+      
+    <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
      <Content>
 
          <Button block success onPress={this._pickImage}>
@@ -145,7 +128,7 @@ async function uploadImageAsync(uri) {
   const ref = firebase
     .storage()
     .ref()
-    .child(uuid.v4());
+    .child("images/" + User.getCurrentUserID() + "/" + uuid.v4());
   const snapshot = await ref.put(blob);
   blob.close();
   return await snapshot.ref.getDownloadURL();

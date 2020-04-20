@@ -2,7 +2,7 @@ import { TextInput, KeyboardAvoidingView, ActivityIndicator, ScrollView , Image}
 import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
 import React, { Component } from 'react';
 import styles from './styles.js';
-import {ProfileDB} from "../database/ProfileDB.js"
+import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js"
 import {firebase, db} from '../database/Database';
 import uuid from 'uuid';
@@ -27,7 +27,7 @@ export default class ProfileEditPhoto extends Component{
     componentDidMount() {
         this.getPermissionAsync();
         // Fetch profile data after component instance created
-        (new ProfileDB(this.state.userID)).getProfile().then((profile) => {
+        (new ProfileData(this.state.userID)).getProfile().then((profile) => {
             this.setState({currentProfile: profile, isProfileLoaded: true});
         });
     }
@@ -115,7 +115,6 @@ export default class ProfileEditPhoto extends Component{
           aspect: [4, 3],
           quality: 0, 
         });
-        console.log(result);
         if (!result.cancelled) {
           this.setState({ image: result.uri });
           this._handleImagePicked(result);

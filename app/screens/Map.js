@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import ScreenHeader from '../components/common/ScreenHeader.js';
+import MapPopUp  from '../components/MapPopUp'; 
 import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
 import { FontAwesome } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
@@ -35,6 +36,9 @@ class Map extends Component {
       xCord: "",
       yCord: ""
     };
+    
+      // Bind to Profile context so calls pop-up for plates tapped
+      this.togglePopUp = this.togglePopUp.bind(this);
   }
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
@@ -94,17 +98,15 @@ class Map extends Component {
     })
   }
 
-  togglePopUp = (name, phone, rating, x, y) => {
-    console.log("Setting to true")
-    // console.log(this.state.nearbyRestaurants[1])
-    console.log(x + " " + y)
-    this.setState({showPopUp: !this.state.showPopUp,
-      restaurantName: name,
-      restaurantPhone: phone,
-      restaurantRating: rating,
-      xCord: x,
-      yCord: y
-    })
+  togglePopUp(data=null) {
+      if (data) {
+          this.setState({modalData: data}, 
+              this.setState({showPopUp: !this.state.showPopUp})
+          );
+      }
+      else {
+          this.setState({showPopUp: !this.state.showPopUp});
+      }
   }
 
   render() {  
@@ -175,7 +177,7 @@ class Map extends Component {
                     latitude: marker.coordinates.latitude,
                     longitude: marker.coordinates.longitude
                   }}                  
-                  onPress = {() => this.togglePopUp(marker.name, marker.display_phone, marker.rating, marker.coordinates.latitude, marker.coordinates.longitude)}
+                  onPress = {() => this.togglePopUp(marker)}
                   >                  
                   <View>
                     <Image
@@ -191,54 +193,10 @@ class Map extends Component {
         </MapView>
 
         {this.state.showPopUp ? 
-            <View>
-              <Modal isVisible={this.state.showPopUp}>              
-                  <Card>
-                      <CardItem header>
-                          <Text>{this.state.restaurantName}</Text>
-                          </CardItem>
-                          <CardItem>
-                          <Body>
-                              <Text>
-                                Plates
-                              </Text>
-                              <List>
-                                  <ListItem avatar>
-                                      <Left>
-                                          <Thumbnail/>
-                                      </Left>                                        
-                                  </ListItem>                                    
-                              </List>                                
-                          </Body>
-                          </CardItem>                            
-                          <CardItem footer style={{flexDirection: 'row', flexWrap: 'wrap'}}>                            
-                              <FontAwesome name='mobile' style={{fontSize: 25, color: "#6fdedc", paddingRight: 5}}/>
-                              <Text style={{paddingRight: 20}}>{this.state.restaurantPhone}</Text>                            
-                              <FontAwesome name='star' style={{fontSize: 20, color: "#6fdedc", paddingRight: 5}}/>
-                              <Text>{this.state.restaurantRating}</Text>                            
-                        </CardItem>
-                  </Card>                  
-                    <CardItem style={{backgroundColor: 'transparent'}}>
-                      <Left>
-                        <Button
-                        onPress={() => {this.setState({showPopUp: false})}}
-                        style={{backgroundColor: '#6fdedc', margin: 0}}
-                        >
-                          <FontAwesome name='close' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
-                        </Button>
-                      </Left>
-                      <Right>
-                        <Button
-                        style={{backgroundColor: '#6fdedc'}}
-                        onPress={() => {Linking.openURL((url))}}
-                        >                          
-                          <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
-                        </Button>
-                      </Right>
-                    </CardItem>
-              </Modal>                
-          </View>
-              : null}
+          <Modal isVisible={this.state.showPopUp}>
+            <MapPopUp data={this.state.modalData} onPress={this.togglePopUp} />
+          </Modal>
+          : null }
 
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {

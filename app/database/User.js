@@ -1,4 +1,4 @@
-import {firebase, db} from '../database/Database';
+import {db, firebase} from '../database/Database';
 
 users = db.collection('users');
 
@@ -59,6 +59,9 @@ export class User {
     userData.last = last;
     userData.age = age;
     userData.email = email;
+    userData.postCount = 0; 
+    userData.likeCount = 0; 
+    userData.commentCount = 0; 
 
     users.doc(userID).set(userData)
     .then((doc) => {
@@ -113,5 +116,8 @@ export class User {
     this.about = userData.about;
     this.tagline = userData.tagline;
     this.points = userData.points;
+    this.postCount = userData.postCount; 
+    this.likeCount = userData.likeCount; 
+    this.commentCount = userData.commentCount; 
   }
 }

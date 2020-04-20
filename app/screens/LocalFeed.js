@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 /* import { Text } from 'react-native' */
-import { Container, Content, Segment, Button, Text, View} from 'native-base';
+import { Container, Content, Segment, Button, Text, View } from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
-import { db } from '../database/Database.js';
-import ScreenHeader from '../components/common/ScreenHeader.js'
+import { db } from '../database/Database';
 import geohash from 'ngeohash'
+import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
+import styles from './styles.js';
 
 export default class LocalFeed extends Component {
 
@@ -16,7 +17,8 @@ export default class LocalFeed extends Component {
     this.state = {
       posts: [],
       latitude: '',
-      longitude: ''
+      longitude: '',
+      isLoaded: false
     }
   }
 
@@ -33,10 +35,9 @@ export default class LocalFeed extends Component {
               postID: doc.id,
               data: doc.data()
             }
-            console.log(post.data.geohash)
             existingPosts.push(post);
           });
-          this.setState({ posts: existingPosts });
+          this.setState({ posts: existingPosts, isLoaded: true});
         })
     },
       error => this.setState({ error: error.message }),
@@ -67,28 +68,23 @@ export default class LocalFeed extends Component {
   }
 
   render() {
-    return (
+    if (!this.state.isLoaded) {
+      return (
+        <Container>
+          <Content>
+            <PostCardPlaceholder style={styles.roundCard} />
+            <PostCardPlaceholder style={styles.roundCard} />
+            <PostCardPlaceholder style={styles.roundCard}/>
+          </Content>
+        </Container>
+      )
+    }
+    else return (
       <Container>
-
-        <ScreenHeader navigation={this.props.navigation} title="Feed">
-        </ScreenHeader>
-
-        <Segment>
-          <Button first active onPress = {() => this.props.navigation.navigate('LocalFeed')}> 
-            <Text>Local</Text>
-          </Button>
-          <Button last active onPress = {() => this.props.navigation.navigate('FriendsFeed')}> 
-            <Text>Friend</Text>
-          </Button>
-        </Segment>
-        
         <Content>
-          {/* TODO: Dynamically load post ids from collection to create Feedcard for each one */}
-          {/* <FeedCard postID="Qe1PUrFY32K8EYL9UYqW"/>
-         <FeedCard postID="aDpWMJ1UfX7U2rdbvXtR"/> */}
-          <ScrollView />
-          {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} />)}
-          <ScrollView />
+          <ScrollView>
+          {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} post={post.data}/>)}
+          </ScrollView>
         </Content>
       </Container>
     )

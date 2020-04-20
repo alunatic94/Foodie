@@ -3,17 +3,18 @@ import { Left, Right, Button, Header, H2, View, Icon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../../screens/Login.js';
 import styles from '../../screens/styles.js';
+import { NavigationActions } from 'react-navigation';
 export default class ScreenHeader extends Component{
     render(){
         return(
-            <Header>
+            <Header hasTabs style={styles.screenHeader}>
               <Left>
                 {this.props.back ? 
                 <Button
                   iconLeft
                   light
                   onPress={() => {
-                    this.props.navigation.goBack();
+                    this.props.navigation.dispatch(NavigationActions.back())
                   }}
                 >
                   <Icon name="arrow-back" />
