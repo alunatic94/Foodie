@@ -31,6 +31,11 @@ export default class ScreenHeader extends Component{
               <Right>
                 <Button 
                   transparent
+                  onPress={() => this.props.navigation.navigate('Help')}>
+                  <AntDesign name='question' style={{fontSize: 30, color: 'black'}} />
+                </Button>
+                <Button 
+                  transparent
                   onPress={() => logout(this.props.navigation)}>
                   <AntDesign name='logout' style={{fontSize: 30, color: 'black'}} />
                 </Button>

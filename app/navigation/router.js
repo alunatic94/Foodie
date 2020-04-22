@@ -15,11 +15,9 @@ import LikePage from '../screens/LikePage.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
 import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
-import LocalFeed from '../screens/LocalFeed.js'
-import FriendsFeed from '../screens/FriendsFeed.js'
+import Help from '../screens/Help.js';
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
-
 const stackOptions = {
     headerMode: 'none'
 };
@@ -41,12 +39,14 @@ const ProfileStack = createStackNavigator({
     Comments: {screen: Comments},
     LikePage: {screen: LikePage},
     AddPost: AddPostStack,
+    Help: {screen: Help},
     Main: Profile,
   }, stackOptions);
   
   const MapStack = createStackNavigator({
       Map: { screen: Map },
       AddPost: AddPostStack,
+      Help: {screen: Help},
       Main: Map
   }, stackOptions);
 
@@ -56,6 +56,7 @@ const ProfileStack = createStackNavigator({
     LikePage: { screen: LikePage },
     AddPost: AddPostStack,
     ProfileOther: {screen: ProfileOther},
+    Help: {screen: Help},
     Main: Feed
   }, stackOptions);
   
