@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { Pages } from 'react-native-pages';
-import { View } from 'native-base';
- 
+import { View, Container } from 'native-base';
+import ScreenHeader from '../../components/common/ScreenHeader.js'
 export default class HelpPost extends Component {
   render() {
     return (
+    <Container>
+      <ScreenHeader navigation={this.props.navigation} title="Help Menu" back />
       <Pages horizontal = {false}>
         <View style={{ flex: 1, backgroundColor: 'red' }} />
         <View style={{ flex: 1, backgroundColor: 'green' }} />
         <View style={{ flex: 1, backgroundColor: 'blue' }} />
       </Pages>
+    </Container>
     );
   }
 }
