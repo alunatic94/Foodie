@@ -14,7 +14,9 @@ export default class HelpBadge extends Component {
         <Image style={{flex:1, height: undefined, width: undefined}}
                source={require('./assets/HelpBadge1.png')} 
                resizeMode="contain" />
-        <View style={{ flex: 1, backgroundColor: 'green' }} />
+        <Image style={{flex:1, height: undefined, width: undefined}}
+               source={require('./assets/HelpBadge2.png')} 
+               resizeMode="contain" />
       </Pages>
     </Container>
     );
