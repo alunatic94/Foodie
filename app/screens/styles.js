@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   commentsFooter: {
     display: "flex",
     flexDirection: "row",
-    marginBottom: 10
+    // marginBottom: 10
   },
   postButton: {
     display: 'flex',

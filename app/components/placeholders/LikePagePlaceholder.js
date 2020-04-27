@@ -23,7 +23,7 @@ import { withNavigation, ScrollView } from "react-navigation";
               color: "grey",
               fontFamily: "Raleway Bold",
               fontSize: 15
-            }}> Users that Liked this Photo</Text>
+            }}></Text>
           </Header>
           <Content style={{ marginTop: 30 }}>
           <View

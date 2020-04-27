@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
   Container,
   Input,
@@ -20,12 +20,9 @@ import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
-import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
 // TODO:
 // 1. change buttonTextColor when input is empty
-// 2. update with user info
-// 3. structure time
-// 4. Disable footer scroll
+// 2. structure time
 class Comments extends Component {
   comments = db
     .collection("posts")

@@ -4,8 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { Container, Header, Left, Right, Body, Content, Button, Text } from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign'; 
-import styles from './styles.js';
 import {firebase} from '../database/Database';
 import uuid from 'uuid';
 import ScreenHeader from '../components/common/ScreenHeader.js';
