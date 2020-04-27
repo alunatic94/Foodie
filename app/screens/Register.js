@@ -17,7 +17,9 @@ class Register extends React.Component{
              last: '',
              age: 0,
              email: '',
+             emailerror:'',
              password: '',
+             passworderror:'',
              userId: ''
          }
    }
@@ -44,6 +46,44 @@ class Register extends React.Component{
       ]
     }))
    }
+   emailValidate(){
+     if(this.state.email==""){
+       this.setState({emailerror:"Email can not be left empty."})
+     }
+     else{
+      this.setState({emailerror:""})
+     }
+   }
+   passwordValidate(){
+    var letters = /^[a-zA-Z]+$/;
+    var numbers = /^[0-9]+$/;
+    var specialchar = /^[!@#$%^&*()]+$/;
+    var pass=this.state.password
+     if(this.state.password==""){
+       this.setState({passworderror:"Password can not be left empty"})
+     }
+     else{
+       this.setState({passworderror:""})
+     }
+     if(!letters.test(this.state.password)){
+       this.setState({passworderror:"Password must have atleast one alphabetical letter "})
+     }
+     else{
+      this.setState({passworderror:""})
+    }
+     if(!numbers.test(this.state.password)){
+       this.setState({passworderror:"Password must contain at least one numerical value"})
+     }
+     else{
+      this.setState({passworderror:""})
+    }
+     if(!specialchar.test(this.state.password)){
+       this.setState({passworderror:"Password must contain atleast one special character"})
+     }
+     else{
+      this.setState({passworderror:""})
+    }
+   }
    render(){
      return(
      <KeyboardAvoidingView style={{flex:1}} behavior="padding">
@@ -52,6 +92,7 @@ class Register extends React.Component{
            <Image source = {require('./assets/logo.png')} />
          </View>
          <TextInput placeholder="Username"
+         maxLength={10}
          style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({username:text})}
@@ -59,7 +100,7 @@ class Register extends React.Component{
          <View>
              <View style={{flexDirection:"row" }}>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder=" First" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
+                     <TextInput placeholder=" First" keyboardType="ascii-capable" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
                  </View>
                  <View style={{flex: 1}}>
                      <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({last:text})} />
@@ -74,16 +115,21 @@ class Register extends React.Component{
            onChangeText={(text) => this.setState({age:text})}
         />
          <TextInput placeholder=" Email"
+         keyboardType="email-address"
+         onBlur={()=> this.emailValidate()}
          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({email:text})}
         />
+        <Text style={{color:'red'}}>{this.state.emailerror} </Text>
          <TextInput placeholder=" Password"
+         onBlur={() => this.passwordValidate()}
          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
          secureTextEntry
          onChangeText={(text) => this.setState({password:text})}
          />
+         <Text style={{color:'red'}}>{this.state.passworderror} </Text>
          <Button
           title = 'Register Account'
           onPress = { () => {
