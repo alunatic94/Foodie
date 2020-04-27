@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Pages } from 'react-native-pages';
-import { View, Container } from 'native-base';
+import { Container } from 'native-base';
 import {Image} from 'react-native'
 import ScreenHeader from '../../components/common/ScreenHeader.js'
  
