@@ -69,6 +69,8 @@ class Register extends React.Component{
          <TextInput placeholder=" Age"
          style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
          returnKeyLabel = {"next"}
+         keyboardType="numeric"
+         maxLength={2}
            onChangeText={(text) => this.setState({age:text})}
         />
          <TextInput placeholder=" Email"
