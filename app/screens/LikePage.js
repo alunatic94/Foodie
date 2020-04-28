@@ -103,12 +103,19 @@ class LikePage extends Component {
               >
                 <Icon name="arrow-back" />
               </Button>
+              <Text>{this.props.navigation.state.params.like}</Text>
             </Left>
+            <Right>
+              <View>
+              <MaterialCommunityIcons name="fire" color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={35} onPress={this.updateLikes} />
+              {this.props.navigation.state.params.like}
+              </View>
+            </Right>
             <Text style={{
-              color: "grey",
+              color: "black",
               fontFamily: "Raleway Bold",
               fontSize: 15
-            }}> Users that Liked this Photo</Text>
+            }}>{this.props.navigation.state.params.like}</Text>
           </Header>
           <Content style={{ marginTop: 10 }}>
             {
@@ -156,7 +163,8 @@ class LikePage extends Component {
 
         </Container >
       );
-    } else {
+    } 
+    else {
       return (
         <LikePagePlaceholder style={this.props.style}/>
       );

@@ -11,7 +11,8 @@ class Login extends React.Component{
 
     this.state = {
         email: '',
-        password: ''
+        password: '',
+        errormessage:''
     }
 }
 
@@ -28,6 +29,11 @@ loginWithEmail = (email, password) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
           console.log("Logged in user: " + res.user.email);
+    })
+    .catch((error)=> {
+      this.setState({errormessage:"Invalid password and/or email"})
+      console.log(error.code);
+      console.log(error.message);
     });
   };
 
@@ -54,6 +60,7 @@ loginWithEmail = (email, password) => {
           returnKeyLabel = {"next"}
           onChangeText={(text) => this.setState({email:text})}
         />
+        <Text style={{color:'red'}}>{this.state.errormessage} </Text>
         <TextInput placeholder=" Password"
           style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
           returnKeyLabel = {"next"}

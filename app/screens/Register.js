@@ -131,6 +131,16 @@ class Register extends React.Component{
          />
          <Text style={{color:'red'}}>{this.state.passworderror} </Text>
          <Button
+           title = 'Have an account? Log in'
+           onPress = {() => {
+             this.props.navigation.dispatch(StackActions.reset({
+               index:0,
+               actions:[
+                 NavigationActions.navigate({ routeName: 'Login'})
+               ]
+             }))
+           }} />
+         <Button
           title = 'Register Account'
           onPress = { () => {
              this.registerUser();

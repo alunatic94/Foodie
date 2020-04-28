@@ -180,7 +180,7 @@ class LikeButton extends React.Component {
           
           <Text style={{paddingTop: 10}}
           onPress={() => this.props.navigation.navigate('LikePage', {
-          postID: this.props.postID})}
+            postID: this.props.postID, like: this.props.post.like})}
           // style={styles.lightText}
           >{this.state.like} likes</Text>        
       </View>
