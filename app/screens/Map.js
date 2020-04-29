@@ -1,15 +1,16 @@
 import MapView, { Marker } from "react-native-maps";
 import React, { Component } from 'react';
-import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import MapPopUp  from '../components/MapPopUp'; 
-import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
-import { FontAwesome } from 'react-native-vector-icons';
+import { Container } from 'native-base';
+import { FontAwesome, Feather } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
 import { Linking, Platform } from 'react-native';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
+import { Slider, Text } from 'react-native-elements';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -34,7 +35,10 @@ class Map extends Component {
       restaurantPhone: "",
       restaurantRating: 0,
       xCord: "",
-      yCord: ""
+      yCord: "",
+      SliderDist: 0,
+      minSliderDist: 0,
+      maxSliderDist: 15
     };
     
       // Bind to Profile context so calls pop-up for plates tapped
@@ -123,6 +127,34 @@ class Map extends Component {
           <ScreenHeader navigation={this.props.navigation}>
           </ScreenHeader>
 
+          <View style={{paddingLeft: 50, // distance slider
+        paddingRight: 50,
+        paddingBottom: 2,
+        backgroundColor: 'transparent'}}>
+            <Slider 
+               minimumValue = {this.state.minSliderDist}
+               maximumValue = {this.state.maxSliderDist}
+               thumbStyle = '#6fdedc'
+               thumbTintColor = '#6fdedc'
+               step = {1}
+               value={this.state.SliderDist}
+               onValueChange={value => this.setState({SliderDist: value})}
+            />
+             <View style={{flexDirection: 'row',
+             justifyContent: 'space-between'}}>
+                    <Text style={{color:'grey', 
+                    fontSize: 12}}>
+                      {this.state.minSliderDist} mi</Text>
+                    <Text style={{color:'red',
+                    fontSize: 12}}>
+                        {this.state.SliderDist + ' mi'}
+                    </Text>
+                    <Text style={{color:'grey',
+                  fontSize: 12}}>
+                      {this.state.maxSliderDist} mi</Text>
+                </View>
+        </View>
+
           <MapView
             style={{ flex: 5 }}
             region={{
@@ -153,7 +185,7 @@ class Map extends Component {
 
         <ScreenHeader navigation = {this.props.navigation} title="Map">
         </ScreenHeader>
-
+      
         <MapView
           style={{ flex: 5 }}
           intialRegion={region}
@@ -198,6 +230,29 @@ class Map extends Component {
           </Modal>
           : null }
 
+        {/* Filter Menu */}
+       <TouchableOpacity>
+        <View style={{
+              backgroundColor: "grey", 
+              width: 60,
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              shadowColor: "#333",
+              shadowOpacity: 1,
+              shadowOffset:
+                { x: 2, y: 0 },
+              shadowRadius: 2,
+              borderRadius: 30,
+              position: "absolute",
+              alignSelf: 'flex-end',
+              marginTop: -540,
+              right: 18
+            }}>
+        <Feather name='menu' style={{ fontSize: 25, color: "white" }} />
+        </View>
+        </TouchableOpacity> 
+        
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
                 lat: this.state.latitude,
@@ -219,7 +274,7 @@ class Map extends Component {
               borderRadius: 30,
               position: "absolute",
               bottom: 30,
-              right: 20,
+              right: 20
             }}>
               <FontAwesome name='search' style={{ fontSize: 25, color: "white" }} />
             </View>

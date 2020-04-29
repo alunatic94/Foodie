@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
@@ -11,7 +11,8 @@ class Login extends React.Component{
 
     this.state = {
         email: '',
-        password: ''
+        password: '',
+        errormessage:''
     }
 }
 
@@ -28,6 +29,11 @@ loginWithEmail = (email, password) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
           console.log("Logged in user: " + res.user.email);
+    })
+    .catch((error)=> {
+      this.setState({errormessage:"Invalid password and/or email"})
+      console.log(error.code);
+      console.log(error.message);
     });
   };
 
@@ -43,30 +49,38 @@ loginWithEmail = (email, password) => {
 
     render(){
      return (
-      <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+
+      <KeyboardAvoidingView style={{flex: 1, alignItems: 'center'}} behavior="padding">
       <View style={styles.left}>
         <View style = {styles.centered}>
           <Image source = {require('./assets/logo.png')} />
         </View>
   
-        <TextInput placeholder=" Email"
-          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+        <TextInput placeholder="  Email"
+          style = {[styles.loginInput, {marginTop: 18}]}
           returnKeyLabel = {"next"}
           onChangeText={(text) => this.setState({email:text})}
         />
+
         <TextInput placeholder=" Password"
-          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+          style = {[styles.loginInput, {marginTop: 8}]}
           returnKeyLabel = {"next"}
           secureTextEntry
           onChangeText={(text) => this.setState({password:text})}
         />
-        <Button
-           title = 'Log In'
+         <Text style={{color:'red'}}>{this.state.errormessage}</Text>
+
+        <TouchableOpacity
            onPress = {() => {
             this.loginWithEmail(this.state.email, this.state.password);
-          }} />
-        <Button
-           title = 'First Time? Create an Account!'
+          }}>
+            <View style = {[styles.loginButton, {marginTop: 2}]}>
+              <Text style={styles.loginButtonText}>Log In</Text>
+            </View>
+            </TouchableOpacity>
+            <View style ={styles.signUpCont}>
+            <Text>Don't have an account? </Text>   
+        <TouchableOpacity
            onPress = {() => {
              this.props.navigation.dispatch(StackActions.reset({
                index:0,
@@ -74,7 +88,12 @@ loginWithEmail = (email, password) => {
                  NavigationActions.navigate({ routeName: 'Register'})
                ]
              }))
-           }} />
+           }}>
+             <View>
+               <Text style={styles.signUpLink}>Sign up!</Text>
+             </View>
+           </TouchableOpacity>
+           </View>
       </View>
     </KeyboardAvoidingView>
     );
