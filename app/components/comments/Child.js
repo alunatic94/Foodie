@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import {User} from '../../database/User.js'
 import Comment from './Comment.js';
-
-
-// const tempImage = require('../screens/assets/dog.png');
-
+import { db } from '../../database/Database.js'
 class Child extends Component{
   constructor(props) {
     super(props);
@@ -28,8 +25,20 @@ class Child extends Component{
      })
  }
 
-  replyChild = () => {    
+  replyChild = async (comment, userThatReplied) => {    
     console.log('Reply child')
+    let childComment =   await db
+            .collection("posts")
+            .doc(this.props.postID)
+            .collection("comments")
+            .where("hasChildren", "==", true)
+            .where("body", "==", this.props.parentBody) //Potential bugs with same comment body
+            .get()
+            .then((snapShot) => {
+              snapShot.forEach(()=> {
+                this.props.handleForMeBig(comment, userThatReplied)
+              })
+            })
   }  
 
     render(){
@@ -41,6 +50,7 @@ class Child extends Component{
                   postID={this.props.postID}
                   inputBox={this.props.inputBox}
                   showFooter={this.props.showFooter}
+                  handleReply={this.replyChild}
           />
         )}
 }

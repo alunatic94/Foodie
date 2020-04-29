@@ -24,40 +24,46 @@ import Moment from 'moment';
 // 1. change buttonTextColor when input is empty
 // 2. structure time
 class Comments extends Component {
-  comments = db
+  query = db
     .collection("posts")
     .doc(this.props.navigation.getParam('postID'))
-    .collection("comments");
+    .collection("comments")
+    .orderBy('time', 'asc')
 
-  time = Moment().format('LT');
   currentPost = db
   .collection("posts")
   .doc(this.props.navigation.getParam('postID')).id
+
+  users = db.collection("users")
+  
+  time = new Date().getTime()
 
   constructor(props) {
     super(props);
     this.state = {
       comment: "",
-      commentsArray: [],
-      isLoaded: false,
+      comments: [],
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
       showFooter: true      
     };
 
   }
-
+  
   componentDidMount() {
-    this.setState({
-      isLoaded:true,
-    });
-    this.getAll();
-    const query = this.comments
-    const listener = query.onSnapshot(querySnapshot => {
-      this.getAll();
+    const listener = this.query.onSnapshot(querySnapshot => {
+      this.setState({
+        comments: querySnapshot.docs.map((snapshot) => snapshot.data())
+      })
     }, err => {
       console.log('There was an error');
-    });    
+    });
+  }
+
+  componentWillUnmount() {
+    // remove database listener
+    const unMountListener = this.query.onSnapshot(() => {
+    });
   }
   
   loadUser = () => {
@@ -67,14 +73,9 @@ class Comments extends Component {
         })
     })
     .catch((err) => {
+      console.log("Getting to here in Comments")
         console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
     })
-}
-
-  componentWillUnmount() {
-    // remove database listener
-    const unMountListener = this.comments.onSnapshot(() => {
-    });
   }
 
   onChange = (comment) => {  
@@ -133,23 +134,12 @@ class Comments extends Component {
       time: this.time,
       userID: User.getCurrentUserID()
     };
-    this.comments.doc().set(commentData);
-  };
-
-  getAll = () => {
-    const allComments = this.comments
-      .orderBy('time', 'asc')
-      .get()
-      .then(snapshot => {
-        let existingComments = [];
-        snapshot.forEach(doc => {
-          existingComments.push(doc.data());
-        });
-        this.setState({commentsArray: existingComments});
-      })
-      .catch(err => {
-        console.log("Error getting comments ", err);
-      });
+    db
+    .collection("posts")
+    .doc(this.props.navigation.getParam('postID'))
+    .collection("comments")
+    .doc()
+    .set(commentData);
   };
 
   mainInputBox = () => {
@@ -164,8 +154,7 @@ class Comments extends Component {
     })
   }
 
-  render() {
-    if(!this.state.isLoaded){
+  render() {    
     return (
       <Container>        
         <Header>
@@ -183,7 +172,7 @@ class Comments extends Component {
         </Header>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
-            {this.state.commentsArray.map((comment, index) => (
+            {this.state.comments.map((comment, index) => (
               <Parent 
                 body={comment.body}
                 time={comment.time}
@@ -192,6 +181,7 @@ class Comments extends Component {
                 postID={this.currentPost}
                 hideInput={this.mainInputBox}
                 exit={this.handleReplyExit}
+                children={comment.children}
               />
             ))}
           </ScrollView>
@@ -224,15 +214,6 @@ class Comments extends Component {
           )}
         </KeyboardAvoidingView>
       </Container>
-    );
-    }
-    else    
-    return (
-      <Content contentContainerStyle={{justifyContent: "center", flex: 1}} >
-        <View style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-          <Image source={require("../styles/assets/loading.gif")}/>            
-      </View>
-     </Content>
     );
 
   }

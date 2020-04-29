@@ -12,9 +12,7 @@ class Parent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            user: User.dummyUser,
-            child: "Testing child",
-            children: []
+            user: User.dummyUser
         }
     }
 
@@ -33,9 +31,23 @@ class Parent extends Component {
         })
     }    
 
-    replyParent = async (childComment) => {        
-        this.state.children.push(childComment)
-        console.log("Reply Parent")        
+    replyParent = async (childComment, userThatReplied) => {
+
+        let currentChildren = this.props.children
+        let sendToFireStore = []
+        if(currentChildren == null){
+            console.log(currentChildren == null)
+            let initChild = {childComment, userThatReplied}
+            sendToFireStore.push(initChild)
+        }else{
+            console.log("currentChildren in else: " , currentChildren)
+            let addChild = {childComment, userThatReplied}
+            sendToFireStore = currentChildren
+            sendToFireStore.push(addChild)
+            console.log("got to else")
+        }        
+        
+        console.log("Reply Parent")
         let parentComment =   await db
             .collection("posts")
             .doc(this.props.postID)
@@ -43,24 +55,22 @@ class Parent extends Component {
             .where('body', '==', this.props.body)
             .get()
             .then(snapshot => {
-                if(snapshot.empty){
+                if(snapshot.empty){ 
                     console.log("Empty")
                     return;
                 }
                 snapshot.forEach((document) => {
-                    db.collection("posts")
-                    .doc(this.props.postID)
-                    .collection("comments")
-                    .doc(document.id).set({
-                        children: this.state.children                        
+                    document.ref.set({
+                        children: sendToFireStore,
+                        hasChildren: true
                     }, {merge: true})
-                    console.log("Uploaded to FireStore")
+                    console.log("Uploaded to FireStore...")
                 });
             })
             .catch(err => {
                 console.log(err)
         })
-    }    
+    }
 
     handleInputBox = () => {
         this.props.hideInput()
@@ -80,17 +90,20 @@ class Parent extends Component {
                     postID={this.props.postID}
                     inputBox={this.handleInputBox}
                     showFooter={this.exitReply}
-                    handleReply={this.replyParent}                    
+                    handleReply={this.replyParent}
                 />
-                {this.state.children.map((comment, index) =>                    
+                
+                {this.props.children && this.props.children.map((comment, index) =>
                     (<Child
                         key={index}
-                        body={comment.body}
-                        time={this.props.time} //TODO: get time from library - refer to comments screen
-                        userID={this.props.userID}
+                        body={comment.childComment}
+                        parentBody={this.props.body}
+                        time={this.props.time} //TODO: Structure time
+                        userID={comment.userThatReplied}
                         postID={this.props.postID}
                         inputBox={this.handleInputBox}
                         showFooter={this.exitReply}
+                        handleForMeBig={this.replyParent}
                     />))}
             </View>
         )

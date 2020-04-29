@@ -5,8 +5,6 @@ import styles from '../../screens/styles.js'
 import {User} from '../../database/User.js'
 import { TextInput } from 'react-native';
 import Moment from 'moment';
-
-const tempImage = require('../../screens/assets/dog.png');
 class Comment extends Component{
   constructor(props) {
     super(props);
@@ -19,7 +17,7 @@ class Comment extends Component{
   }
 
   componentWillMount() {
-    this.loadUser();
+    this.loadUser();    
  }
 
  loadUser = () => {
@@ -29,12 +27,11 @@ class Comment extends Component{
          })
      })
      .catch((err) => {
-         console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
+       console.log(err + ":" + "Could not load user [id = " + this.props.userID + "] for comment");
      })
  }
 
   handleChange = (comment) => {
-    console.log('Reply comment')    
     this.setState({
       comment: comment,
       buttonTextColor: '#0fd90d'
@@ -42,7 +39,6 @@ class Comment extends Component{
   }
 
   displayReplyMenu = () => {
-    console.log("Displaying buttons")
     this.setState({
       showReplyMenu: true
     })
@@ -50,7 +46,6 @@ class Comment extends Component{
   }
 
   handleReplyExit = () => {
-    console.log("Pressed exit button")
     this.textInput.clear()
     this.setState({      
       buttonTextColor: '#0065ff',
@@ -59,9 +54,8 @@ class Comment extends Component{
     this.props.showFooter()
   }
 
-  parentReplied = () => {
-    console.log("parentReplied called in comment")
-    this.props.handleReply(this.state.comment)    
+  handleReplies = () => {
+    this.props.handleReply(this.state.comment, this.state.user.userID)
     this.handleReplyExit()
   }
 
@@ -100,7 +94,7 @@ class Comment extends Component{
                             <Button transparent rounded
                               style={styles.postButton}
                               disabled={!this.state.comment}
-                              onPress={this.parentReplied}
+                              onPress={this.handleReplies}
                             >
                               <Text style={{color: this.state.buttonTextColor}}>Post</Text>
                             </Button>
