@@ -5,6 +5,7 @@ import CustomTooltip from '../../components/common/CustomTooltip';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView} from "react-native";
 import styles from '../../screens/styles.js';
+import { globalStyles } from '../../styles/global.js';
  
 export default class Badges extends Component {
     // Loop through badges list and add Icon component for each one                                       
@@ -29,7 +30,7 @@ export default class Badges extends Component {
         return (
             <CardItem>
             <Body>
-                <H2 style={styles.heading}>Badges</H2>
+                <H2 style={globalStyles.heading}>Badges</H2>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={{flexDirection: "row"}}>
                     {this.renderBadges(this.props.data)}
