@@ -15,8 +15,12 @@ import LikePage from '../screens/LikePage.js';
 import ProfileEdit from '../screens/ProfileEdit.js'
 import ProfileOther from '../screens/ProfileOther.js'
 import ProfileEditPhoto from '../screens/ProfileEditPhoto.js'
-import LocalFeed from '../screens/LocalFeed.js'
-import FriendsFeed from '../screens/FriendsFeed.js'
+import Help from '../screens/Help.js';
+import HelpBadge from '../screens/helpmenus/HelpBadge.js'
+import HelpMap from '../screens/helpmenus/HelpMap.js'
+import HelpPost from '../screens/helpmenus/HelpPost.js'
+import HelpProfile from '../screens/helpmenus/HelpProfile.js'
+import HelpFeed from '../screens/helpmenus/HelpFeed.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
 import { AquaMain } from '../styles/global.js'
@@ -34,6 +38,16 @@ const AddPostStack = createStackNavigator({
     },
     Main: AddPostPhoto
 }, stackOptions)
+
+const HelpStack = createStackNavigator({
+    Help: {screen: Help},
+    HelpBadge: {screen: HelpBadge},
+    HelpMap: {screen: HelpMap},
+    HelpPost: {screen: HelpPost},
+    HelpProfile: {screen: HelpProfile},
+    HelpFeed: {screen: HelpFeed},
+    Main: Help
+}, stackOptions)
  
 const ProfileStack = createStackNavigator({
     Profile: { screen: Profile },
@@ -42,12 +56,14 @@ const ProfileStack = createStackNavigator({
     Comments: {screen: Comments},
     LikePage: {screen: LikePage},
     AddPost: AddPostStack,
+    Help: HelpStack, 
     Main: Profile,
   }, stackOptions);
   
   const MapStack = createStackNavigator({
       Map: { screen: Map },
       AddPost: AddPostStack,
+      Help: HelpStack, 
       Main: Map
   }, stackOptions);
 
@@ -57,6 +73,7 @@ const ProfileStack = createStackNavigator({
     LikePage: { screen: LikePage },
     AddPost: AddPostStack,
     ProfileOther: {screen: ProfileOther},
+    Help: HelpStack, 
     Main: Feed
   }, stackOptions);
   

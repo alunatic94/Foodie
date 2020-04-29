@@ -287,7 +287,7 @@ export default class AddPostComment extends Component {
           <View style={{
             borderWidth: 1,
             height: 100,
-            alignItems: 'left',
+            //alignItems: 'left',
             justifyContent: 'center',
             justifyContent: 'space-between',
             paddingTop: 15, paddingBottom: 20
