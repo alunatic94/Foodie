@@ -108,7 +108,7 @@ class LikePage extends Component {
               color: "grey",
               fontFamily: "Raleway Bold",
               fontSize: 15
-            }}> Users that Liked this Photo</Text>
+            }}></Text>
           </Header>
           <Content style={{ marginTop: 10 }}>
             {
@@ -139,26 +139,11 @@ class LikePage extends Component {
               })
             }
           </Content>
-
-
-          <Footer>
-            <Container style={styles.commentsFooter}>
-              <ListItem avatar >
-                <Left>
-                  <Thumbnail small source={{ uri: this.state.currentProfile.profileImage }} />
-                </Left>
-              </ListItem>
-              <Content>
-
-              </Content>
-            </Container>
-          </Footer>
-
-        </Container >
+        </Container>
       );
     } else {
       return (
-        <LikePagePlaceholder style={this.props.style}/>
+        <LikePagePlaceholder/>
       );
     }
 

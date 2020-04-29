@@ -10,18 +10,16 @@ import {
   Header,
   Footer,
   Content,
-  ListItem
+  ListItem,
+  View
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import { KeyboardAvoidingView, Text} from "react-native";
+import { KeyboardAvoidingView, Text, Image } from "react-native";
 import styles from './styles.js';
 import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
-import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
-
-const tempImage = require('../screens/assets/dog.png');
 // TODO:
 // 1. change buttonTextColor when input is empty
 // 2. structure time
@@ -47,8 +45,9 @@ class Comments extends Component {
       comments: [],
       buttonTextColor: '#0065ff',
       user: User.dummyUser,
-      showFooter: true
+      showFooter: true      
     };
+
   }
   
   componentDidMount() {
@@ -155,7 +154,8 @@ class Comments extends Component {
     })
   }
 
-  render() {    
+  render() {
+    if(!this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -215,6 +215,15 @@ class Comments extends Component {
           )}
         </KeyboardAvoidingView>
       </Container>
+    );
+    }
+    else    
+    return (
+      <Content contentContainerStyle={{justifyContent: "center", flex: 1}} >
+        <View style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+          <Image source={require("../styles/assets/loading.gif")}/>            
+      </View>
+     </Content>
     );
 
   }

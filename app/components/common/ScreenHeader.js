@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Left, Right, Button, Header, H2, View, Icon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {logout} from '../../screens/Login.js';
-import styles from '../../screens/styles.js';
+import { globalStyles } from '../../styles/global.js';
 import { NavigationActions } from 'react-navigation';
 export default class ScreenHeader extends Component{
     render(){
         return(
-            <Header hasTabs style={styles.screenHeader}>
+            <Header hasTabs style={globalStyles.screenHeader}>
               <Left>
                 {this.props.back ? 
                 <Button
@@ -27,7 +27,7 @@ export default class ScreenHeader extends Component{
                 </Button>
               }
               </Left>
-              <View><H2 style={styles.heading}>{this.props.title}</H2></View>
+              <View><H2 style={globalStyles.heading}>{this.props.title}</H2></View>
               <Right>
                 <Button 
                   transparent

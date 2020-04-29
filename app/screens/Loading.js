@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {firebase} from '../database/Database';
 import {Image, View} from 'react-native';
 import { StackActions, NavigationActions} from 'react-navigation';
-import styles from './styles.js';
+import { globalStyles } from '../styles/global.js';
 export default class Loading extends Component {
     componentWillMount() {
         this.loginListener = firebase.auth().onAuthStateChanged(user => { 
@@ -20,7 +20,7 @@ export default class Loading extends Component {
     }
     render() {
         return (
-            <View style={styles.centered}>
+            <View style={globalStyles.centered}>
                 <Image source={{ uri: '../assets/logo.png' }} />
             </View>
         )

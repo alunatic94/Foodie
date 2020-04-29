@@ -3,7 +3,6 @@ import { Container, Content, Segment, Button, Text, View} from 'native-base';
 import FeedCard from '../components/FeedCard.js';
 import { ScrollView } from 'react-native';
 import { db } from '../database/Database';
-import styles from './styles.js';
 import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
 
 export default class FriendsFeed extends Component {
@@ -107,9 +106,9 @@ export default class FriendsFeed extends Component {
       return (
         <Container>
           <Content>
-            <PostCardPlaceholder style={styles.roundCard} />
-            <PostCardPlaceholder style={styles.roundCard} />
-            <PostCardPlaceholder style={styles.roundCard}/>
+            <PostCardPlaceholder/>
+            <PostCardPlaceholder/>
+            <PostCardPlaceholder/>
           </Content>
         </Container>
       )

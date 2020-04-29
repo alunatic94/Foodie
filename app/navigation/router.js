@@ -23,6 +23,8 @@ import HelpProfile from '../screens/helpmenus/HelpProfile.js'
 import HelpFeed from '../screens/helpmenus/HelpFeed.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'native-base';
+import { AquaMain } from '../styles/global.js'
+
 const stackOptions = {
     headerMode: 'none'
 };
@@ -111,7 +113,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
         indicatorStyle: {
             opacity: 0
         },
-        activeTintColor: '#6fdedc',
+        activeTintColor: AquaMain,
         inactiveTintColor: 'grey',
         showIcon: true, 
         style: {
