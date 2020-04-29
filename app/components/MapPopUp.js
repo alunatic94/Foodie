@@ -4,8 +4,7 @@ import { Linking, Platform } from 'react-native';
 import { FontAwesome } from 'react-native-vector-icons';
 import {ScrollView} from "react-native";
 import TitleAndIconsPlaceholder from './placeholders/TitleAndIconsPlaceholder';
-import styles from '../screens/styles.js';
-import {AquaMain} from '../styles/global.js';
+import { globalStyles, AquaMain } from '../styles/global.js'
 
 // Temp Image
 const image = require('../screens/assets/howlin.png');
@@ -43,7 +42,7 @@ export default class MapPopUp extends Component{
     renderPlates = (plates) => {
         iconSize = 50;
         if (plates.length == 0) {
-            return <Text style={styles.lightText}>None so far!</Text>;
+            return <Text style={globalStyles.lightText}>None so far!</Text>;
         }
         else {
             return(
@@ -65,13 +64,13 @@ export default class MapPopUp extends Component{
     <View>
         <Card>
             <CardItem header>
-                <H2 style={styles.heading}>{this.props.data.name}</H2>
+                <H2 style={globalStyles.heading}>{this.props.data.name}</H2>
                 </CardItem>
 
             {this.state.arePlatesLoaded && 
                 <CardItem>
                     <Body>
-                        <H2 style={styles.headingSmall}>Plates Eaten Here</H2>
+                        <H2 style={globalStyles.headingSmall}>Plates Eaten Here</H2>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             <View style={{flexDirection: "row"}}>
                                 {this.renderPlates(this.state.plates)}

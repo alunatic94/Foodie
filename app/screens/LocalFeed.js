@@ -6,7 +6,6 @@ import { ScrollView } from 'react-native';
 import { db } from '../database/Database';
 import geohash from 'ngeohash'
 import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
-import styles from './styles.js';
 
 export default class LocalFeed extends Component {
 
@@ -72,9 +71,9 @@ export default class LocalFeed extends Component {
       return (
         <Container>
           <Content>
-            <PostCardPlaceholder style={styles.roundCard} />
-            <PostCardPlaceholder style={styles.roundCard} />
-            <PostCardPlaceholder style={styles.roundCard}/>
+            <PostCardPlaceholder/>
+            <PostCardPlaceholder/>
+            <PostCardPlaceholder/>
           </Content>
         </Container>
       )

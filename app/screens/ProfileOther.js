@@ -5,7 +5,6 @@ import { Image, ScrollView, ActivityIndicator, FlatList, Dimensions, StyleSheet 
 import {BadgeData} from "../database/BadgeData.js"
 import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js";
-import styles from './styles.js';
 import {db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import Modal from "react-native-modal";

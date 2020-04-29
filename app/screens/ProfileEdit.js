@@ -1,7 +1,7 @@
 import { TextInput, KeyboardAvoidingView, ActivityIndicator, ScrollView , Image} from 'react-native';
 import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
 import React, { Component } from 'react';
-import styles from './styles.js';
+import { globalStyles } from '../styles/global.js';
 import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js"
 import {firebase, db} from '../database/Database';
@@ -50,7 +50,7 @@ export default class ProfileEdit extends Component{
             <Container>
             <ScreenHeader navigation = {this.props.navigation} back />
             <KeyboardAvoidingView style={{flex:1}} behavior="padding">
-            <Text style={styles.heading}>
+            <Text style={globalStyles.heading}>
                  First Name:  
             </Text>
             <TextInput placeholder={this.state.currentProfile.first}
@@ -58,7 +58,7 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newFirst:text})}
             />  
-            <Text style={styles.heading}>
+            <Text style={globalStyles.heading}>
                  Last Name:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.last}
@@ -66,7 +66,7 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newLast:text})}
             />
-            <Text style={styles.heading}>
+            <Text style={globalStyles.heading}>
                  Age:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.age}
@@ -74,7 +74,7 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAge:text})}
             />
-            <Text style={styles.heading}>
+            <Text style={globalStyles.heading}>
                  About:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.about}
