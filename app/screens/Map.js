@@ -1,15 +1,16 @@
 import MapView, { Marker } from "react-native-maps";
 import React, { Component } from 'react';
-import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import MapPopUp  from '../components/MapPopUp'; 
-import { Container, List, Content, Card, CardItem, Body, Button, ListItem, Left, Right, Thumbnail } from 'native-base';
-import { FontAwesome } from 'react-native-vector-icons';
+import { Container } from 'native-base';
+import { FontAwesome, Feather } from 'react-native-vector-icons';
 import Modal from 'react-native-modal';
 import { Linking, Platform } from 'react-native';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
+import { Slider, Text } from 'react-native-elements';
 
 const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
@@ -34,7 +35,10 @@ class Map extends Component {
       restaurantPhone: "",
       restaurantRating: 0,
       xCord: "",
-      yCord: ""
+      yCord: "",
+      SliderDist: 0,
+      minSliderDist: 0,
+      maxSliderDist: 15
     };
     
       // Bind to Profile context so calls pop-up for plates tapped
@@ -153,7 +157,7 @@ class Map extends Component {
 
         <ScreenHeader navigation = {this.props.navigation} title="Map">
         </ScreenHeader>
-
+      
         <MapView
           style={{ flex: 5 }}
           intialRegion={region}
@@ -196,8 +200,8 @@ class Map extends Component {
           <Modal isVisible={this.state.showPopUp}>
             <MapPopUp data={this.state.modalData} onPress={this.togglePopUp} />
           </Modal>
-          : null }
-
+          : null } 
+        
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
                 lat: this.state.latitude,
@@ -219,7 +223,7 @@ class Map extends Component {
               borderRadius: 30,
               position: "absolute",
               bottom: 30,
-              right: 20,
+              right: 20
             }}>
               <FontAwesome name='search' style={{ fontSize: 25, color: "white" }} />
             </View>

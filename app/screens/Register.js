@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { StackActions, NavigationActions} from 'react-navigation';
 import styles from './styles.js';
@@ -46,50 +46,75 @@ class Register extends React.Component{
    }
    render(){
      return(
-     <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+       <ScrollView>
+         <KeyboardAvoidingView style={{flex: 1}} behavior="position">
        <View style = {styles.left}>
          <View style = {styles.centered}>
            <Image source = {require('./assets/logo.png')} />
          </View>
-         <TextInput placeholder="Username"
-         style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder="  Username"
+         style = {styles.regInput}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({username:text})}
         />
-         <View>
-             <View style={{flexDirection:"row" }}>
+         <View style={{marginTop: 0}}>
+             <View style={{flexDirection: "row"}}>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder=" First" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
+                     <TextInput placeholder="  First"
+                      style={[styles.regInput, {marginRight: 0, justifyContent: 'flex-start'}]}
+                      returnKeyLabel = {"next"}
+                       onChangeText={(text) => this.setState({first:text})}/>
                  </View>
                  <View style={{flex: 1}}>
-                     <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({last:text})} />
+                     <TextInput placeholder="  Last"
+                      style={[styles.regInput, {marginLeft: 0, justifyContent: 'flex-end'}]}
+                      returnKeyLabel = {"next"}
+                       onChangeText={(text) => this.setState({last:text})} />
                  </View>
              </View>
          </View>
-         <TextInput placeholder=" Age"
-         style = {{  height: 40, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder="  Age"
+         style = {styles.regInput}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({age:text})}
         />
-         <TextInput placeholder=" Email"
-         style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder="  Email"
+         style = {[styles.regInput, {paddingTop: 0}]}
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({email:text})}
         />
-         <TextInput placeholder=" Password"
-         style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+         <TextInput placeholder="  Password"
+         style = {styles.regInput}
          returnKeyLabel = {"next"}
          secureTextEntry
          onChangeText={(text) => this.setState({password:text})}
          />
-         <Button
-          title = 'Register Account'
-          onPress = { () => {
-             this.registerUser();
-            }
+         <TouchableOpacity
+          onPress = { () => {this.registerUser();}}>
+            <View style = {styles.regButton}>
+              <Text style={styles.regButtonText}>Sign Up</Text>
+            </View>
+            </TouchableOpacity>
+            <View style ={styles.signInCont}>
+            <Text>Already have an account? </Text>   
+        <TouchableOpacity
+           onPress = {() => {
+             this.props.navigation.dispatch(StackActions.reset({
+               index:0,
+               actions:[
+                 NavigationActions.navigate({ routeName: 'Login'})
+               ]
+             }))
+           }}>
+             <View>
+               <Text style={styles.signInLink}>Sign in!</Text>
+             </View>
+           </TouchableOpacity>
+           </View>  
+         
              
             
-            /****
+          {/*   /****
              * OLD REGISTER -> SERVER CODE
              * SEE: registerWithEmail() 
              
@@ -118,11 +143,11 @@ class Register extends React.Component{
                     ]
                   }))
                 } 
-            ****/
-              } />
+            ****/}
+            
        </View>
-       </KeyboardAvoidingView>
-       
+       </KeyboardAvoidingView> 
+       </ScrollView>
      )
    }
  }

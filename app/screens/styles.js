@@ -9,7 +9,9 @@ const styles = StyleSheet.create({
   centered: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 60,
+    paddingBottom: 0
   },
   centeredTest: {
     flex: 1,
@@ -139,6 +141,81 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     backgroundColor: '#ddd'
+  },
+
+  loginInput: {
+    height: 40, 
+    borderColor: 'black', 
+    borderWidth: 2, 
+    margin: 10,
+    marginBottom: 0
+  },
+
+  loginButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 120, 
+    backgroundColor: '#6fdedc',
+    margin: 10,
+    borderRadius: 7
+  },
+
+  loginButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+
+  signUpCont: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 30,
+    fontWeight: 'bold'
+  },
+
+  signUpLink: {
+   color: '#5bb5b3',
+   fontWeight: 'bold'
+  },
+
+  regInput: {
+    height: 40, 
+    borderColor: 'black', 
+    borderWidth: 2, 
+    margin: 36,
+    marginBottom: 0, 
+    marginTop: 16
+  },
+
+  regButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 80, 
+    backgroundColor: '#6fdedc',
+    margin: 36,
+    borderRadius: 7
+  },
+
+  regButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    flexDirection: 'row'
+  },
+
+  signInCont: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 30,
+    paddingTop: 2,
+    fontWeight: 'bold'
+  },
+
+  signInLink: {
+   color: '#5bb5b3',
+   fontWeight: 'bold'
   }
 });
 export default styles; 
