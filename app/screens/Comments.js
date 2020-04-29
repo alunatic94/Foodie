@@ -10,15 +10,16 @@ import {
   Header,
   Footer,
   Content,
-  ListItem,
-  Right
+  ListItem
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/Comment.js";
-import { KeyboardAvoidingView, Text, AppState } from "react-native";
+import { KeyboardAvoidingView, Text} from "react-native";
 import styles from './styles.js';
-import { db } from "../database/Database";
+import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
+import Parent from "../components/comments/Parent.js";
+import Moment from 'moment';
+import CommentPagePlaceHolder  from '../components/placeholders/CommentPagePlaceHolder.js';
 
 const tempImage = require('../screens/assets/dog.png');
 // TODO:
@@ -29,22 +30,31 @@ const tempImage = require('../screens/assets/dog.png');
 class Comments extends Component {
   comments = db
     .collection("posts")
-    .doc(this.props.navigation.getParam('postID', 'Qe1PUrFY32K8EYL9UYqW')) //this.props.postsid -> Needs to be pasted from posts
+    .doc(this.props.navigation.getParam('postID'))
     .collection("comments");
 
-  time = new Date();
+  time = Moment().format('LT');
+  currentPost = db
+  .collection("posts")
+  .doc(this.props.navigation.getParam('postID')).id
+  
 
   constructor(props) {
     super(props);
     this.state = {
       comment: "",
       commentsArray: [],
+      isLoaded: false,
       buttonTextColor: '#0065ff',
-      user: User.dummyUser     
+      user: User.dummyUser,
+      showFooter: true
     };
   }
   
-  componentDidMount() {
+  componentDidMount() {  
+    this.setState({
+      isLoaded:true,
+    });
     this.getAll();
     const query = this.comments
     const listener = query.onSnapshot(querySnapshot => {
@@ -57,7 +67,7 @@ class Comments extends Component {
   loadUser = () => {
     User.getCurrent().then((loadedUser) => {
         this.setState({
-            user: loadedUser
+            user: loadedUser,
         })
     })
     .catch((err) => {
@@ -76,23 +86,56 @@ class Comments extends Component {
         comment: comment,
         buttonTextColor: '#0fd90d'
       });   
-  }  
+  }
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault();    
     this.add(this.state.comment);    
     this.setState({
       comment: "",
       buttonTextColor: '#0065ff',
     });    
+    const increment = firebase.firestore.FieldValue.increment(1);
+    this.users.doc(User.getCurrentUserID()).update({commentCount: increment})
+    this.addBadge(); 
   };
 
+  async addBadge() {
+    var badgeID = "";
+    var numComments; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numComments = doc.data().commentCount;
+      }
+    })
+    switch(numComments){
+      case 1: 
+        badgeID = "first-comment"; 
+        break;
+      case 20: 
+        badgeID = "twenty-comments";
+        break; 
+      default: 
+        badgeID = null; 
+    }
+    if (badgeID != null) {
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
+      badges.push(badgeID);
+
+      users.doc(User.getCurrentUserID()).update({ badges: badges });
+    }
+  }
 
   add = comment => {
     let commentData = {
       body: comment,
-      time: this.time.getTime(),
-      userID: User.getCurrentUserID()      
+      time: this.time,
+      userID: User.getCurrentUserID()
     };
     this.comments.doc().set(commentData);
   };
@@ -113,7 +156,20 @@ class Comments extends Component {
       });
   };
 
+  mainInputBox = () => {
+    this.setState({
+      showFooter: false
+    })
+  }
+
+  handleReplyExit = () => {
+    this.setState({
+      showFooter: true
+    })
+  }
+
   render() {
+    if(this.state.isLoaded){
     return (
       <Container>        
         <Header>
@@ -132,37 +188,53 @@ class Comments extends Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">  
           <ScrollView>          
             {this.state.commentsArray.map((comment, index) => (
-              <Comment body={comment.body} time={comment.time} key={index} userID={comment.userID}/>
+              <Parent 
+                body={comment.body}
+                time={comment.time}
+                key={index}
+                userID={comment.userID}
+                postID={this.currentPost}
+                hideInput={this.mainInputBox}
+                exit={this.handleReplyExit}
+              />
             ))}
-          </ScrollView>          
-          <Footer>
-          <Container style={styles.commentsFooter}>
-            <ListItem avatar >
-              <Left>
-                <Thumbnail small source={{uri: this.state.user.profileImage}} />
-              </Left>
-            </ListItem>            
-              <Content>            
-                <Item rounded >
-                  <Input
-                    placeholder="Comment"
-                    onChangeText={comment => this.onChange(comment)}
-                    value={this.state.comment}                    
-                  />
-                    <Button transparent rounded
-                        onPress={this.handleSubmit}
-                        disabled={!this.state.comment}
-                        style={styles.postButton}
-                    >
-                        <Text style={{color: this.state.buttonTextColor}}>Post</Text>
-                    </Button>                 
-                </Item>            
-                </Content>            
-            </Container>            
-          </Footer>
+          </ScrollView>
+          {this.state.showFooter && (
+            <Footer>
+            <Container style={styles.commentsFooter}>
+              <ListItem avatar >
+                <Left>
+                  <Thumbnail small source={{uri: this.state.user.profileImage}} />
+                </Left>
+              </ListItem>            
+                <Content>            
+                  <Item rounded>
+                    <Input
+                      placeholder="Comment"
+                      onChangeText={comment => this.onChange(comment)}
+                      value={this.state.comment}                    
+                    />
+                      <Button transparent rounded
+                          onPress={this.handleSubmit}
+                          disabled={!this.state.comment}
+                          style={styles.postButton}
+                      >
+                          <Text style={{color: this.state.buttonTextColor}}>Post</Text>
+                      </Button>
+                  </Item>
+                </Content>
+              </Container>
+            </Footer>
+          )}
         </KeyboardAvoidingView>
       </Container>
     );
+    }
+    else
+    return (
+      <CommentPagePlaceHolder style={this.props.style}/>
+    );
+
   }
 }
 

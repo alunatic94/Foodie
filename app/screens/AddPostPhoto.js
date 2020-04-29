@@ -9,6 +9,7 @@ import styles from './styles.js';
 import {firebase} from '../database/Database';
 import uuid from 'uuid';
 import ScreenHeader from '../components/common/ScreenHeader.js';
+import {User} from '../database/User';
 
 export default class AddPostPhoto extends React.Component {
   state = {
@@ -127,7 +128,7 @@ async function uploadImageAsync(uri) {
   const ref = firebase
     .storage()
     .ref()
-    .child(uuid.v4());
+    .child("images/" + User.getCurrentUserID() + "/" + uuid.v4());
   const snapshot = await ref.put(blob);
   blob.close();
   return await snapshot.ref.getDownloadURL();

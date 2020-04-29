@@ -6,7 +6,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database";
 import { User } from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
-import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import LikePage from '../screens/LikePage.js';
@@ -14,6 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 class LikeButton extends React.Component {
+  users = db.collection("users");
   ref = db.collection('posts').doc(this.props.postID);
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
   componentDidMount() {
@@ -75,7 +75,44 @@ class LikeButton extends React.Component {
       }
     })
   }
+  async addBadge() {
+    var badgeID = "";
+    var numLikes; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numLikes = doc.data().likeCount;
+      }
+    })
+    switch(numLikes){
+      case 1: 
+        badgeID = "first-like"; 
+        break;
+      case 20: 
+        badgeID = "twenty-likes";
+        break; 
+      default: 
+        badgeID = null; 
+    }
+    if (badgeID != null) {
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
+      duplicate = false; 
+      for(i=0; i<badges.length; i++){
+        if(badges[i] == badgeID){
+          duplicate = true; 
+        }
+      }
+      if(duplicate == false){
+        badges.push(badgeID); 
+      }
 
+      users.doc(User.getCurrentUserID()).update({ badges: badges });
+    }
+  }
   add = () => {
     let id = User.getCurrentUserID();
     let likeData = {
@@ -102,6 +139,7 @@ class LikeButton extends React.Component {
     if (!this.state.liked) {
       this.setState({ liked: true });
       this.add();
+      this.users.doc(User.getCurrentUserID()).update({likeCount: increment});
       this.setState((prevState, props) => {
         likeRef.update({ likes: increment });
         return {
@@ -113,10 +151,11 @@ class LikeButton extends React.Component {
         };
 
       });
-
+      this.addBadge(); 
     } else {
 
       this.remove();
+      this.users.doc(User.getCurrentUserID()).update({likeCount: decrement});
       this.setState((prevState, props) => {
         likeRef.update({ likes: decrement });
         //Remove the user from likeby collection in DB
@@ -141,7 +180,7 @@ class LikeButton extends React.Component {
           
           <Text style={{paddingTop: 10}}
           onPress={() => this.props.navigation.navigate('LikePage', {
-          postID: this.props.postID})}
+            postID: this.props.postID, like: this.props.post.like})}
           // style={styles.lightText}
           >{this.state.like} likes</Text>        
       </View>

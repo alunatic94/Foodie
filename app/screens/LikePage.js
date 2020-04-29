@@ -7,6 +7,7 @@ import { db } from "../database/Database";
 import { User } from "../database/User.js";
 import { ProfileData } from "../database/ProfileData.js"
 import { withNavigation, ScrollView } from "react-navigation";
+import LikePagePlaceholder  from '../components/placeholders/LikePagePlaceholder.js';
 //import Comment from "../components/Comment.js";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -57,7 +58,6 @@ class LikePage extends Component {
     await this.state.likeUserID.map(user => {
       users.doc(user).get().then(doc => {
         var data = doc.data()
-        console.log(data.userID)
         docArray.push({ name: data.username, profilePic: data.profileImage, first: data.first, last: data.last, userID: data.userID })
         this.setState({
           likeUsername: docArray
@@ -103,12 +103,19 @@ class LikePage extends Component {
               >
                 <Icon name="arrow-back" />
               </Button>
+              <Text>{this.props.navigation.state.params.like}</Text>
             </Left>
+            <Right>
+              <View>
+              <MaterialCommunityIcons name="fire" color={this.state.liked ? 'red' : 'rgb(237, 237, 237)'} size={35} onPress={this.updateLikes} />
+              {this.props.navigation.state.params.like}
+              </View>
+            </Right>
             <Text style={{
-              color: "grey",
+              color: "black",
               fontFamily: "Raleway Bold",
               fontSize: 15
-            }}> Users that Liked this Photo</Text>
+            }}>{this.props.navigation.state.params.like}</Text>
           </Header>
           <Content style={{ marginTop: 10 }}>
             {
@@ -156,11 +163,10 @@ class LikePage extends Component {
 
         </Container >
       );
-    } else {
+    } 
+    else {
       return (
-        <Container>
-          <Text>Loading...</Text>
-        </Container>
+        <LikePagePlaceholder style={this.props.style}/>
       );
     }
 

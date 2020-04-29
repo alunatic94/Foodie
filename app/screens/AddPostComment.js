@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { Container, Header, Left, Right, Body, Content, Button, Text, Input, View } from 'native-base';
+import { Container,Content, Button, Text, Input, View } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { logout } from '../screens/Login.js';
-import styles from './styles.js';
-import { db } from '../database/Database';
+import { db, firebase } from '../database/Database';
 import { User } from '../database/User.js';
-import Points from '../components/common/Points.js';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import axios from 'axios';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
@@ -27,6 +23,7 @@ export default class AddPostComment extends Component {
       likeButtonColor: '#a9a9a9',
       mehButtonColor: '#a9a9a9',
       dislikeButtonColor: '#a9a9a9',
+      veganButtonColor:'#a9a9a9',
       rating: 'meh',
       latitude: 0,
       longitude: 0,
@@ -39,6 +36,7 @@ export default class AddPostComment extends Component {
       like: false,
       meh: false,
       dislike: false,
+      isvegan:false,
       searchedRestaurantName: 'Search restaurants',
       searchedRestaurantID: '',
       searchedRestaurantCoordinates: []
@@ -120,27 +118,38 @@ export default class AddPostComment extends Component {
     })
   }
 
-  addBadge() {
+  async addBadge() {
     var badgeID = "";
-    var numPlates = this.state.user.plates.length;
-    // switch(numPosts) {
-    //   case 10:
-    //     badgeID = "ten-plates";
-    //     break;
-    //   case 25:
-    //     badgeID = "twenty-five-plates";
-    //     break;
-    //   case 100:
-    //     badgeID = "one-hundred-plates";
-    //     break;
-    //   default:
-    //     badgeID = null;
-    badgeID = "test";
-    // }
+    var numPlates; 
+    await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+      if(doc.exists){
+        numPlates = doc.data().postCount;
+      }
+    })
+    switch(numPlates){
+      case 1: 
+        badgeID = "first-plate"; 
+        break;
+      case 10: 
+        badgeID = "ten-plates"; 
+        break; 
+      case 20: 
+        badgeID = "twenty-plates";
+        break; 
+      case 100: 
+        badgeID = "hundred-plates"; 
+        break; 
+      default: 
+        badgeID = null; 
+    }
     if (badgeID != null) {
-      badges = this.state.user.badges;
+      badges = null; 
+      await this.users.doc(User.getCurrentUserID()).get().then((doc)=>{
+        if(doc.exists){
+          badges = doc.data().badges;
+        }
+      })
       badges.push(badgeID);
-
       users.doc(User.getCurrentUserID()).update({ badges: badges });
     }
   }
@@ -170,6 +179,28 @@ export default class AddPostComment extends Component {
       mehButtonColor: '#a9a9a9',
       rating: 'dislike'
     });
+  }
+
+  onChangeVegan = () => { 
+    if(!this.state.isvegan)
+    {
+      this.setState({
+        dislikeButtonColor:'#a9a9a9',
+        likeButtonColor: '#a9a9a9',
+        mehButtonColor: '#a9a9a9',
+        veganButtonColor:'green',
+        isvegan:true
+      });
+    }
+    else{
+      this.setState({
+        dislikeButtonColor:'#a9a9a9',
+        likeButtonColor: '#a9a9a9',
+        mehButtonColor: '#a9a9a9',
+        veganButtonColor:'#a9a9a9',
+        isvegan:false
+      });
+    }
   }
 
   submitButton = () => {
@@ -246,6 +277,39 @@ export default class AddPostComment extends Component {
               </Button>
             </View>
           </View>
+          <Text style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            paddingTop: 18,
+            paddingBottom: 25
+          }}>Category:</Text>
+
+          <View style={{
+            borderWidth: 1,
+            height: 100,
+            alignItems: 'left',
+            justifyContent: 'center',
+            justifyContent: 'space-between',
+            paddingTop: 15, paddingBottom: 20
+          }}>
+            
+            <View style={{ flexDirection: "row" }}>
+            <Text style={{
+            fontSize: 14,
+            fontWeight: "bold",
+            paddingTop: 15,
+            paddingBottom: 12,
+            paddingRight:3
+          }}>Vegan:</Text>
+              <Button
+                transparent>
+                <AntDesign name={'downcircle'} color={this.state.veganButtonColor}
+                  size={30} style={{ padding: 40,height:25,width:35 }}
+                  onPress={() => this.onChangeVegan()} />
+              </Button>
+              
+            </View>
+          </View>
 
           <Text style={{
             fontSize: 25,
@@ -283,8 +347,11 @@ export default class AddPostComment extends Component {
              this.submitButton();
             } }  */
             onPress={() => {
-              this.props.navigation.navigate('Main');
+              this.props.navigation.navigate('Feed');
               this.addPost();
+              const increment = firebase.firestore.FieldValue.increment(1);
+              this.users.doc(User.getCurrentUserID()).update({postCount: increment})
+              this.addBadge(); 
             }}>
             <Text>Post your plate</Text>
           </Button>

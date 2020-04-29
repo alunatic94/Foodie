@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, Button } from 'react-native';
 import { Container, Header, Left, Right, Body, Content, Text, Input, View } from 'native-base';
+import ScreenHeader from '../components/common/ScreenHeader.js';
 import styles from './styles.js';
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
@@ -81,7 +82,6 @@ export default class SearchRestaurants extends React.Component {
                 autocompleteResult: res.data.businesses,
                 isLoaded: true
             });
-            console.log(this.state.autocompleteResult)
         }).catch((err) => {
             console.log("Yelp request via Axios failed: " + err);
             return err;
@@ -93,43 +93,53 @@ export default class SearchRestaurants extends React.Component {
         const { goBack } = this.props.navigation;
         if (!isInitialized) {
             return (
-                <View style={styles.centeredTest}>
-                    <Text>Loading...</Text>
+                <View>
+                    <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back />
+                    <View style={styles.centeredTest}>
+                        <Text>Loading...</Text>
+                    </View>
                 </View>
+               
             )
         }
         else if (isLoaded) {
             return (
-                <Content>
-                    <SearchBar placeholder="Search restaurants.."
-                        onChangeText={this.updateSearch}
-                        lightTheme
-                        placeholderTextColor='grey'
-                        value={this.state.search}
-                        autoCorrect={false}
-                    />
-                    {
-                        this.state.autocompleteResult.map(r => {
-                            return <Button
-                                title={r.name}
-                                key={r.id}
-                                color='#696969'
+                <Container>
+                    <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back />
+                    <Content>
+                        <SearchBar placeholder="Search restaurants.."
+                            onChangeText={this.updateSearch}
+                            lightTheme
+                            placeholderTextColor='grey'
+                            value={this.state.search}
+                            autoCorrect={false}
+                        />
+                        {
+                            this.state.autocompleteResult.map(r => {
+                                return <Button
+                                    title={r.name}
+                                    key={r.id}
+                                    color='#696969'
 
-                                onPress={() => {
-                                    this.props.navigation.state.params.onGoBack(r);
-                                    temp = this.getLocation;
-                                    if (this.state.neededLoc) {
-                                        this.props.navigation.state.params.location(this.state.location);
-                                    }
-                                    this.props.navigation.goBack();
-                                }}
-                            />;
-                        })
-                    }
-                </Content>
+                                    onPress={() => {
+                                        this.props.navigation.state.params.onGoBack(r);
+                                        temp = this.getLocation;
+                                        if (this.state.neededLoc) {
+                                            this.props.navigation.state.params.location(this.state.location);
+                                        }
+                                        this.props.navigation.goBack();
+                                    }}
+                                />;
+                            })
+                        }
+                    </Content>
+                </Container>
+               
             );
         } else {
             return (
+                <Container>
+                <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back /> 
                 <Content>
                     <SearchBar placeholder="Search restaurants.."
                         ref="searchBar"
@@ -138,6 +148,7 @@ export default class SearchRestaurants extends React.Component {
                         placeholderTextColor='grey'
                         value={this.state.search} />
                 </Content>
+                </Container>
             );
 
         }
