@@ -21,6 +21,7 @@ class Register extends React.Component{
              usernameerror:'',
              password: '',
              passworderror:'',
+             ageerror:'',
              userId: '',
              firstnameerror:'',
              lastnameerror:''
@@ -69,6 +70,12 @@ class Register extends React.Component{
         }
         else{
           this.setState({lastnameerror:""})
+        }
+        if(this.state.age==""){
+          this.setState({ageerror:"Whats your age?"})
+        }
+        else{
+          this.setState({ageerror:""})
         }
         
       });
@@ -138,12 +145,12 @@ class Register extends React.Component{
              <View style={{flexDirection:"row" }}>
                  <View style={{flex: 1}}>
                      <TextInput placeholder=" First" keyboardType="ascii-capable" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
+                     <Text style={{color:'red'}}>{this.state.firstnameerror} </Text>
                  </View>
-                 <Text style={{color:'red'}}>{this.state.firstnameerror} </Text>
                  <View style={{flex: 1}}>
                      <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({last:text})} />
+                     <Text style={{color:'red'}}>{this.state.lastnameerror} </Text>
                  </View>
-                 <Text style={{color:'red'}}>{this.state.lastnamenameerror} </Text>
              </View>
          </View>
          <TextInput placeholder=" Age"
@@ -153,6 +160,7 @@ class Register extends React.Component{
          maxLength={2}
            onChangeText={(text) => this.setState({age:text})}
         />
+        <Text style={{color:'red'}}>{this.state.ageerror} </Text>
          <TextInput placeholder=" Email"
          keyboardType="email-address"
          onBlur={()=> this.emailValidate()}
