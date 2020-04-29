@@ -98,7 +98,7 @@ class Register extends React.Component{
      }
    }
    passwordValidate(){
-    var letters = /^[a-zA-Z]+$/;
+    var letters = /^[a-z]+$/;
     var numbers = /^[0-9]+$/;
     var specialchar = /^[!@#$%^&*()]+$/;
     var pass=this.state.password
@@ -108,24 +108,7 @@ class Register extends React.Component{
      else{
        this.setState({passworderror:""})
      }
-     if(!letters.test(this.state.password)){
-       this.setState({passworderror:"Password must have atleast one alphabetical letter "})
-     }
-     else{
-      this.setState({passworderror:""})
-    }
-     if(!numbers.test(this.state.password)){
-       this.setState({passworderror:"Password must contain at least one numerical value"})
-     }
-     else{
-      this.setState({passworderror:""})
-    }
-     if(!specialchar.test(this.state.password)){
-       this.setState({passworderror:"Password must contain atleast one special character"})
-     }
-     else{
-      this.setState({passworderror:""})
-    }
+
    }
    render(){
      return(
@@ -169,6 +152,7 @@ class Register extends React.Component{
            onChangeText={(text) => this.setState({email:text})}
         />
         <Text style={{color:'red'}}>{this.state.emailerror} </Text>
+        <KeyboardAvoidingView>
          <TextInput placeholder=" Password"
          onBlur={() => this.passwordValidate()}
          style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
@@ -177,6 +161,7 @@ class Register extends React.Component{
          onChangeText={(text) => this.setState({password:text})}
          />
          <Text style={{color:'red'}}>{this.state.passworderror} </Text>
+         </KeyboardAvoidingView>
          <Button
            title = 'Have an account? Log in'
            onPress = {() => {
