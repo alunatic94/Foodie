@@ -18,9 +18,12 @@ class Register extends React.Component{
              age: 0,
              email: '',
              emailerror:'',
+             usernameerror:'',
              password: '',
              passworderror:'',
-             userId: ''
+             userId: '',
+             firstnameerror:'',
+             lastnameerror:''
          }
    }
 
@@ -35,6 +38,39 @@ class Register extends React.Component{
         this.state.age.trim(), this.state.email.trim());
 
         this.navigateToLogin();
+      })
+      .catch((error)=> {
+        if(this.state.password==""){
+          this.setState({passworderror:"Password can not be left empty"})
+        }
+        else{
+          this.setState({passworderror:""})
+        }
+        if(this.state.email==""){
+          this.setState({emailerror:"Email can not be left empty."})
+        }
+        else{
+         this.setState({emailerror:""})
+        }
+        if(this.state.username==""){
+          this.setState({usernameerror:"You need a username!"})
+        }
+        else{
+         this.setState({usernameerror:""})
+        }
+        if(this.state.first==""){
+          this.setState({firstnameerror:"Whats your first name?"})
+        }
+        else{
+          this.setState({firstnameerror:""})
+        }
+        if(this.state.last==""){
+          this.setState({lastnameerror:"Whats your last name?"})
+        }
+        else{
+          this.setState({lastnameerror:""})
+        }
+        
       });
    }
 
@@ -97,14 +133,17 @@ class Register extends React.Component{
          returnKeyLabel = {"next"}
            onChangeText={(text) => this.setState({username:text})}
         />
+        <Text style={{color:'red'}}>{this.state.usernameerror} </Text>
          <View>
              <View style={{flexDirection:"row" }}>
                  <View style={{flex: 1}}>
                      <TextInput placeholder=" First" keyboardType="ascii-capable" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-start'}} returnKeyLabel = {"next"} onChangeText={(text) => this.setState({first:text})}/>
                  </View>
+                 <Text style={{color:'red'}}>{this.state.firstnameerror} </Text>
                  <View style={{flex: 1}}>
                      <TextInput placeholder=" Last" style={{ height: 40, borderColor: 'black', borderWidth: 2, justifyContent: 'flex-end'}}returnKeyLabel = {"next"} onChangeText={(text) => this.setState({last:text})} />
                  </View>
+                 <Text style={{color:'red'}}>{this.state.lastnamenameerror} </Text>
              </View>
          </View>
          <TextInput placeholder=" Age"
