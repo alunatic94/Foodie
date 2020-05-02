@@ -3,19 +3,22 @@ import { List, Card, CardItem, Text, Body, View, Button, ListItem, Left, Right, 
 import { Linking, Platform } from 'react-native';
 import { FontAwesome } from 'react-native-vector-icons';
 import {ScrollView} from "react-native";
-import TitleAndIconsPlaceholder from './placeholders/TitleAndIconsPlaceholder';
-import { globalStyles, AquaMain } from '../styles/global.js'
+import TitleAndImagesPlaceholder from './placeholders/TitleAndIconsPlaceholder';
+import { globalStyles, AquaMain } from '../styles/global.js';
+import { Rating } from 'react-native-ratings';
+import { db} from '../database/Database';
 
 // Temp Image
 const image = require('../screens/assets/howlin.png');
-export default class MapPopUp extends Component{
+export default class MapPopUp extends Component {
+    posts = db.collection("posts");
 
     constructor(props){
         super(props);
         this.state = {
             url: Platform.select({
-                ios: "maps:0,0?q=" + this.props.data.x + "," + this.props.data.y, 
-                android: "geo:0,0?q=" + this.props.data.x + "," + this.props.data.y
+                ios: `maps:${this.props.data.coordinates.latitude},${this.props.data.coordinates.longitude}?q=${this.props.data.name}`,
+                android: `geo:${this.props.data.coordinates.latitude},${this.props.data.coordinates.longitude}?q=${this.props.data.name}`
             })
         };        
     }
@@ -26,7 +29,7 @@ export default class MapPopUp extends Component{
 
     getPlates() {
         let plates = [];
-        posts.where("yelpID", "==", this.props.data.id).orderBy("timestamp", "desc").limit(10).get().then(snapshot => {
+        this.posts.where("yelpID", "==", this.props.data.id).orderBy("timestamp", "desc").limit(10).get().then(snapshot => {
             snapshot.forEach(doc => {
                 plate = doc.data();
                 if (!plate.id) plate.id = doc.id;
@@ -58,39 +61,93 @@ export default class MapPopUp extends Component{
         }
     }
 
+    renderRestaurantInformation() {
+        iconSize = 75;
+        return (
+            <View>
+                <CardItem style={[globalStyles.cardItem, {paddingBottom: 0, paddingTop: 0}]}>
+                    <H2 style={globalStyles.heading}>{this.props.data.name}</H2>   
+                </CardItem>
+                <CardItem style={[globalStyles.cardItem, {flexDirection: 'row', flexWrap: 'no-wrap'}]}>
+                    <Thumbnail key={`${this.props.data.id}_main_img`}
+                        style={{ width: iconSize, height: iconSize, borderRadius: 10, borderWidth: 0, backgroundColor: 'lightgray', margin: 5}}
+                        source={{ uri: this.props.data.image_url }}
+                    /> 
+                    <View style={{paddingLeft: 10, flexDirection: 'column', flexWrap: 'no-wrap', justifyContent: 'flex-start', alignItems: 'flex-start'}}>                    
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'flex-start'}}> 
+                            <Rating
+                                style={{justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', flexWrap: 'wrap'}}
+                                ratingCount={5}
+                                startingValue={this.props.data.rating}
+                                imageSize={20}
+                                showRating={false}
+                                readonly={true}
+                            />
+                            <Text style={globalStyles.lightText}> ({this.props.data.review_count})</Text> 
+                        </View>
+                        <Text style={globalStyles.lightText}>{this.props.data.categories[0].title}</Text>
+                    </View>
+                 </CardItem>
+            </View>
+        );
+    }
+
+    renderRestaurantCategories() {
+        let categoryNames = [];
+        this.props.data.categories.forEach((category, index) => {
+            categoryNames.push(category.title + (index < this.props.data.categories.length - 1 ? ", " : ""));
+        });
+    return (categoryNames.map((name) => {return <Text style={globalStyles.lightText}>{name}</Text>}));
+    }
+
+    renderPlatesEaten() {
+        iconSize = 50;
+        return (
+            <CardItem style={globalStyles.cardItem}>
+                <Body>
+                    <H2 style={globalStyles.headingSmall}>Plates Eaten Here</H2>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {this.state.arePlatesLoaded && <View style={{flexDirection: "row"}}>
+                            {this.renderPlates(this.state.plates)}
+                        </View>}
+                    </ScrollView>
+                </Body>
+            </CardItem>
+        );
+    }
+
+    renderBottomInformation() {
+        let numLikes, percLikes = 0;
+        if (this.state.arePlatesLoaded && this.state.plates.length > 0) {
+            numLikes = this.state.plates.filter((plate) => plate.rating === "like").length;
+            percLikes = (numLikes / this.state.plates.length * 100).toFixed(1);
+        }
+        return(
+            <CardItem footer style={[globalStyles.cardItem, {flexDirection: 'row', flexWrap: 'wrap'}]}>                            
+                <FontAwesome name='mobile' style={{fontSize: 25, color: AquaMain, paddingRight: 5}}/>
+                <Text style={{paddingRight: 20}} onPress={() => {Linking.openURL(`tel:${this.props.data.phone}`)}}>{this.props.data.phone}</Text>                            
+                {numLikes && <FontAwesome name='thumbs-up' style={{fontSize: 20, color: AquaMain, paddingRight: 5, paddingLeft: 5}}/>}
+                {numLikes && this.state.plates.length > 0 && <Text>{`${percLikes}%`}</Text>}                        
+            </CardItem>
+        );
+    }
+
+
      render(){
         return(
+            
         
     <View>
-        <Card>
-            <CardItem header>
-                <H2 style={globalStyles.heading}>{this.props.data.name}</H2>
-                </CardItem>
-
-            {this.state.arePlatesLoaded && 
-                <CardItem>
-                    <Body>
-                        <H2 style={globalStyles.headingSmall}>Plates Eaten Here</H2>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            <View style={{flexDirection: "row"}}>
-                                {this.renderPlates(this.state.plates)}
-                            </View>
-                        </ScrollView>
-                    </Body>
-                </CardItem>
-            }
-                                           
-                <CardItem footer style={{flexDirection: 'row', flexWrap: 'wrap'}}>                            
-                    <FontAwesome name='mobile' style={{fontSize: 25, color: AquaMain, paddingRight: 5}}/>
-                    <Text style={{paddingRight: 20}}>{this.props.data.phone}</Text>                            
-                    <FontAwesome name='star' style={{fontSize: 20, color: AquaMain, paddingRight: 5, paddingLeft: 5}}/>
-                    <Text>{this.props.data.rating}</Text>                            
-            </CardItem> 
+        <Card style={globalStyles.card}>
+            {this.renderRestaurantInformation()}
+            {this.renderPlatesEaten()}
+            {this.renderBottomInformation()}
         </Card>
         <Card transparent>              
             <CardItem style={{backgroundColor: 'transparent'}}>
                 <Left>
                 <Button
+                rounded
                 onPress={() => this.props.onPress()}
                 style={{backgroundColor: AquaMain, margin: 0}}
                 >
@@ -99,8 +156,9 @@ export default class MapPopUp extends Component{
                 </Left>
                 <Right>
                 <Button
+                rounded
                 style={{backgroundColor: AquaMain}}
-                onPress={() => {Linking.openURL((this.props.data.url))}}
+                onPress={() => {Linking.openURL((this.state.url))}}
                 >                          
                     <FontAwesome name='rocket' style={{fontSize: 25, color: "white", paddingRight: 50, paddingLeft: 50}}/>
                 </Button>
@@ -108,6 +166,7 @@ export default class MapPopUp extends Component{
             </CardItem>
         </Card>
     </View>
-        );    
-     }     
+        );   
+     } 
+    
 }

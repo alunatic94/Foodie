@@ -89,7 +89,44 @@ class LikePage extends Component {
 
 
   render() {
-    if (this.state.isLoaded && this.state.profileLoaded && this.state.namesLoaded) {
+    if (!this.state.isLoaded && this.state.ProfileLoaded || this.state.isLoaded && !this.state.likeUsername) {
+      return (
+        <Container>
+          <Header>
+          <Left>
+            <Button
+              iconLeft
+              light
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Text style={{
+            color: "grey",
+            fontFamily: "Raleway Bold",
+            fontSize: 15
+          }}></Text>
+        </Header>
+        <Content contentContainerStyle={{marginTop: 10, flexDirection: "column",  height: '90%', justifyContent: "center", alignItems: "center"}}>
+          <Text style={{
+                    alignSelf: 'center',
+                    color: "lightgray",
+                    fontFamily: "Raleway Bold",
+                    fontSize: 23,
+                    marginLeft: 20
+                  }}>
+            Be the first to like this!
+          </Text>
+        </Content>
+      </Container>
+
+      )
+    
+    }
+    else if (this.state.isLoaded && this.state.profileLoaded && this.state.namesLoaded) {
       return (
         <Container>
           <Header>
@@ -119,6 +156,7 @@ class LikePage extends Component {
                     alignItems: "center",
                     //justifyContent: "left",
                     marginLeft: 20,
+                    marginBottom: 5
                   }}
                     onPress={() => this.props.navigation.navigate('ProfileOther',
                       { userID: name.userID })}

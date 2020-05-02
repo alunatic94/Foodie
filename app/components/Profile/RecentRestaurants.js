@@ -10,9 +10,10 @@ import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
 import TitleAndIconsPlaceholder  from '../placeholders/TitleAndIconsPlaceholder';
 import {ScrollView} from "react-native";
 
-posts = db.collection("posts");
+
  
 export default class RecentRestaurants extends Component {
+    posts = db.collection("posts");
 
     constructor(props) {
         super(props);
@@ -62,7 +63,7 @@ export default class RecentRestaurants extends Component {
     getRecentRestaurants() {
         // Get yelp IDs from user's most recent posts
         yelpIDs = [];
-        posts.where("userID", "==", this.props.userID)
+        this.posts.where("userID", "==", this.props.userID)
             .orderBy('timestamp', 'desc')
             .limit(10)
             .get()

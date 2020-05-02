@@ -5,6 +5,7 @@ import CustomTooltip from '../../components/common/CustomTooltip';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView} from "react-native";
 import styles from '../../screens/styles.js';
+import { badgeColors } from '../../styles/global.js';
  
 export default class Badges extends Component {
     // Loop through badges list and add Icon component for each one                                       
@@ -17,7 +18,9 @@ export default class Badges extends Component {
                 badges.map((badge) => {
                     return (
                         <CustomTooltip key={badge.badgeID} backgroundColor={"rgba(52, 52, 52, 0.8)"} withOverlay={false} popover={<Text style={{color: 'white'}}>{badge.description}</Text>}>
-                            <Icon key={badge.badgeID} name={badge.icon} style={styles.padding} size={30} />
+                            <Icon key={badge.badgeID} name={badge.icon} style={styles.padding} size={30} 
+                                color={badgeColors[badge.color] ? badgeColors[badge.color] : badge.color} 
+                            />
                         </CustomTooltip>
                     );
                 })

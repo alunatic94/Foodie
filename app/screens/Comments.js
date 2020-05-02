@@ -11,7 +11,8 @@ import {
   Footer,
   Content,
   ListItem,
-  View
+  View,
+  Toast
 } from "native-base";
 import { withNavigation, ScrollView } from "react-navigation";
 import { KeyboardAvoidingView, Text, Image } from "react-native";
@@ -20,6 +21,8 @@ import { db, firebase } from "../database/Database";
 import {User} from "../database/User.js";
 import Parent from "../components/comments/Parent.js";
 import Moment from 'moment';
+import {AquaMain, badgeColors} from "../styles/global";
+
 // TODO:
 // 1. change buttonTextColor when input is empty
 // 2. structure time
@@ -124,7 +127,16 @@ class Comments extends Component {
       })
       badges.push(badgeID);
 
+      let badgeColor = (badgeColors[badgeColor] ? badgeColors[badgeColor] : AquaMain);
       users.doc(User.getCurrentUserID()).update({ badges: badges });
+      Toast.show({
+        text: `Wow! You earned a badge for commenting ${numComments} times.`,
+        buttonText: 'Nice!',
+        type: 'success',
+        duration: 3000,
+        style: {opacity: .95, backgroundColor: badgeColor},
+        buttonTextStyle: {color: 'dimgray'}
+      })
     }
   }
 

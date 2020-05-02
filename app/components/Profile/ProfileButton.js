@@ -7,18 +7,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {AquaMain} from '../../styles/global.js'
 
 class ProfileButton extends Component {
-    
-    friends = db.collection("friends");
 
     constructor(props) {
         super(props);
         this.state = {
             isFriends: false
         };
+    
+        this.friends = db.collection("friends");
     }
 
     componentDidMount() {
-        friends.doc(User.getCurrentUserID()).get().then((doc) => {
+        this.friends.doc(User.getCurrentUserID()).get().then((doc) => {
             if (doc.exists) {
                 this.setState({isFriends: doc.data()[this.props.userID]});
             }
@@ -27,7 +27,7 @@ class ProfileButton extends Component {
 
     toggleFriend(userID) {
         var status = false;
-        let ref = friends.doc(User.getCurrentUserID());
+        let ref = this.friends.doc(User.getCurrentUserID());
         let updates = {};
         ref.get().then((doc) => {
             if (!doc.exists) {

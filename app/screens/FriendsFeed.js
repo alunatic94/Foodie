@@ -36,7 +36,8 @@ export default class FriendsFeed extends Component {
         var temp = this.state.plateID.concat(data)
         this.setState({ plateID: temp })
       })
-    return plates
+      .catch((err) => {});
+    return plates;
   }
 
   async getPost(id) {
@@ -105,7 +106,7 @@ export default class FriendsFeed extends Component {
     if (!this.state.isLoaded) {
       return (
         <Container>
-          <Content>
+           <Content style={{backgroundColor: 'whitesmoke', padding: 5}}>
             <PostCardPlaceholder/>
             <PostCardPlaceholder/>
             <PostCardPlaceholder/>
@@ -115,7 +116,7 @@ export default class FriendsFeed extends Component {
     }
     else return (
       <Container>
-        <Content>
+         <Content style={{backgroundColor: 'whitesmoke', padding: 5}}>
           <ScrollView>
           {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} post={post.data}/>)}
           </ScrollView>

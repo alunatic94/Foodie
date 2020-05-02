@@ -42,7 +42,7 @@ export default class FeedCard extends Component {
             <View>
                 {this.state.isShowingRestaurant ? 
                 <RestaurantCard style={styles.roundCard} restaurantID={this.state.post.restaurantID} onLongPress={() => {this.setState({isShowingRestaurant: !this.state.isShowingRestaurant})}} /> : 
-                <PostCard style={styles.roundCard} postID={this.props.postID} post={this.state.post} onLongPress={() => {this.setState({isShowingRestaurant: !this.state.isShowingRestaurant})}} />}
+                <PostCard postID={this.props.postID} post={this.state.post} onLongPress={() => {this.setState({isShowingRestaurant: !this.state.isShowingRestaurant})}} />}
             </View>
             )
         // }

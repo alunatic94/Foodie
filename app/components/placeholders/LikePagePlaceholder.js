@@ -25,51 +25,79 @@ import { withNavigation, ScrollView } from "react-navigation";
               fontSize: 15
             }}></Text>
           </Header>
-          <Content style={{ marginTop: 30 }}>
-          <View
-            style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 100,
-                    backgroundColor: 'lightgray',
-                    marginBottom: 10,
-                    marginLeft:25  
-                    }}
-                    
-        />
-        <View
-            style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 100,
-                    backgroundColor: 'lightgray',
-                    marginBottom: 10,
-                    marginLeft:25   
-                    }}
-                    
-        />
-        <View
-            style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 100,
-                    backgroundColor: 'lightgray',
-                    marginBottom: 10,
-                    marginLeft:25   
-                    }}
-                    
-        />
-        <View
-            style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 100,
-                    backgroundColor: 'lightgray',
-                    marginBottom: 10,
-                    marginLeft:25    
-                    }}
-                    
-        />
+          <Content style={{ marginTop: 10, flexDirection: "column" }}>
+          <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    //justifyContent: "left",
+                    marginLeft: 20,
+                    marginBottom: 5
+                  }}
+                  >
+                    <View
+                        style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 100,
+                                backgroundColor: 'lightgray',
+                                left: 0,
+                                }}
+                                
+                    />
+                    <View style={{
+                    flexDirection: "column"}}>
+                      <View style={{ width: 75, height: 15, backgroundColor: 'lightgray', paddingBottom: 15, marginLeft: 20}} />
+                      <View style={{ width: 100, height: 10, backgroundColor: 'lightgray', marginTop: 5, marginLeft: 20}} />  
+                    </View>
+            </View>
+            <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    //justifyContent: "left",
+                    marginLeft: 20,
+                    marginBottom: 5
+                  }}
+                  >
+                    <View
+                        style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 100,
+                                backgroundColor: 'lightgray',
+                                left: 0,
+                                }}
+                                
+                    />
+                    <View style={{
+                    flexDirection: "column"}}>
+                      <View style={{ width: 75, height: 15, backgroundColor: 'lightgray', paddingBottom: 15, marginLeft: 20}} />
+                      <View style={{ width: 100, height: 10, backgroundColor: 'lightgray', marginTop: 5, marginLeft: 20}} />  
+                    </View>
+            </View>
+            <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    //justifyContent: "left",
+                    marginLeft: 20,
+                    marginBottom: 5
+                  }}
+                  >
+                    <View
+                        style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 100,
+                                backgroundColor: 'lightgray',
+                                left: 0,
+                                }}
+                                
+                    />
+                    <View style={{
+                    flexDirection: "column"}}>
+                      <View style={{ width: 75, height: 15, backgroundColor: 'lightgray', paddingBottom: 15, marginLeft: 20}} />
+                      <View style={{ width: 100, height: 10, backgroundColor: 'lightgray', marginTop: 5, marginLeft: 20}} />  
+                    </View>
+            </View>
           </Content>
 
       </Container>

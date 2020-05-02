@@ -21,9 +21,6 @@ import ProfilePlaceholder  from '../components/placeholders/ProfilePlaceholder';
 import TitleAndImagesPlaceholder  from '../components/placeholders/TitleAndImagesPlaceholder'; 
 import TitleAndIconsPlaceholder from '../components/placeholders/TitleAndIconsPlaceholder.js';
 
-posts = db.collection("posts");
-users = db.collection("users");
-friends = db.collection("friends");
 
 const thumbnail = "";
 const platesURL = [
@@ -49,6 +46,10 @@ const plateStyles = StyleSheet.create({
 });
 
 export default class ProfileOther extends Component {
+    posts = db.collection("posts");
+    users = db.collection("users");
+    friends = db.collection("friends");
+
     constructor(props) {
         super(props);
         // Defaults
@@ -87,15 +88,15 @@ export default class ProfileOther extends Component {
     }
 
     removePostsListener() {
-        posts.onSnapshot(() => {});
+        this.posts.onSnapshot(() => {});
     }
     
     removeProfileListener() {
-        users.doc(this.state.userID).onSnapshot(() => {});
+        this.users.doc(this.state.userID).onSnapshot(() => {});
     }
 
     addProfileListener() {
-        users.doc(this.state.userID).onSnapshot(doc => {         
+        this.users.doc(this.state.userID).onSnapshot(doc => {         
             modifiedProfile = doc.data();
             this.setState({currentProfile: modifiedProfile}, () => {
                 BadgeData.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
@@ -108,7 +109,7 @@ export default class ProfileOther extends Component {
     addPostsListener() {
         // Listen for updates/removals/deletions in plates posted by user
         // Grab changed post documents and update array of plates stored in state
-        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+        this.posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     plates = this.state.plates;
@@ -167,7 +168,7 @@ export default class ProfileOther extends Component {
             });
             
             let friendIDs = [];
-            friends.doc(this.state.userID).get().then((doc) => {
+            this.friends.doc(this.state.userID).get().then((doc) => {
                 if (doc.exists) {
                     const userIDs = doc.data();
                     for (let id in userIDs) {
@@ -191,7 +192,7 @@ export default class ProfileOther extends Component {
     }
 
     toggleFriend(userID) {
-        friends.doc(User.getCurrentUserID()).update({userID: true});
+        this.friends.doc(User.getCurrentUserID()).update({userID: true});
     }
 
     getCurrentUser = () => {
@@ -205,7 +206,7 @@ export default class ProfileOther extends Component {
     }
 
     isFriendsWithCurrentUser() {
-        friends.doc(User.getCurrentUserID()).get()
+        this.friends.doc(User.getCurrentUserID()).get()
         .then((doc) => {
             if (doc.get(this.state.userID) != null) return true;
             else return false;

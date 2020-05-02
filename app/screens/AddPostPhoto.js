@@ -1,41 +1,50 @@
 import * as React from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import { Container, Header, Left, Right, Body, Content, Button, Text } from 'native-base';
-import {firebase} from '../database/Database';
+import { Container, Content, Button, Text, View } from 'native-base';
+import { firebase } from '../database/Database';
 import uuid from 'uuid';
 import ScreenHeader from '../components/common/ScreenHeader.js';
-import {User} from '../database/User';
+import { User } from '../database/User';
+import { globalStyles, AquaMain } from '../styles/global.js';
+import { Overlay } from 'react-native-elements';
 
 export default class AddPostPhoto extends React.Component {
   state = {
     image: null,
-    uploading: false
+    uploading: false,
+    isVisible: false
   };
+
+  toggleOverlay() {
+    this.setState({ isVisible: !isVisible });
+  }
 
   render() {
     let { image } = this.state;
-
     return (
       <Container>
-      
-    <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
-     <Content>
 
-         <Button block success onPress={this._pickImage}>
-           <Text>Pick Photo</Text>
-        </Button>
-        <Button block success onPress={this._takeImage}>
-           <Text>Take Photo</Text>
-        </Button>
-        
-        {image &&
-          <Image source={{ uri: image }} style={{ width: 400, height: 400 }} />}
-
-     </Content>
-   </Container>
+        <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
+        <Content>
+          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'nowrap' }}>
+              <Button rounded style={{ backgroundColor: AquaMain, margin: 5 }} success onPress={this._pickImage}>
+                <Text>Pick Photo</Text>
+              </Button>
+              <Button rounded style={{ backgroundColor: AquaMain, margin: 5 }} onPress={this._takeImage}>
+                <Text>Take Photo</Text>
+              </Button>
+              {this.state.uploading && <Image source={require('../styles/assets/loading.gif')} style={{ zIndex: 10, width: 75, height: 75 }} />}
+            </View>
+            <TouchableOpacity onPress={this._pickImage}>
+              <Image source={image ? { uri: image } : require('./assets/image-placeholder.png')} style={{ width: 400, height: 400, margin: 10, borderRadius: 10, backgroundColor: 'lightgray' }} />
+            </TouchableOpacity>
+          </View>
+        </Content>
+      </Container>
     );
   }
 
@@ -68,7 +77,7 @@ export default class AddPostPhoto extends React.Component {
     }
   };
 
-/*TAKE IMAGE FROM CAMERA */
+  /*TAKE IMAGE FROM CAMERA */
   _takeImage = async () => {
     const { navigate } = this.props.navigation;
     await Permissions.askAsync(Permissions.CAMERA);
@@ -76,7 +85,7 @@ export default class AddPostPhoto extends React.Component {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0, 
+      quality: 0,
     });
     if (!result.cancelled) {
       this.setState({ image: result.uri });
@@ -86,6 +95,7 @@ export default class AddPostPhoto extends React.Component {
 
   /* HANDLE IMAGE UPLOADED TO APP, SEND TO FIREBASE */
   _handleImagePicked = async result => {
+    let uploadFailed = false;
     try {
       this.setState({ uploading: true });
 
@@ -96,13 +106,19 @@ export default class AddPostPhoto extends React.Component {
     } catch (e) {
       console.log(e);
       alert('Upload failed, sorry :(');
+      uploadFailed = true;
+
     } finally {
       this.setState({ uploading: false });
-      this.props.navigation.navigate(
-        'AddPostComment', 
-        { uri : result.uri,
-          imageURL: this.state.image  }
-      );
+      if (!uploadFailed) {
+        this.props.navigation.navigate(
+          'AddPostComment',
+          {
+            uri: result.uri,
+            imageURL: this.state.image
+          }
+        );
+      }
     }
   };
 }
@@ -111,10 +127,10 @@ export default class AddPostPhoto extends React.Component {
 async function uploadImageAsync(uri) {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
+    xhr.onload = function () {
       resolve(xhr.response);
     };
-    xhr.onerror = function(e) {
+    xhr.onerror = function (e) {
       console.log(e);
       reject(new TypeError('Network request failed'));
     };

@@ -94,9 +94,9 @@ export default class SearchRestaurants extends React.Component {
         if (!isInitialized) {
             return (
                 <View>
-                    <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back />
-                    <View style={styles.centeredTest}>
-                        <Text>Loading...</Text>
+                    <ScreenHeader navigation={this.props.navigation} title="Search" back />
+                    <View style={{flexDirection: 'column', height: '90%', justifyContent: 'center', alignItems: 'center'}}>
+                        <Image styles={{justifySelf: 'center'}} source={require('../styles/assets/loading.gif')}/>
                     </View>
                 </View>
                
@@ -105,7 +105,7 @@ export default class SearchRestaurants extends React.Component {
         else if (isLoaded) {
             return (
                 <Container>
-                    <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back />
+                    <ScreenHeader navigation={this.props.navigation} title="Search" back />
                     <Content>
                         <SearchBar placeholder="Search restaurants.."
                             onChangeText={this.updateSearch}
@@ -139,7 +139,7 @@ export default class SearchRestaurants extends React.Component {
         } else {
             return (
                 <Container>
-                <ScreenHeader navigation={this.props.navigation} title="Search Restaurants" back /> 
+                <ScreenHeader navigation={this.props.navigation} title="Search" back /> 
                 <Content>
                     <SearchBar placeholder="Search restaurants.."
                         ref="searchBar"

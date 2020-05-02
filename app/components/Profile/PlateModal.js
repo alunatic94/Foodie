@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, Button, View } from 'native-base';
 import styles from '../../screens/styles.js';
 import PostCard from '../../components/PostCard.js';
-import {AquaMain} from '../../styles/global.js';
+import { globalStyles, AquaMain } from '../../styles/global.js';
 
 export default class PlateModal extends Component {                                     
     render() {

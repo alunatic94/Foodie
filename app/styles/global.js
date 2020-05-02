@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 export const AquaMain = '#6fdedc'
+export const AquaSecondary = '#6fdeb9'
 
 export const globalStyles = StyleSheet.create({
     centered: {
@@ -32,6 +33,24 @@ export const globalStyles = StyleSheet.create({
         color: "gray",
         fontFamily: "Nunito Sans",
         fontSize: 16
-    }
+    },
+    card: {
+        borderRadius: 10,
+        borderWidth: 0,
+        borderColor: 'transparent'
+    },
+    cardItem: {
+        borderWidth: 0,
+        borderColor: 'transparent',
+        backgroundColor: 'transparent'
+    },
 });
+
+export const badgeColors = {
+    "first": AquaMain,
+    "ten": AquaSecondary,
+    'twenty': '#FFBE3D',
+    'fifty': '#FF953D',
+    'hundred': '#FF473D'
+}
 

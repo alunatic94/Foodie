@@ -4,12 +4,13 @@ import { View } from 'react-native'
 import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import SkeletonContent from "react-native-skeleton-content";
+import { globalStyles, AquaMain } from '../../styles/global.js';
  
 export default class PostCardPlaceholder extends Component {
     render() {
         return (
-               <Card>
-                 <CardItem>
+               <Card style={globalStyles.card}>
+                 <CardItem style={globalStyles.cardItem}>
                 <Left>
                 <View
                     style={{
@@ -27,14 +28,14 @@ export default class PostCardPlaceholder extends Component {
                 </Left>
                 </CardItem>
                 
-                <CardItem cardBody> 
+                <CardItem cardBody style={globalStyles.cardItem}> 
         
                 <View style={{ width: '100%', height: 200,  backgroundColor: 'gray', marginBottom: 5}} />
                 
                 <View style={{ width: 50, height: 15, backgroundColor: 'lightgray', marginBottom: 5}} />  
                 <View style={{ width: 120, height: 15, backgroundColor: 'lightgray', marginBottom: 5}} />  
                 </CardItem>
-                <CardItem>
+                <CardItem style={globalStyles.cardItem}>
                 <Left>
                     <Grid>
                         <Row>

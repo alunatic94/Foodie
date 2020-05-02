@@ -4,10 +4,11 @@ import Plates  from './Plates';
 import {View} from 'native-base';
 import TitleAndImagesPlaceholder  from '../placeholders/TitleAndImagesPlaceholder';
 
-posts = db.collection("posts");
-friends = db.collection("friends");
+
 
 export default class FriendPlates extends Component {
+    posts = db.collection("posts");
+    friends = db.collection("friends");
 
     constructor(props) {
         super(props);
@@ -28,11 +29,11 @@ export default class FriendPlates extends Component {
     }
 
     removeFriendsListener() {
-        friends.doc(this.props.userID).onSnapshot(() => {});
+        this.friends.doc(this.props.userID).onSnapshot(() => {});
     }
 
     addFriendsListener() {
-        friends.doc(this.props.userID).onSnapshot(doc => {
+        this.friends.doc(this.props.userID).onSnapshot(doc => {
             let modifiedFriendIDs = [];       
             if (doc.exists) {
                 const userIDs = doc.data();
@@ -49,7 +50,7 @@ export default class FriendPlates extends Component {
         // Combine all friend's plate posts for rendering
         let plates = [];
         friendIDs.map((friendID) => {
-            posts.where("userID", "==", friendID)
+            this.posts.where("userID", "==", friendID)
                 .orderBy('timestamp', 'desc')
                 .limit(2)
                 .get()

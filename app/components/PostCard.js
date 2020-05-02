@@ -8,7 +8,8 @@ import { User } from "../database/User.js";
 import Moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PostCardPlaceholder  from '../components/placeholders/PostCardPlaceholder.js';
-import { db} from '../database/Database'
+import { db} from '../database/Database';
+import { globalStyles, AquaMain } from '../styles/global.js';
 
 restaurants = db.collection("restaurants");
 import LikePage from '../screens/LikePage.js';
@@ -108,13 +109,13 @@ class PostCard extends Component {
     render() {
         if (!this.state.isLoaded) {
             return (
-                <PostCardPlaceholder style={this.props.style} />
+                <PostCardPlaceholder />
                 );
         }
         else {
             return (
-            <Card>
-                 <CardItem button onPress={() => this.props.navigation.navigate('ProfileOther', {userID: this.props.post.userID})}>
+            <Card style={[globalStyles.card]}>
+                 <CardItem style={globalStyles.cardItem} button onPress={() => this.props.navigation.navigate('ProfileOther', {userID: this.props.post.userID})}>
                 <Left>
                     <Thumbnail style={{backgroundColor: 'lightgray'}} source={{uri: this.state.user.profileImage}} />
                     <Body>
@@ -124,7 +125,7 @@ class PostCard extends Component {
                 </Left>
                 </CardItem>
                 
-                <CardItem cardBody> 
+                <CardItem style={globalStyles.cardItem} cardBody> 
         
                 {<ImageSlider
                     style={styles.imageFeed}
@@ -132,13 +133,13 @@ class PostCard extends Component {
                 />}
                 </CardItem>
 
-                <CardItem>
+                <CardItem style={globalStyles.cardItem}>
                     <Body>
                         <Text style={[styles.lightText, {paddingBottom: 5}]}>{this.state.restaurantName}</Text>
                         <Text style={styles.regularText}>{this.props.post.caption}</Text>
                     </Body> 
                 </CardItem>
-                <CardItem>
+                <CardItem style={globalStyles.cardItem}>
                 {/* <Left>                    
                     <LikeButton postID={this.props.postID}/> */}
                     <Left style={{paddingLeft: 0}}>

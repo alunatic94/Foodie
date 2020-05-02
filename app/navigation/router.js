@@ -29,15 +29,15 @@ const stackOptions = {
     headerMode: 'none'
 };
 
-const AddPostStack = createStackNavigator({
-    AddPostPhoto: {
-        screen: AddPostPhoto
-    },
-    AddPostComment: {
-        screen: AddPostComment
-    },
-    Main: AddPostPhoto
-}, stackOptions)
+// const AddPostStack = createStackNavigator({
+//     AddPostPhoto: {
+//         screen: AddPostPhoto
+//     },
+//     AddPostComment: {
+//         screen: AddPostComment
+//     },
+//     Main: AddPostPhoto
+// }, stackOptions)
 
 const HelpStack = createStackNavigator({
     Help: {screen: Help},
@@ -46,6 +46,8 @@ const HelpStack = createStackNavigator({
     HelpPost: {screen: HelpPost},
     HelpProfile: {screen: HelpProfile},
     HelpFeed: {screen: HelpFeed},
+    AddPostPhoto: {screen: AddPostPhoto},
+    AddPostComment: {screen: AddPostComment},
     Main: Help
 }, stackOptions)
  
@@ -55,14 +57,18 @@ const ProfileStack = createStackNavigator({
     ProfileEditPhoto: { screen: ProfileEditPhoto },
     Comments: {screen: Comments},
     LikePage: {screen: LikePage},
-    AddPost: AddPostStack,
+    // AddPost: AddPostStack,
+    AddPostPhoto: {screen: AddPostPhoto},
+    AddPostComment: {screen: AddPostComment},
     Help: HelpStack, 
     Main: Profile,
   }, stackOptions);
   
   const MapStack = createStackNavigator({
       Map: { screen: Map },
-      AddPost: AddPostStack,
+    //   AddPost: AddPostStack,
+        AddPostPhoto: {screen: AddPostPhoto},
+        AddPostComment: {screen: AddPostComment},
       Help: HelpStack, 
       Main: Map
   }, stackOptions);
@@ -71,7 +77,9 @@ const ProfileStack = createStackNavigator({
     Feed: { screen: Feed },
     Comments: { screen: Comments },
     LikePage: { screen: LikePage },
-    AddPost: AddPostStack,
+    // AddPost: AddPostStack,
+    AddPostPhoto: {screen: AddPostPhoto},
+    AddPostComment: {screen: AddPostComment},
     ProfileOther: {screen: ProfileOther},
     Help: HelpStack, 
     Main: Feed
@@ -121,13 +129,13 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             borderTopWidth: 1,
             borderTopColor: 'lightgray',
             height: 'auto'
-        }
+        },
+        lazy: true
     }
 });
 
 
 const AppNavigator = createStackNavigator({
-    
     Loading: {
         screen: Loading
     },

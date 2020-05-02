@@ -20,10 +20,6 @@ import MapPopUp  from '../components/MapPopUp';
 import ProfilePlaceholder  from '../components/placeholders/ProfilePlaceholder'; 
 import TitleAndImagesPlaceholder  from '../components/placeholders/TitleAndImagesPlaceholder'; 
 
-posts = db.collection("posts");
-users = db.collection("users");
-friends = db.collection("friends");
-
 const thumbnail = "";
 const platesURL = [
     "https://www.williams-sonoma.com/wsimgs/rk/images/dp/wcm/201938/0181/williams-sonoma-pantry-dinner-plates-set-of-6-c.jpg",
@@ -62,6 +58,10 @@ export default class Profile extends Component {
 
         // Bind to Profile context so calls pop-up for plates tapped
         this.toggleModal = this.toggleModal.bind(this);
+
+        this.posts = db.collection("posts");
+        this.users = db.collection("users");
+        this.friends = db.collection("friends");
     }
     componentDidMount() {
         this.loadProfileInformation();
@@ -84,15 +84,15 @@ export default class Profile extends Component {
     }
 
     removePostsListener() {
-        posts.onSnapshot(() => {});
+        this.posts.onSnapshot(() => {});
     }
     
     removeProfileListener() {
-        users.doc(this.state.userID).onSnapshot(() => {});
+        this.users.doc(this.state.userID).onSnapshot(() => {});
     }
 
     addProfileListener() {
-        users.doc(this.state.userID).onSnapshot(doc => {         
+        this.users.doc(this.state.userID).onSnapshot(doc => {         
             modifiedProfile = doc.data();
             this.setState({currentProfile: modifiedProfile}, () => {
                 BadgeData.getBadgesFromIDs(this.state.currentProfile.badges).then((newBadges) => {
@@ -105,7 +105,7 @@ export default class Profile extends Component {
     addPostsListener() {
         // Listen for updates/removals/deletions in plates posted by user
         // Grab changed post documents and update array of plates stored in state
-        posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
+        this.posts.where("userID", "==", this.state.userID).onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === "added") {
                     plates = this.state.plates;
@@ -146,7 +146,7 @@ export default class Profile extends Component {
             });
             
             let friendIDs = [];
-            friends.doc(this.state.userID).get().then((doc) => {
+            this.friends.doc(this.state.userID).get().then((doc) => {
                 if (doc.exists) {
                     const userIDs = doc.data();
                     for (let id in userIDs) {
@@ -170,7 +170,7 @@ export default class Profile extends Component {
     }
 
     toggleFriend(userID) {
-        friends.doc(User.getCurrentUserID()).update({userID: true});
+        this.friends.doc(User.getCurrentUserID()).update({userID: true});
     }
 
 

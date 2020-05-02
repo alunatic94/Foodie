@@ -1,9 +1,10 @@
 import {db} from '../database/Database';
 import {User} from '../database/User';
 
-users = db.collection('users');
 
 export class ProfileData {
+  users = db.collection('users');
+  posts = db.collection('posts');
   // Create new Profile instance from:
   // ProfileData(userID) - can get current user ID with User.getCurrentUserID()
   constructor(userID) {
@@ -15,7 +16,7 @@ export class ProfileData {
   // Use .then((profile) => {// do stuff...}) to grab profile data
   async getProfile() {
     var profileData = {};
-    await users.doc(this.userID).get().then((doc) => {
+    await this.users.doc(this.userID).get().then((doc) => {
       profileData = doc.data();
     })
     .catch((err) => {
@@ -31,7 +32,7 @@ export class ProfileData {
   async getPlatesFromIDs(IDarray) {
     var plates = [];
     for (let ID of IDarray) {
-      plateDoc = await posts.doc(ID).get();
+      plateDoc = await this.posts.doc(ID).get();
       plate = plateDoc.data();
       plate.id = ID;
       plates.unshift(plate);

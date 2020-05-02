@@ -20,24 +20,14 @@ export default class LocalFeed extends Component {
       isLoaded: false
     }
   }
+  
 
   async componentDidMount() {
     await navigator.geolocation.getCurrentPosition(position => {
-      const range = this.getGeoRange(position.coords.latitude, position.coords.longitude, 5);
-      this.posts
-        .where("geohash", ">=", range.lower)
-        .where("geohash", "<=", range.upper)
-        .onSnapshot(snapshot => {
-          let existingPosts = [];
-          snapshot.forEach(doc => {
-            post = {
-              postID: doc.id,
-              data: doc.data()
-            }
-            existingPosts.push(post);
-          });
-          this.setState({ posts: existingPosts, isLoaded: true});
-        })
+      let range = this.getGeoRange(position.coords.latitude, position.coords.longitude, 5);
+      // this.getPosts(range);
+      this.setState({isLoaded: true});
+      this.addPostsListener(range);
     },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 })
@@ -45,6 +35,36 @@ export default class LocalFeed extends Component {
 
   componentWillUnmount() {
     const unMountListener = this.posts.onSnapshot(() => { });
+  }
+
+  addPostsListener(range) {
+    this.posts.where("geohash", ">=", range.lower)
+    .where("geohash", "<=", range.upper).onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          posts = this.state.posts;
+          post = {postID: change.doc.id, data: change.doc.data()};
+            if (change.type === "added") {
+              posts.unshift(post);
+            }
+            if (change.type === "modified") {
+                var i = posts.findIndex(x => x.data.id == post.data.id);
+                posts[i] = post;
+            }
+            if (change.type === "removed") {
+                var i = posts.indexOf(post);
+                posts.splice(i, 1);
+            }
+            posts.sort(this.compare);
+            this.setState({posts});
+        });
+    });
+  }
+
+  compare(a, b) {
+      const postone = a.data.timestamp
+      const posttwo = b.data.timestamp
+
+      return (postone > posttwo ? -1 : 1);
   }
 
   getGeoRange(latitude, longitude, distance) {
@@ -67,10 +87,10 @@ export default class LocalFeed extends Component {
   }
 
   render() {
-    if (!this.state.isLoaded) {
+    if (!this.state.isLoaded || this.state.posts.length < 1) {
       return (
         <Container>
-          <Content>
+          <Content style={{backgroundColor: 'whitesmoke', padding: 5}}>
             <PostCardPlaceholder/>
             <PostCardPlaceholder/>
             <PostCardPlaceholder/>
@@ -80,7 +100,7 @@ export default class LocalFeed extends Component {
     }
     else return (
       <Container>
-        <Content>
+        <Content style={{backgroundColor: 'whitesmoke', padding: 5}}>
           <ScrollView>
           {this.state.posts.map((post) => <FeedCard key={post.postID} postID={post.postID} post={post.data}/>)}
           </ScrollView>

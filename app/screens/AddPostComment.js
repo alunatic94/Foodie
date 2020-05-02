@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Container,Content, Button, Text, Input, View } from 'native-base';
+import { Container,Content, Button, Text, Input, View, Toast } from 'native-base';
+import { Image } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from '../database/Database';
 import { User } from '../database/User.js';
 import ScreenHeader from '../components/common/ScreenHeader.js';
 import axios from 'axios';
 import { REACT_APP_MAP_AUTH } from 'react-native-dotenv';
-import geohash from 'ngeohash'
+import geohash from 'ngeohash';
+import { globalStyles, badgeColors, AquaMain, AquaSecondary } from '../styles/global.js';
 
 export default class AddPostComment extends Component {
 
@@ -16,6 +18,8 @@ export default class AddPostComment extends Component {
   users = db.collection("users");
   rest = db.collection("restaurants")
   photos = [this.props.navigation.getParam('imageURL')];
+
+  addPostHeaderStyle = [globalStyles.headingLarge, {marginBottom: 10, marginTop: 15}];
 
   constructor(props) {
     super(props);
@@ -39,7 +43,8 @@ export default class AddPostComment extends Component {
       isvegan:false,
       searchedRestaurantName: 'Search restaurants',
       searchedRestaurantID: '',
-      searchedRestaurantCoordinates: []
+      searchedRestaurantCoordinates: [],
+      isPostButtonDisabled: true
     };
   }
 
@@ -150,7 +155,17 @@ export default class AddPostComment extends Component {
         }
       })
       badges.push(badgeID);
+      
+      let badgeColor = (badgeColors[badgeColor] ? badgeColors[badgeColor] : AquaMain);
       users.doc(User.getCurrentUserID()).update({ badges: badges });
+      Toast.show({
+        text: `You earned a badge for posting ${numPlates} plates. Rock on!`,
+        buttonText: 'Woo!',
+        type: 'success',
+        duration: 3000,
+        style: {opacity: .95, backgroundColor: badgeColor},
+        buttonTextStyle: {color: 'dimgray'}
+      })
     }
   }
 
@@ -211,7 +226,8 @@ export default class AddPostComment extends Component {
   refresh = (data) => {
     this.setState({
       searchedRestaurantName: data.name,
-      searchedRestaurantID: data.id
+      searchedRestaurantID: data.id,
+      isPostButtonDisabled: false
     })
   }
 
@@ -233,33 +249,25 @@ export default class AddPostComment extends Component {
     const imageURL = navigation.getParam('imageURL');
 
     return this.state.isLoading
-      ? <Text style={{ marginTop: 50 }}>TODO: Screen is loading!</Text>
+      ? <Container style={{flexDirection: 'column', height: '100%', justifyContent: 'center', alignItems: 'center'}}><Image source={require('../styles/assets/loading.gif')}/></Container>
       : (<Container>
         <ScreenHeader navigation={this.props.navigation} title="Post a Plate" back />
 
-        <Content>
+        <Content style={{paddingTop: 0, paddingRight: 15, paddingLeft: 15, paddingBottom: 30}}>
 
-          <Text style={{
-            fontSize: 25,
-            fontWeight: "bold",
-            paddingTop: 18,
-            paddingBottom: 25
-          }}>Rate your plate:</Text>
+          <Text style={this.addPostHeaderStyle}>Rate your plate:</Text>
 
           <View style={{
-            borderWidth: 1,
-            height: 100,
             alignItems: 'center',
-            justifyContent: 'center',
             justifyContent: 'space-between',
-            paddingTop: 15, paddingBottom: 20
+            flexDirection: "row"
           }}>
-            <View style={{ flexDirection: "row" }}>
+              
               <Button
                 transparent>
-                <AntDesign name={'like1'} color={this.state.likeButtonColor}
+                <AntDesign name={'dislike1'} color={this.state.dislikeButtonColor}
                   size={30} style={{ padding: 30 }}
-                  onPress={() => this.onChangeLike()} />
+                  onPress={() => this.onChangeDislike()} />
               </Button>
 
               <Button
@@ -271,65 +279,41 @@ export default class AddPostComment extends Component {
 
               <Button
                 transparent>
-                <AntDesign name={'dislike1'} color={this.state.dislikeButtonColor}
+                <AntDesign name={'like1'} color={this.state.likeButtonColor}
                   size={30} style={{ padding: 30 }}
-                  onPress={() => this.onChangeDislike()} />
+                  onPress={() => this.onChangeLike()} />
               </Button>
-            </View>
+
           </View>
-          <Text style={{
-            fontSize: 25,
-            fontWeight: "bold",
-            paddingTop: 18,
-            paddingBottom: 25
-          }}>Category:</Text>
+          <Text style={this.addPostHeaderStyle}>Category:</Text>
 
           <View style={{
-            borderWidth: 1,
-            height: 100,
-            //alignItems: 'left',
-            justifyContent: 'center',
+            alignItems: 'center',
             justifyContent: 'space-between',
-            paddingTop: 15, paddingBottom: 20
+            flexDirection: 'row'
           }}>
             
-            <View style={{ flexDirection: "row" }}>
-            <Text style={{
-            fontSize: 14,
-            fontWeight: "bold",
-            paddingTop: 15,
-            paddingBottom: 12,
-            paddingRight:3
-          }}>Vegan:</Text>
-              <Button
-                transparent>
-                <AntDesign name={'downcircle'} color={this.state.veganButtonColor}
-                  size={30} style={{ padding: 40,height:25,width:35 }}
-                  onPress={() => this.onChangeVegan()} />
-              </Button>
-              
-            </View>
+              <View style={{ flexDirection: "column", justifyContent: 'center', alignItems: 'center' }}>
+                  <Button
+                    transparent>
+                    <AntDesign name={'downcircle'} color={this.state.veganButtonColor}
+                      size={30} style={{height:35,width:35, marginBottom: 5}}
+                      onPress={() => this.onChangeVegan()} />
+                  </Button>
+                  <Text style={globalStyles.lightText}>Vegan</Text>
+              </View>
           </View>
 
-          <Text style={{
-            fontSize: 25,
-            fontWeight: "bold",
-            paddingTop: 30,
-            paddingBottom: 15
-          }}>Add a caption:</Text>
-          <View style={{ borderWidth: 1 }}>
-            <Input placeholder="Caption" onChangeText={(text) => this.setState({ caption: text })} />
+          <Text style={this.addPostHeaderStyle}>Add a caption:</Text>
+          <View style={{ borderWidth: 1, borderColor: 'lightgray', borderRadius: 10, height: 100 }}>
+            <Input multiline={true} textAlignVertical="top" numberOfLines={10} placeholder="Let the world know your cravings!" onChangeText={(text) => this.setState({ caption: text })} />
           </View>
 
-          <Text style={{
-            fontSize: 25,
-            fontWeight: "bold",
-            paddingTop: 30,
-            paddingBottom: 15
-          }}>Add location:</Text>
+          <Text style={this.addPostHeaderStyle}>Location:</Text>
 
           <Button
             block
+            rounded style={{ backgroundColor: AquaSecondary, margin: 5 }}
             onPress={() => this.props.navigation.navigate('SearchRestaurants',
               {
                 lat: this.state.latitude,
@@ -342,16 +326,18 @@ export default class AddPostComment extends Component {
           </Button>
 
           <Button
-            block success
-            /*  onPress = { () => {
-             this.submitButton();
-            } }  */
+            block
+            disabled={this.state.isPostButtonDisabled}
+            rounded style={
+              this.state.isPostButtonDisabled ? {backgroundColor: 'lightgray', margin: 5} :
+              { backgroundColor: AquaMain, margin: 5 }
+            }
             onPress={() => {
-              this.props.navigation.navigate('Feed');
               this.addPost();
               const increment = firebase.firestore.FieldValue.increment(1);
               this.users.doc(User.getCurrentUserID()).update({postCount: increment})
               this.addBadge(); 
+              this.props.navigation.navigate('FeedTab');
             }}>
             <Text>Post your plate</Text>
           </Button>

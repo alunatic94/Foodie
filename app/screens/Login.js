@@ -15,19 +15,20 @@ class Login extends React.Component{
     }
 }
 
-componentWillMount() {
-  this.loginListener = firebase.auth().onAuthStateChanged(user => { 
-    if (user) { // logged in
-      this.navigateToFeed();
-    } else { // not logged in (e.g. logged out)
+componentDidMount() {
+  // this.loginListener = firebase.auth().onAuthStateChanged(user => { 
+  //   if (user) { // logged in
+  //     this.navigateToFeed();
+  //   } else { // not logged in (e.g. logged out)
       
-    }
-  })
+  //   }
+  // })
 }
 loginWithEmail = (email, password) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
           console.log("Logged in user: " + res.user.email);
+          this.navigateToFeed();
     });
   };
 

@@ -15,6 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const scale = (num, in_min, in_max, out_min, out_max) => {
   return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+const MAX_RESTAURANTS = 50;
 
 class Map extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Map extends Component {
           origLat: position.coords.latitude,
           origLong: position.coords.longitude,
           error: null
-        }, this.updateRestaurants);
+        }, this.updateRestaurants(position.coords.latitude, position.coords.longitude));
       },
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 2000 }
@@ -57,13 +58,13 @@ class Map extends Component {
   }
 
   onRegionChangeComplete = (region) => {
-    this.setState({
-      // latitude: region.latitude,
-      // longitude: region.longitude,
-      // latitudeDelta: region.latitudeDelta,
-      // longitudeDelta: region.longitudeDelta,
-      zoomLevel: this.getZoomLevel(region)
-    });
+    let distanceBetween = this.getDistanceBetween({x: region.latitude, y: region.longitude}, {x: this.state.latitude, y: this.state.longitude});
+      this.setState({zoomLevel: this.getZoomLevel(region)});
+      if (distanceBetween >= .10) this.updateRestaurants(region.latitude, region.longitude);
+  }
+
+  getDistanceBetween(a, b) {
+    return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
   }
 
   getZoomLevel = (region) => {
@@ -76,26 +77,37 @@ class Map extends Component {
     })
   }
 
-  updateRestaurants = () => {
+  updateRestaurants = (lat, long, offset=0) => {
     axios.get('https://api.yelp.com/v3/businesses/search', {
       headers: { 'Authorization': REACT_APP_MAP_AUTH },
       params: {
         // // latitude: 34.2383,
         // longitude: -118.5237,
-        latitude: this.state.origLat,
-        longitude: this.state.origLong,
+        latitude: lat,
+        longitude: long,
         categories: "restaurants",
-        limit: 20
+        radius: 8045, // meters => miles = 5
+        limit: 20,
+        offset: offset
       }
     }).then((res) => {
+      let prevRestaurants = this.state.nearbyRestaurants;
+      if (prevRestaurants.length > MAX_RESTAURANTS) prevRestaurants = [];
+      let restaurants = this.removeDuplicateRestaurants([res.data.businesses, prevRestaurants]);
       this.setState({
-        nearbyRestaurants: res.data.businesses,
+        nearbyRestaurants: restaurants,
+        latitude: lat,
+        longitude: long,
         isLoaded: true
       });
     }).catch((err) => {
       console.log("Yelp request via Axios failed: " + err);
       return err;
     })
+  }
+
+  removeDuplicateRestaurants(restaurants) {
+    return Array.from(new Set([].concat(...restaurants)))
   }
 
   togglePopUp(data=null) {
@@ -120,7 +132,7 @@ class Map extends Component {
       return (
         <Container>
 
-          <ScreenHeader navigation={this.props.navigation}>
+          <ScreenHeader title="Map" navigation={this.props.navigation}>
           </ScreenHeader>
 
           <MapView

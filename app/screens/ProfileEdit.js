@@ -6,6 +6,7 @@ import {ProfileData} from "../database/ProfileData.js"
 import {User} from "../database/User.js"
 import {firebase, db} from '../database/Database';
 import ScreenHeader from '../components/common/ScreenHeader.js';
+import {AquaMain} from '../styles/global.js';
 import uuid from 'uuid';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -48,13 +49,13 @@ export default class ProfileEdit extends Component{
         else{ 
           return (
             <Container>
-            <ScreenHeader navigation = {this.props.navigation} back />
-            <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+            <ScreenHeader title="Edit Profile" navigation = {this.props.navigation} back />
+            <KeyboardAvoidingView style={{flex:1, padding: 15}} behavior="padding">
             <Text style={globalStyles.heading}>
                  First Name:  
             </Text>
             <TextInput placeholder={this.state.currentProfile.first}
-            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            style={{ borderWidth: 1, borderColor: 'lightgray', borderRadius: 10, height: 40 }}
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newFirst:text})}
             />  
@@ -62,7 +63,7 @@ export default class ProfileEdit extends Component{
                  Last Name:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.last}
-            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            style={{ borderWidth: 1, borderColor: 'lightgray', borderRadius: 10, height: 40 }}
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newLast:text})}
             />
@@ -70,7 +71,7 @@ export default class ProfileEdit extends Component{
                  Age:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.age}
-            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            style={{ borderWidth: 1, borderColor: 'lightgray', borderRadius: 10, height: 40 }}
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAge:text})}
             />
@@ -78,20 +79,23 @@ export default class ProfileEdit extends Component{
                  About:  
             </Text> 
             <TextInput placeholder={this.state.currentProfile.about}
-            style = {{ height: 40, borderColor: 'black', borderWidth: 2}}
+            style={{ borderWidth: 1, borderColor: 'lightgray', borderRadius: 10, height: 40 }}
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAbout:text})}
             />
-            <Button block success onPress={() =>  users.doc(this.state.userID).set({
-                                                     first: this.state.newFirst,
-                                                     last: this.state.newLast, 
-                                                     age: this.state.newAge, 
-                                                     about: this.state.newAbout
-                                                 }, {merge: true}) 
-                                                    && this.props.navigation.goBack()
-                                                   }>
-                <Text>Save Changes</Text>
-            </Button>
+             <Button
+            block
+            rounded style={{ backgroundColor: AquaMain, margin: 5 }}
+            onPress={() =>  users.doc(this.state.userID).set({
+                first: this.state.newFirst,
+                last: this.state.newLast, 
+                age: this.state.newAge, 
+                about: this.state.newAbout
+            }, {merge: true}) 
+               && this.props.navigation.goBack()
+              }>
+            <Text>Save Changes</Text>
+          </Button>
          </KeyboardAvoidingView>
         </Container>
        );

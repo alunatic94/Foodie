@@ -1,19 +1,21 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-import { Icon, Button, Container, Grid, Row, Col } from 'native-base';
+import { Toast } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db, firebase } from "../database/Database";
 import { User } from "../database/User.js";
 import { withNavigation, ScrollView } from "react-navigation";
 import styles from '../screens/styles.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {badgeColors, AquaMain} from '../styles/global';
 // import LikePage from '../screens/LikePage.js';
 //import { ref } from '@hapi/joi';
 
 
 class LikeButton extends React.Component {
   users = db.collection("users");
+  badges = db.collection("badges");
   ref = db.collection('posts').doc(this.props.postID);
   liketoinsert = db.collection('posts').doc(this.props.postID).collection('Likeby');
   componentDidMount() {
@@ -110,7 +112,16 @@ class LikeButton extends React.Component {
         badges.push(badgeID); 
       }
 
+      let badgeColor = (badgeColors[badgeColor] ? badgeColors[badgeColor] : AquaMain);
       users.doc(User.getCurrentUserID()).update({ badges: badges });
+      Toast.show({
+        text: `Nice! You earned a badge for liking ${numLikes} posts.`,
+        buttonText: 'Yay!',
+        type: 'success',
+        duration: 3000,
+        style: {opacity: .95, backgroundColor: badgeColor},
+        buttonTextStyle: {color: 'dimgray'}
+      })
     }
   }
   add = () => {
