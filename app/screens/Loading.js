@@ -17,7 +17,7 @@ export default class Loading extends Component {
     }
     render() {
         return (
-            <View style={globalStyles.centered}>
+            <View style={[globalStyles.centered, {flexDirection: 'column', height: '100%'}]}>
                 <Image source={{ uri: '../styles/assets/loading.gif' }} />
             </View>
         )

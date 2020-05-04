@@ -29,6 +29,21 @@ export const globalStyles = StyleSheet.create({
         fontFamily: "Raleway Bold",
         fontSize: 23
     },
+    regularText: {
+        color: "#000",
+        fontFamily: "Nunito Sans",
+        fontSize: 16
+    },
+    regularTextLarge: {
+        color: "#000",
+        fontFamily: "Nunito Sans",
+        fontSize: 18
+    },
+    regularTextSmall: {
+        color: "#000",
+        fontFamily: "Nunito Sans",
+        fontSize: 12
+    },
     lightText: {
         color: "gray",
         fontFamily: "Nunito Sans",

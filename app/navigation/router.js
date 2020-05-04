@@ -129,8 +129,7 @@ const AppNavigatorTabs = createMaterialTopTabNavigator({
             borderTopWidth: 1,
             borderTopColor: 'lightgray',
             height: 'auto'
-        },
-        lazy: true
+        }
     }
 });
 

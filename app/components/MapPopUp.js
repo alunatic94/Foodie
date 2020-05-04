@@ -26,7 +26,7 @@ export default class MapPopUp extends Component {
     componentDidMount() {
         this.getPlates();
     }
-
+    
     getPlates() {
         let plates = [];
         this.posts.where("yelpID", "==", this.props.data.id).orderBy("timestamp", "desc").limit(10).get().then(snapshot => {

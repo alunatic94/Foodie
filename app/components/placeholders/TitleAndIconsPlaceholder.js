@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Left, Body, Right, Card, CardItem, Icon, H2} from 'native-base';
 import { View } from 'react-native'
-import styles from '../../screens/styles.js';
+import { globalStyles } from '../../styles/global.js'
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
  
 export default class TitleAndIconsPlaceholder extends Component {
@@ -10,7 +10,7 @@ export default class TitleAndIconsPlaceholder extends Component {
         <CardItem>
             <Body>
                 {this.props.title ?
-                <H2 style={styles.heading}>{this.props.title}</H2>
+                <H2 style={globalStyles.heading}>{this.props.title}</H2>
                 :
                 <View style={{ width: 120, height: 25, backgroundColor: 'lightgray', marginBottom: 5}} />
                 }

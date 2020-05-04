@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Left, Body, Right, Card, CardItem, Icon} from 'native-base';
 import { View } from 'react-native'
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import styles from '../../screens/styles.js';
  
 export default class ImageAndTextPlaceholder extends Component {
     render() {

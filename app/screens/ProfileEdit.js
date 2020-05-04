@@ -1,5 +1,5 @@
-import { TextInput, KeyboardAvoidingView, ActivityIndicator, ScrollView , Image} from 'react-native';
-import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header } from 'native-base';
+import { TextInput, KeyboardAvoidingView, ActivityIndicator, ScrollView , Image, TouchableOpacity} from 'react-native';
+import { Container, Content, Card, CardItem, Body, Text, Left, Right, Icon, Thumbnail, Button, Header, View} from 'native-base';
 import React, { Component } from 'react';
 import { globalStyles } from '../styles/global.js';
 import {ProfileData} from "../database/ProfileData.js"
@@ -50,7 +50,8 @@ export default class ProfileEdit extends Component{
           return (
             <Container>
             <ScreenHeader title="Edit Profile" navigation = {this.props.navigation} back />
-            <KeyboardAvoidingView style={{flex:1, padding: 15}} behavior="padding">
+            <KeyboardAvoidingView style={{flex:1}} behavior="padding">
+                <View style={{padding: 36, paddingTop: 8}}>
             <Text style={globalStyles.heading}>
                  First Name:  
             </Text>
@@ -83,19 +84,19 @@ export default class ProfileEdit extends Component{
             returnKeyLabel = {"next"}
             onChangeText={(text) => this.setState({newAbout:text})}
             />
-             <Button
-            block
-            rounded style={{ backgroundColor: AquaMain, margin: 5 }}
-            onPress={() =>  users.doc(this.state.userID).set({
-                first: this.state.newFirst,
-                last: this.state.newLast, 
-                age: this.state.newAge, 
-                about: this.state.newAbout
-            }, {merge: true}) 
-               && this.props.navigation.goBack()
-              }>
-            <Text>Save Changes</Text>
-          </Button>
+            </View>
+            <TouchableOpacity block success onPress={() =>  users.doc(this.state.userID).set({
+                                                     first: this.state.newFirst,
+                                                     last: this.state.newLast, 
+                                                     age: this.state.newAge, 
+                                                     about: this.state.newAbout
+                                                 }, {merge: true}) 
+                                                    && this.props.navigation.goBack()
+                                                   }>
+                <View style = {[globalStyles.centered, {marginTop: 0}]}>
+              <Text style={globalStyles.regularTextLarge}>Save Changes</Text>
+            </View>
+            </TouchableOpacity>  
          </KeyboardAvoidingView>
         </Container>
        );

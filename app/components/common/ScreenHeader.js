@@ -12,7 +12,7 @@ export default class ScreenHeader extends Component{
                 {this.props.back ? 
                 <Button
                   iconLeft
-                  light
+                  transparent
                   onPress={() => {
                     this.props.navigation.dispatch(NavigationActions.back())
                   }}
